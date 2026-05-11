@@ -1,66 +1,187 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+
+
+export default function Auth()
+{
+    const [email, setEmail] = useState<string>("");
+    const [otp, setOtp] = useState<string>("");
+    const [step, setStep] = useState<"email" | "otp">("email");
+    const [loading, setLoading] = useState<boolean>(false);
+    
+    const router = useRouter();
+    
+    
+    function resetAuthForm(): void
+    {
+        setEmail("");
+        setOtp("");
+        setStep("email");
+        setLoading(false);
+    }
+    
+    
+    async function loadUserSession(): Promise<void>
+    {
+        try
+        {
+            const response = await supabase.auth.getSession();
+            
+            if (response.error !== null)
+            {
+                return;
+            }
+            
+            const userSession = response.data.session;
+            
+            if (userSession !== null)
+            {
+                router.push("/dashboard");
+            }
+        }
+        catch
+        {
+            console.log("Erro ao carregar sessão");
+        }
+    }
+    
+    
+    useEffect(() =>
+    {
+        loadUserSession();
+        
+    }, []);
+    
+    
+    async function handleSendOtp(
+        event: React.SyntheticEvent<HTMLFormElement>):
+        Promise<void>
+    {
+        event.preventDefault();
+        setLoading(true);
+        
+        try
+        {
+            const { error: sendRequestError } = await supabase.auth.signInWithOtp({ email, });
+            
+            if (sendRequestError !== null)
+            {
+                console.log("Erro ao enviar codigo de verificação para o email: " + sendRequestError.message);
+            }
+            else
+            {
+                setStep("otp");
+            }
+        }
+        catch
+        {
+            console.log("Algo deu errado ao enviar o código de verificação para o e-mail.");
+        }
+        finally
+        {
+            setLoading(false);
+        }
+    }
+    
+    
+    async function handleVerifyOtp(
+        event: React.SyntheticEvent<HTMLFormElement>):
+        Promise<void>
+    {
+        event.preventDefault();
+        setLoading(true);
+        
+        try
+        {
+            const { error: otpVerifyError } = await supabase.auth.verifyOtp({
+                email,
+                token: otp,
+                type: "email",
+            });
+            
+            if (otpVerifyError !== null)
+            {
+                console.log("Código inválido ou expirado");
+            }
+            else
+            {
+                resetAuthForm();
+                router.push("/dashboard");
+            }
+        }
+        catch
+        {
+            console.log("Erro ao verificar código.");
+        }
+        finally
+        {
+            setLoading(false);
+        }
+    }
+    
+    
+    function renderEmailOrOtpForm()
+    {
+        if (step === "email")
+        {
+            return(
+                <form
+                    className="signup-form"
+                    onSubmit={handleSendOtp}
+                >
+                    <label htmlFor="email-input">Endereço de e-mail</label>
+                    <input
+                        id="email-input"
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                    />
+                    <button
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? "Aguarde" : "Seguinte"}
+                    </button>
+                </form>
+            );
+        }
+        else
+        {
+            return(
+                <form
+                    className="otp-form"
+                    onSubmit={handleVerifyOtp}
+                >
+                    <label htmlFor="otp-input">
+                        Insira o código de 6 digitos enviado para o seu e-mail
+                    </label>
+                    <input
+                        id="otp-input"
+                        type="text"
+                        inputMode="numeric"
+                        value={otp}
+                        onChange={(event) => setOtp(event.target.value)}
+                    />
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        aria-label="Verificar código para entrar na aplicação"
+                    >
+                        {loading ? "Verificando..." : "Verificar código"}
+                    </button>
+                </form>
+            );
+        }
+    }
+    
+    
+    return(
+        <section key={step}>
+            {renderEmailOrOtpForm()}
+        </section>
+    );
 }
