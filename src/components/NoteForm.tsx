@@ -3,7 +3,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Note } from "@/types";
+import { Note, NoteMutationResult } from "@/types";
+import { insertNote, updateNote } from "@/data/notes";
+import { supabase } from "@/lib/supabase/client";
+import {  UserResponse } from "@supabase/supabase-js";
 import { useNotes } from "@/context/NotesContext";
 
 
@@ -17,37 +20,65 @@ type NoteFormProps =
 export function NoteForm(props: NoteFormProps)
 {
     const { initialData } = props;
-    const { createNote, updateNote } = useNotes();
+    
     const router = useRouter();
+    const { setNotes } = useNotes();
     
     const [title, setTitle] = useState(initialData?.title || "");
     const [summary, setSummary] = useState(initialData?.summary || "");
     const [content, setContent] = useState(initialData?.content || "");
+
     
-    
-    function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): void
+    async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): Promise<void>
     {
         event.preventDefault();
         
-        if (initialData)
+        if (initialData !== undefined)
         {
-            updateNote({
-                id: initialData.id,
+            const updatedNote: NoteMutationResult = await updateNote({
                 title: title,
                 summary: summary,
                 content: content,
-                updatedAt: new Date().toLocaleDateString(),
-            });
+            }, initialData.id);
+            
+            const updatedData: Note | null = updatedNote.data;
+            if (updatedData !== null)
+            {
+                setNotes((previousNotes) =>
+                {
+                    const newNotes: Note[] = [];
+                    for (const note of previousNotes)
+                    {
+                        if (note.id !== updatedData.id)
+                        {
+                            newNotes.push(note);
+                        }
+                    }
+                    
+                    return(newNotes.concat(updatedData));
+                });
+            }
+            
         }
         else
         {
-            createNote({
-                id: crypto.randomUUID(),
+            const user: UserResponse = await supabase.auth.getUser();
+            if (user.error !== null)
+            {
+                return;
+            }
+            
+            const insertedNote: NoteMutationResult = await insertNote({
                 title: title,
                 summary: summary,
                 content: content,
-                updatedAt: new Date().toLocaleDateString(),
-            });
+            }, user.data.user.id);
+            
+            const insertedData: Note | null = insertedNote.data;
+            if (insertedData !== null)
+            {
+                setNotes((previousNotes) => [insertedData].concat(previousNotes));
+            }
         }
         
         router.push("/dashboard");

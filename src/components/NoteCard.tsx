@@ -11,6 +11,21 @@ export default function NoteCard(props: NoteCardProps)
 {
     const { note } = props;
     
+    const created_at = new Date(note.created_at).toLocaleString(
+        "pt-Br",
+        {
+             timeZone: "America/Sao_paulo",
+        }
+    );
+    
+    const updated_at = new Date(note.updated_at).toLocaleString(
+        "pt-Br",
+        {
+            timeZone: "America/Sao_paulo",
+        }
+    );
+    
+    
     function renderContent()
     {
         return(
@@ -19,7 +34,9 @@ export default function NoteCard(props: NoteCardProps)
                 <p>
                     {note.summary}
                 </p>
-                <small>Atualizado: {note.updatedAt}</small>
+                <small>Atualizado: {created_at}</small>
+                <br/>
+                <small>Atualizado: {updated_at}</small>
             </article>
         );
     }

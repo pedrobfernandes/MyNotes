@@ -1,8 +1,8 @@
 "use client";
 
 import { use } from "react";
-import { useNotes } from "@/context/NotesContext";
 import { NoteForm } from "@/components/NoteForm";
+import { useNotes } from "@/context/NotesContext";
 import { DeleteButton } from "@/components/DeleteButton";
 
 
@@ -20,18 +20,26 @@ export default function EditNote(props: EditNoteProps)
     
     const { notes } = useNotes();
     
-    const note = notes.find((note) => note.id === id);
-    
-    if (!note)
+    if (notes.length > 0)
     {
-        return(<p>Nota não encontrada</p>);
+        const note = notes.find((note) => note.id === id);
+        if (note === undefined)
+        {
+            return(
+                <main>
+                    <p>Nota não encontrada</p>
+                </main>
+            );
+        }
+        
+        return(
+            <main>
+                <h1>{note.title}</h1>
+                <NoteForm initialData={note}/>
+                <DeleteButton id={id}/>
+            </main>
+        );
     }
     
-    return(
-        <main>
-            <h1>{note.title}</h1>
-            <NoteForm initialData={note}/>
-            <DeleteButton id={note.id}/>
-        </main>
-    );
+    return(<p>Notas ainda não carregaram</p>)
 }

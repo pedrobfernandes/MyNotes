@@ -1,27 +1,67 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import NoteCard from "@/components/NoteCard";
-import { Note } from "@/types";
-import { useNotes } from "@/context/NotesContext";
+import { Note, FetchNotesResult } from "@/types";
 import { supabase } from "@/lib/supabase/client";
+import { UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { fetchNotes } from "@/data/notes";
+import { useNotes } from "@/context/NotesContext";
 
 
 export default function Dashboard()
 {
-    const { notes } = useNotes();
+    const [userId, setUserId] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    
+    const didInitialize: React.RefObject<boolean> = useRef<boolean>(false);
+    
+    const { notes, setNotes } = useNotes();
     const router = useRouter();
+    
+    
+    async function getId(): Promise<void>
+    {
+        const user: UserResponse = await supabase.auth.getUser();
+        
+        if (user.error !== null)
+        {
+            setUserId(null);
+            return;
+        }
+        
+        setUserId(user.data.user.id);
+    }
+    
+    
+    async function getNotes(): Promise<void>
+    {
+        if (userId !== null)
+        {
+            const savedNotes: FetchNotesResult = await fetchNotes(userId);
+            setNotes(savedNotes.data);
+            
+            if (savedNotes.error !== null)
+            {
+                setErrorMessage(savedNotes.error);
+            }
+        }
+    }
+    
     
     function renderNotes()
     {
-        const notesList = notes.map((note: Note) =>
+        if (notes !== null)
         {
-            return(<NoteCard key={note.id} note={note}/>);
-        });
-        
-        return(notesList);
+            const notesList = notes.map((note: Note) =>
+            {
+                return(<NoteCard key={note.id} note={note}/>);
+            });
+            
+            return(notesList);
+        }
     }
     
     
@@ -65,10 +105,28 @@ export default function Dashboard()
     }, []);
     
     
+    useEffect(() =>
+    {
+        if (didInitialize.current === false)
+        {
+            didInitialize.current = true;
+            getId();
+        }
+    
+    }, []);
+    
+    
+    useEffect(() =>
+    {
+        getNotes();
+    
+    }, [userId]);
+    
+    
     return(
         <main>
             <header>
-                <h1>My Notes</h1>
+                <h1>Minhas Notas</h1>
                 
                 <Link href="/notes/new">
                     + Nova Nota
@@ -76,7 +134,7 @@ export default function Dashboard()
             </header>
             
             <section aria-label="Lista de notas">
-                <ul>{renderNotes()}</ul>
+                <ul>{renderNotes()} || {errorMessage}</ul>
             </section>
             <button type="button" onClick={handleLogout}>
                 Sair

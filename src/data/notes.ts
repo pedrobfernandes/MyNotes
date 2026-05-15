@@ -1,20 +1,212 @@
-import { Note } from "@/types";
+import { supabase } from "@/lib/supabase/client";
+import { FetchNotesResult, NoteMutationResult, InsertNoteType } from "@/types";
 
-export const notes: Note[] =
-[
+
+export async function fetchNotes(userId: string): Promise<FetchNotesResult>
+{
+    try
     {
-        id: "1",
-        title: "Como resolver erro no Firefox",
-        summary: "Problema com Wayland e aceleração...",
-        content: "Detalhes completos aqui...",
-        updatedAt: "Hoje",
-    },
-    
-    {
-        id: "2",
-        title: "Instalar Flatpak no Slackware",
-        summary: "Passo a passo com depedências...",
-        content: "Passos completos...",
-        updatedAt: "Ontem",
+        const { data: fetchData, error: fetchError } = await supabase
+            .from("notes")
+            .select("*")
+            .eq("user_id", userId);
+        
+        
+        if (fetchError !== null && fetchError !== undefined)
+        {
+            return({
+                data: [],
+                error: "Erro ao buscar notas",
+                status: "error",
+            });
+        }
+
+        if (fetchData !== null && fetchData !== undefined &&
+            Array.isArray(fetchData) && fetchData.length > 0)
+        {
+            return({
+                data: fetchData,
+                error: null,
+                status: "success",
+            });
+        }
+
+        return({
+            data: [],
+            error: "Sem notas criadas ainda.",
+            status: "not_created",
+        });
     }
-];
+    catch (error)
+    {
+        return({
+            data: [],
+            error: "Erro de conexão. " +
+            "Verifique sua internet ou tente mais tarde.",
+            status: "network_error",
+        });
+    }
+}
+
+
+export async function insertNote(
+    note: InsertNoteType,
+    userId: string):
+    Promise<NoteMutationResult>
+{
+    const { title, summary, content } = note;
+
+    try
+    {
+        const { data: insertData, error: insertError } = await supabase
+            .from("notes")
+            .insert({
+                user_id: userId,
+                title: title,
+                summary: summary,
+                content: content,
+            })
+            .select()
+            .maybeSingle();
+        
+        
+        if (insertError !== null && insertError !== undefined)
+        {
+            return({
+                data: null,
+                error: "Erro ao inserir nova nota.",
+                status: "error",
+            });
+        }
+
+        if (insertData !== null && insertData !== undefined)
+        {
+            return({
+                data: insertData,
+                error: null,
+                status: "success",
+            });
+        }
+
+        return({
+            data: null,
+            error: "Erro desconhecido ao tentar inserir nota.",
+            status: "not_created",
+        });
+    }
+    catch (error)
+    {
+        return({
+            data: null,
+            error: "Erro de conexão. " +
+            "Verifique sua internet ou tente mais tarde.",
+            status: "network_error",
+        });
+    }
+}
+
+
+export async function updateNote(
+    note: InsertNoteType,
+    noteId: string):
+    Promise<NoteMutationResult>
+{
+    const { title, summary, content } = note;
+    
+    try
+    {
+        const { data: updatedData, error: updatedError } = await supabase
+            .from("notes")
+            .update({
+                title: title,
+                summary: summary,
+                content: content,
+                updated_at: new Date().toISOString(),
+            })
+            .eq("id", noteId)
+            .select()
+            .maybeSingle();
+        
+        if (updatedError !== null && updatedError !== undefined)
+        {
+            return({
+                data: null,
+                error: "Erro ao atualizar a nota.",
+                status: "error",
+            });
+        }
+        
+        if (updatedData !== null && updatedData !== undefined)
+        {
+            return({
+                data: updatedData,
+                error: null,
+                status: "success",
+            });
+        }
+        
+        return({
+            data: null,
+            error: "Erro desconhecido ao tentar atualizar nota.",
+            status: "not_created",
+        });
+    }
+    catch
+    {
+        return({
+            data: null,
+            error: "Erro de conexão. " +
+            "Verifique sua internet ou tente mais tarde.",
+            status: "network_error",
+        });
+    }
+}
+
+
+export async function deleteNote(
+    noteId: string,):
+    Promise<NoteMutationResult>
+{
+    try
+    {
+        const { data: deletedData, error: deletedError } = await supabase
+            .from("notes")
+            .delete()
+            .eq("id", noteId)
+            .select()
+            .maybeSingle();
+        
+        if (deletedError !== null && deletedError !== undefined)
+        {
+            return({
+                data: null,
+                error: "Erro ao deletar nota.",
+                status: "error",
+            });
+        }
+            
+        if (deletedData !== null && deletedData !== undefined)
+        {
+            return({
+                data: deletedData,
+                error: null,
+                status: "success",
+            });
+        }
+        
+        return({
+            data: null,
+            error: "Erro desconhecido ao tentar deletar nota.",
+            status: "not_created",
+        });
+    }
+    catch
+    {
+        return({
+            data: null,
+             error: "Erro de conexão. " +
+            "Verifique sua internet ou tente mais tarde.",
+            status: "network_error",
+        });
+    }
+}
