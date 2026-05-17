@@ -16,7 +16,7 @@ type NotestProviderProps =
 }
 
 
-const NotestContext = createContext<NotesContextType | undefined>(undefined);
+const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
 
 export function NotesProvider(props: NotestProviderProps)
@@ -25,21 +25,21 @@ export function NotesProvider(props: NotestProviderProps)
     const [notes, setNotes] = useState<Note[] | []>([]);
     
     return(
-        <NotestContext.Provider
+        <NotesContext.Provider
             value={{
                 notes,
                 setNotes,
             }}
         >
             {children}
-        </NotestContext.Provider>
+        </NotesContext.Provider>
     );
 }
 
 
 export function useNotes()
 {
-    const context = useContext(NotestContext);
+    const context = useContext(NotesContext);
     
     if (context === undefined)
     {
