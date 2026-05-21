@@ -49,6 +49,53 @@ export async function fetchNotes(userId: string): Promise<FetchNotesResult>
 }
 
 
+export async function fetchNoteById(id: string): Promise<NoteMutationResult>
+{
+    try
+    {
+        const { data: fetchData, error: fetchError } = await supabase
+            .from("notes")
+            .select("*")
+            .eq("id", id)
+            .maybeSingle();
+        
+        
+        if (fetchError !== null && fetchError !== undefined)
+        {
+            return({
+                data: null,
+                error: "Erro ao buscar a nota.",
+                status: "error",
+            });
+        }
+        
+        if (fetchData !== null && fetchData !== undefined)
+        {
+            return({
+                data: fetchData,
+                error: null,
+                status: "success",
+            });
+        }
+        
+        return({
+            data: null,
+            error: "Nota não existe",
+            status: "not_created",
+        });
+    }
+    catch
+    {
+        return({
+            data: null,
+            error: "Erro de conexão. " +
+            "Verifique sua internet ou tente mais tarde.",
+            status: "network_error",
+        });
+    }
+}
+
+
 export async function insertNote(
     note: InsertNoteType,
     userId: string):

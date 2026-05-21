@@ -8,6 +8,7 @@ import { insertNote, updateNote } from "@/data/notes";
 import { supabase } from "@/lib/supabase/client";
 import {  UserResponse } from "@supabase/supabase-js";
 import { useNotes } from "@/context/NotesContext";
+import styles from "./NoteForm.module.css";
 
 
 
@@ -92,26 +93,28 @@ export function NoteForm(props: NoteFormProps)
     
     
     return(
-        <form onSubmit={handleSubmit}>
-            <div>
+        <form onSubmit={handleSubmit} className={styles.noteForm}>
+            <div className={styles.inputGroup}>
                 <label htmlFor="title">Título</label>
                 <input
                     id="title"
+                    className={styles.titleInput}
                     type="text"
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
                 />
             </div>
-            <div>
+            <div className={styles.inputGroup}>
                 <label htmlFor="summary">Sumário</label>
                 <input
                     id="summary"
+                    className={styles.summaryInput}
                     type="text"
                     value={summary}
                     onChange={(event) => setSummary(event.target.value)}
                 />
             </div>
-            <div>
+            <div className={styles.inputGroup}>
                 <label htmlFor="content">Conteudo</label>
                 <textarea
                     id="content"
@@ -121,7 +124,7 @@ export function NoteForm(props: NoteFormProps)
             </div>
             
             
-            <div>
+            <div className={styles.buttonGroup}>
                 <button type="submit">
                     Salvar
                 </button>

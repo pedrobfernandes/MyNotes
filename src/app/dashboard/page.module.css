@@ -1,0 +1,58 @@
+.dashboardContainer
+{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    
+    width: min(var(--container-max-size), 90vw);
+    margin: 0 auto;
+    padding: 1rem 0;
+    border: 1px solid violet;
+    
+    .dashboardHeader
+    {
+        width: 100%;
+        border: 1px solid magenta;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+        
+        @media(min-width: calc(500 / 16 * 1rem))
+        {
+            justify-content: space-between;
+        }
+        
+    }
+    
+    .searchFormSection
+    {
+        border: 1px solid lightblue;
+        width: 100%;
+    }
+    
+    .notesSection
+    {
+        border: 1px solid yellow;
+        width: 100%;
+        flex: 1;
+        
+        .notesContainer
+        {
+            border: 1px solid darkorange;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            
+            @media (min-width: calc(568 / 16 * 1rem))
+            {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    }
+}

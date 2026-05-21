@@ -9,6 +9,9 @@ import { UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { fetchNotes } from "@/data/notes";
 import { useNotes } from "@/context/NotesContext";
+import SearchForm from "@/components/SearchForm";
+import Pagination from "@/components/Pagination"
+import styles from "./page.module.css";
 
 
 export default function Dashboard()
@@ -61,6 +64,10 @@ export default function Dashboard()
             });
             
             return(notesList);
+        }
+        else
+        {
+            return(<p>{errorMessage}</p>);
         }
     }
     
@@ -124,21 +131,26 @@ export default function Dashboard()
     
     
     return(
-        <main>
-            <header>
+        <main className={styles.dashboardContainer}>
+            <header className={styles.dashboardHeader}>
+                <button type="button" onClick={handleLogout}>
+                    Sair
+                </button>
                 <h1>Minhas Notas</h1>
                 
                 <Link href="/notes/new">
                     + Nova Nota
                 </Link>
             </header>
-            
-            <section aria-label="Lista de notas">
-                <ul>{renderNotes()} || {errorMessage}</ul>
+            <section className={styles.searchFormSection}>
+                <h2 className="visually-hidden">Pesquisa de Notas</h2>
+                <SearchForm/>
             </section>
-            <button type="button" onClick={handleLogout}>
-                Sair
-            </button>
+            <section className={styles.notesSection}>
+                <h2 className="visually-hidden">Lista de Notas</h2>
+                <ul className={styles.notesContainer}>{renderNotes()}</ul>
+                <Pagination/>
+            </section>
         </main>
     );
 }

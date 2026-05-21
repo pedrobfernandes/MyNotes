@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import styles from "./page.module.css";
 
 
 export default function Auth()
@@ -130,7 +131,7 @@ export default function Auth()
         {
             return(
                 <form
-                    className="signup-form"
+                    className={styles.loginForm}
                     onSubmit={handleSendOtp}
                 >
                     <label htmlFor="email-input">Endereço de e-mail</label>
@@ -153,7 +154,7 @@ export default function Auth()
         {
             return(
                 <form
-                    className="otp-form"
+                    className={styles.loginForm}
                     onSubmit={handleVerifyOtp}
                 >
                     <label htmlFor="otp-input">
@@ -180,8 +181,30 @@ export default function Auth()
     
     
     return(
-        <section key={step}>
-            {renderEmailOrOtpForm()}
-        </section>
+        <div className={styles.loginPageWrapper}>
+            <main className={styles.loginMain}>
+                <h1>MyNotes</h1>
+                <p className={styles.appDescription}>
+                    Suas notas organizadas em um só lugar.
+                </p>
+                <section className={styles.formSection} key={step}>
+                    {renderEmailOrOtpForm()}
+                </section>
+            </main>
+            <footer className={styles.loginFooter}>
+                <p className={styles.authorLink}>
+                    <span className={styles.copyright}>&copy; 2026</span>
+                    <a
+                        href="https://github.com/pedrobfernandes"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Pedro Fernandes
+                        (abre em nova aba)
+                    </a>
+                </p>
+            </footer>
+        </div>
+        
     );
 }

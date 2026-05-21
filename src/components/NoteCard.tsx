@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Note } from "@/types";
+import styles from "./NoteCard.module.css"
 
 type NoteCardProps =
 {
@@ -34,7 +35,7 @@ export default function NoteCard(props: NoteCardProps)
                 <p>
                     {note.summary}
                 </p>
-                <small>Atualizado: {created_at}</small>
+                <small>Criado: {created_at}</small>
                 <br/>
                 <small>Atualizado: {updated_at}</small>
             </article>
@@ -42,7 +43,7 @@ export default function NoteCard(props: NoteCardProps)
     }
     
     return(
-        <li>
+        <li className={styles.noteCard}>
             <Link href={`/notes/${note.id}`}>
                 {renderContent()}
             </Link>

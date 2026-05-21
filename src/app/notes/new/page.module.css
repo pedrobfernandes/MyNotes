@@ -1,0 +1,14 @@
+.newNoteContainer
+{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    width: min(var(--container-max-size), 90vw);
+    margin: 0 auto;
+    padding: 1rem 0;
+    gap: 1rem;
+    border: 1px solid violet;
+}

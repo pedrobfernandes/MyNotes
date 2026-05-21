@@ -1,0 +1,15 @@
+.noteCard
+{
+    border: 1px solid brown;
+    display: block;
+    
+    article
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        text-align: center;
+        padding: 0.5rem;
+    }
+}
