@@ -23,6 +23,19 @@
         gap: 1rem;
         
         
+        .loginHeading
+        {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            
+            .icon
+            {
+                width: 1.8rem;
+                height: 1.8rem;
+            }
+        }
+        
         .appDescription
         {
             text-wrap: balance;

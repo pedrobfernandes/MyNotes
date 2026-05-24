@@ -1,9 +1,10 @@
 "use client";
 
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { NotebookPen } from "lucide-react";
 import styles from "./page.module.css";
 
 
@@ -13,7 +14,12 @@ export default function Auth()
     const [otp, setOtp] = useState<string>("");
     const [step, setStep] = useState<"email" | "otp">("email");
     const [loading, setLoading] = useState<boolean>(false);
+    const [resendMessage, setResendMessage] = useState<string>("");
+    const [resendCooldown, setResendCooldown] = useState<number>(0);
     
+    
+    // Guarda a referencia para o timer
+    const resendIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const router = useRouter();
     
     
@@ -26,6 +32,8 @@ export default function Auth()
     }
     
     
+    // Cuida de ver se já tem uma sessão. Se tem
+    // manda para o dashboard, se não fica aqui (login)
     async function loadUserSession(): Promise<void>
     {
         try
@@ -51,11 +59,95 @@ export default function Auth()
     }
     
     
+    // Cuida de "agendar" a limpeza do timer na desmontagem
+    // "agenda" pois estamos retornando um callback e não executando na hora
+    useEffect(() =>
+    {
+        return(() =>
+        {
+            if (resendIntervalRef.current !== null)
+            {
+                clearInterval(resendIntervalRef.current);
+            }
+        })
+    
+    }, []);
+    
+    
     useEffect(() =>
     {
         loadUserSession();
         
     }, []);
+    
+    
+    
+    function startResendCooldown()
+    {
+        if (resendIntervalRef.current !== null)
+        {
+            clearInterval(resendIntervalRef.current);
+        }
+        
+        setResendCooldown(30);
+        
+        
+        // Cuida de criar o timer, que roda a callback a cada segundo.
+        // O ref guarda a referencia do timer para o parar depois.
+        resendIntervalRef.current = setInterval(() =>
+        {
+            // Em cada chamada desta callback pelo timer,
+            // atualiza o valor do cooldown e atualiza a interface
+            setResendCooldown(previous =>
+            {
+                if (previous <= 1)
+                {
+                    if (resendIntervalRef.current !== null)
+                    {
+                        clearInterval(resendIntervalRef.current);
+                        resendIntervalRef.current = null;
+                    }
+                    
+                    return(0);
+                }
+                
+                return(previous - 1);
+            });
+        
+        }, 1000);
+    }
+    
+    
+    
+    async function handleResendOtp(): Promise<void>
+    {
+        setLoading(true);
+        setResendMessage("");
+        
+        try
+        {
+            const { error: resendRequestError } = await supabase.auth.signInWithOtp({ email });
+            
+            if (resendRequestError !== null)
+            {
+                console.log(resendRequestError.message);
+            }
+            else
+            {
+                setResendMessage("Código reenviado. Verifique seu email.");
+                startResendCooldown();
+            }
+        }
+        catch
+        {
+            console.log("Erro ao reenviar código");
+        }
+        finally
+        {
+            setLoading(false);
+        }
+    }    
+    
     
     
     async function handleSendOtp(
@@ -174,6 +266,15 @@ export default function Auth()
                     >
                         {loading ? "Verificando..." : "Verificar código"}
                     </button>
+                    <button
+                        type="button"
+                        onClick={handleResendOtp}
+                        disabled={loading || resendCooldown > 0}
+                        aria-label="Reenviar código de verificação para o e-mail"
+                    >
+                        {resendCooldown > 0 ? `Reenviar em ${resendCooldown}s` : "Reenviar código"}
+                    </button>
+                    {resendMessage}
                 </form>
             );
         }
@@ -183,7 +284,10 @@ export default function Auth()
     return(
         <div className={styles.loginPageWrapper}>
             <main className={styles.loginMain}>
-                <h1>MyNotes</h1>
+                <h1 className={styles.loginHeading}>
+                    MyNotes
+                    <NotebookPen className={styles.icon}/>
+                </h1>
                 <p className={styles.appDescription}>
                     Suas notas organizadas em um só lugar.
                 </p>

@@ -11,6 +11,7 @@ import { fetchNotes } from "@/data/notes";
 import { useNotes } from "@/context/NotesContext";
 import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination"
+import { NotebookPen, SquarePlus } from "lucide-react";
 import styles from "./page.module.css";
 
 
@@ -133,14 +134,24 @@ export default function Dashboard()
     return(
         <main className={styles.dashboardContainer}>
             <header className={styles.dashboardHeader}>
-                <button type="button" onClick={handleLogout}>
-                    Sair
-                </button>
-                <h1>Minhas Notas</h1>
-                
+                <div className={styles.dashboardHeaderLeft}>
+                    <button type="button" onClick={handleLogout}>
+                        Sair
+                    </button>
+                    <h1  className={styles.dashboardHeading}>
+                        Minhas Notas
+                        <NotebookPen className="icon"/>
+                    </h1>
+                </div>
+ 
                 <Link href="/notes/new">
-                    + Nova Nota
+                    <div className={styles.newNoteContainer}>
+                        <SquarePlus/>
+                        Nova Nota
+                    </div>
                 </Link>
+
+                
             </header>
             <section className={styles.searchFormSection}>
                 <h2 className="visually-hidden">Pesquisa de Notas</h2>
