@@ -14,12 +14,24 @@ export default function SearchForm(props: SearchFormProps)
     const [searchTerm, setSearchTerm] = useState<string>("");
     
     
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        const value: string = event.target.value;
+        setSearchTerm(value);
+        
+        if (value.trim() === "")
+        {
+            setFilter("");
+        }
+    }
+    
+    
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): void
     {
         event.preventDefault();
         setFilter(searchTerm.trim());
+        setSearchTerm(searchTerm.trim());
         setCurrentPage(1);
-        //~ setSearchTerm("");
     }
     
     return(
@@ -30,7 +42,7 @@ export default function SearchForm(props: SearchFormProps)
                 type="text"
                 placeholder="Termo de pesquisa"
                 value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
+                onChange={handleChange}
             />
             <button type="submit">
                 Buscar
