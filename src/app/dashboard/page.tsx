@@ -6,7 +6,7 @@ import NoteCard from "@/components/NoteCard";
 import { Note, FetchNotesResult } from "@/types";
 import { supabase } from "@/lib/supabase/client";
 import { UserResponse } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fetchNotes } from "@/data/notes";
 import { useNotes } from "@/context/NotesContext";
 import SearchForm from "@/components/SearchForm";
@@ -17,9 +17,12 @@ import styles from "./page.module.css";
 
 export default function Dashboard()
 {
+    const searchParams = useSearchParams();
+    const initialPage = Number(searchParams.get("page")) || 1;
+    
     const [userId, setUserId] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>("");
     
     // Dá erro (ou issue) no next de 'qualquer coisa hydration' - whatever...
@@ -106,7 +109,12 @@ export default function Dashboard()
             const notesToShow: Note[] = filteredNotes.slice(startIndex, endIndex);
             const notesList = notesToShow.map((note: Note) =>
             {
-                return(<NoteCard key={note.id} note={note}/>);
+                return(
+                    <NoteCard
+                        key={note.id}
+                        note={note}
+                        currentPage={currentPage}
+                    />);
             });
             
             return(notesList);
@@ -154,7 +162,9 @@ export default function Dashboard()
     {
         if (currentPage < totalPages)
         {
-            setCurrentPage((previous) => previous + 1);
+            const nextPage: number = currentPage + 1
+            setCurrentPage(nextPage);
+            router.replace(`/dashboard?page=${nextPage}`);
             return;
         }
     }
@@ -163,7 +173,9 @@ export default function Dashboard()
     {
         if (currentPage > 1)
         {
-            setCurrentPage((previous) => previous - 1);
+            const previousPage: number = currentPage - 1;
+            setCurrentPage(previousPage);
+            router.replace(`/dashboard?page=${previousPage}`);
             return;
         }
     }
@@ -195,6 +207,22 @@ export default function Dashboard()
     }, [userId]);
     
     
+    useEffect(() =>
+    {
+        if (currentPage < 1)
+        {
+            setCurrentPage(1);
+            return;
+        }
+        
+        if (currentPage > totalPages && totalPages > 0)
+        {
+            setCurrentPage(totalPages);
+        }
+    
+    }, [currentPage, totalPages]);
+    
+    
     return(
         <main className={styles.dashboardContainer}>
             <header className={styles.dashboardHeader}>
@@ -202,7 +230,7 @@ export default function Dashboard()
                     <button type="button" onClick={handleLogout}>
                         Sair
                     </button>
-                    <h1  className={styles.dashboardHeading}>
+                    <h1 className={styles.dashboardHeading}>
                         Minhas Notas
                         <NotebookPen className="icon"/>
                     </h1>

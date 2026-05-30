@@ -15,12 +15,13 @@ import styles from "./NoteForm.module.css";
 type NoteFormProps =
 {
     initialData?: Note;
+    redirectPath: string;
 }
 
 
 export function NoteForm(props: NoteFormProps)
 {
-    const { initialData } = props;
+    const { initialData, redirectPath } = props;
     
     const router = useRouter();
     const { setNotes } = useNotes();
@@ -82,13 +83,13 @@ export function NoteForm(props: NoteFormProps)
             }
         }
         
-        router.push("/dashboard");
+        router.push(redirectPath);
     }
     
     
     function handleCancel()
     {
-        router.push("/dashboard");
+        router.push(redirectPath);
     }
     
     

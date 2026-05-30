@@ -5,12 +5,13 @@ import styles from "./NoteCard.module.css"
 type NoteCardProps =
 {
     note: Note;
+    currentPage: number;
 };
 
 
 export default function NoteCard(props: NoteCardProps)
 {
-    const { note } = props;
+    const { note, currentPage } = props;
     
     const created_at = new Date(note.created_at).toLocaleString(
         "pt-Br",
@@ -44,7 +45,7 @@ export default function NoteCard(props: NoteCardProps)
     
     return(
         <li className={styles.noteCard}>
-            <Link href={`/notes/${note.id}`}>
+            <Link href={`/notes/${note.id}?page=${currentPage}`}>
                 {renderContent()}
             </Link>
         </li>

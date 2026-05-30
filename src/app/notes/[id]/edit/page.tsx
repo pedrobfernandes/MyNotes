@@ -1,27 +1,23 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import { use } from "react";
+import { NoteForm } from "@/components/NoteForm";
 import { useNotes } from "@/context/NotesContext";
+import { DeleteButton } from "@/components/DeleteButton";
 import { fetchNoteById } from "@/data/notes";
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import { Note } from "@/types";
 import styles from "./page.module.css";
-import { useSearchParams } from "next/navigation";
 
 
-
-type ViewNoteProps =
+type EditNoteProps =
 {
     params: Promise<{
-        id: string
+        id: string;
     }>;
 };
 
-
-export default function ViewNote(props: ViewNoteProps)
+export default function EditNote(props: EditNoteProps)
 {
     const [note, setNote] = useState<Note | null>(null);
     const [loadMessage, setLoadMessage] = useState<string | null>(null);
@@ -30,9 +26,6 @@ export default function ViewNote(props: ViewNoteProps)
     const { id } = use(params);
     
     const { notes } = useNotes();
-    
-    const searchParams = useSearchParams();
-    const page = searchParams.get("page") ?? "1";
     
     
     async function loadNote(): Promise<void>
@@ -73,25 +66,13 @@ export default function ViewNote(props: ViewNoteProps)
     if (note !== null)
     {
         return(
-            <main className={styles.viewNoteContainer}>
-                <article>
-                    <header>
-                        <h1>{note.title}</h1>
-                    </header>
-                    <section>
-                        <ReactMarkdown>
-                            {note.content}
-                        </ReactMarkdown>
-                    </section>
-                    <footer>
-                        <Link href={`/notes/${note.id}/edit`}>
-                            Editar
-                        </Link>
-                        <Link href={`/dashboard?page=${page}`}>
-                            Voltar
-                        </Link>
-                    </footer>
-                </article>
+            <main className={styles.editNoteContainer}>
+                <h1>{note.title}</h1>
+                <NoteForm
+                    initialData={note}
+                    redirectPath={`/notes/${note.id}`}
+                />
+                <DeleteButton id={id}/>
             </main>
         );
     }
