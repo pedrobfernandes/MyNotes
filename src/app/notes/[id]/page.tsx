@@ -33,6 +33,7 @@ export default function ViewNote(props: ViewNoteProps)
     
     const searchParams = useSearchParams();
     const page = searchParams.get("page") ?? "1";
+    const search = searchParams.get("search");
     
     
     async function loadNote(): Promise<void>
@@ -84,10 +85,10 @@ export default function ViewNote(props: ViewNoteProps)
                         </ReactMarkdown>
                     </section>
                     <footer>
-                        <Link href={`/notes/${note.id}/edit`}>
+                        <Link href={`/notes/${note.id}/edit?page=${page}&search=${search}`}>
                             Editar
                         </Link>
-                        <Link href={`/dashboard?page=${page}`}>
+                        <Link href={`/dashboard?page=${page}&search=${search}`}>
                             Voltar
                         </Link>
                     </footer>

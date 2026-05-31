@@ -1,17 +1,17 @@
-import { useState, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import styles from "./SearchForm.module.css";
 
 
 type SearchFormProps =
 {
-    setFilter: React.Dispatch<SetStateAction<string>>;
-    setCurrentPage: React.Dispatch<SetStateAction<number>>;
+    filter: string;
+    handleSearch: (term: string) => void;
 };
 
 export default function SearchForm(props: SearchFormProps)
 {
-    const { setFilter, setCurrentPage } = props;
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const { filter, handleSearch } = props;
+    const [searchTerm, setSearchTerm] = useState<string>(filter);
     
     
     function handleChange(event: React.ChangeEvent<HTMLInputElement>)
@@ -21,7 +21,7 @@ export default function SearchForm(props: SearchFormProps)
         
         if (value.trim() === "")
         {
-            setFilter("");
+            handleSearch("");
         }
     }
     
@@ -29,10 +29,16 @@ export default function SearchForm(props: SearchFormProps)
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): void
     {
         event.preventDefault();
-        setFilter(searchTerm.trim());
-        setSearchTerm(searchTerm.trim());
-        setCurrentPage(1);
+        handleSearch(searchTerm.trim());
     }
+    
+    
+    useEffect(() =>
+    {
+        setSearchTerm(filter);
+    
+    }, [filter]);
+    
     
     return(
         <form className={styles.searchForm} onSubmit={handleSubmit}>

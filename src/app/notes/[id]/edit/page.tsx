@@ -8,6 +8,7 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { fetchNoteById } from "@/data/notes";
 import { Note } from "@/types";
 import styles from "./page.module.css";
+import { useSearchParams } from "next/navigation";
 
 
 type EditNoteProps =
@@ -26,6 +27,10 @@ export default function EditNote(props: EditNoteProps)
     const { id } = use(params);
     
     const { notes } = useNotes();
+    
+    const searchParams = useSearchParams();
+    const page = searchParams.get("page") ?? "1";
+    const search = searchParams.get("search");
     
     
     async function loadNote(): Promise<void>
@@ -70,7 +75,7 @@ export default function EditNote(props: EditNoteProps)
                 <h1>{note.title}</h1>
                 <NoteForm
                     initialData={note}
-                    redirectPath={`/notes/${note.id}`}
+                    redirectPath={`/notes/${note.id}?page=${page}&search=${search}`}
                 />
                 <DeleteButton id={id}/>
             </main>

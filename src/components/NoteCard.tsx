@@ -6,12 +6,13 @@ type NoteCardProps =
 {
     note: Note;
     currentPage: number;
+    filter: string;
 };
 
 
 export default function NoteCard(props: NoteCardProps)
 {
-    const { note, currentPage } = props;
+    const { note, currentPage, filter } = props;
     
     const created_at = new Date(note.created_at).toLocaleString(
         "pt-Br",
@@ -45,7 +46,7 @@ export default function NoteCard(props: NoteCardProps)
     
     return(
         <li className={styles.noteCard}>
-            <Link href={`/notes/${note.id}?page=${currentPage}`}>
+            <Link href={`/notes/${note.id}?page=${currentPage}&search=${encodeURIComponent(filter)}`}>
                 {renderContent()}
             </Link>
         </li>

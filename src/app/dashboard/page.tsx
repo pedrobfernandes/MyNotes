@@ -19,11 +19,12 @@ export default function Dashboard()
 {
     const searchParams = useSearchParams();
     const initialPage = Number(searchParams.get("page")) || 1;
+    const initialSearch = searchParams.get("search") || "";
     
     const [userId, setUserId] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
-    const [filter, setFilter] = useState<string>("");
+    const [filter, setFilter] = useState<string>(initialSearch);
     
     // Dá erro (ou issue) no next de 'qualquer coisa hydration' - whatever...
     // Se não usar isto para renderizar a paginação apenas quando
@@ -114,7 +115,8 @@ export default function Dashboard()
                         key={note.id}
                         note={note}
                         currentPage={currentPage}
-                    />);
+                        filter={filter}
+                />);
             });
             
             return(notesList);
@@ -157,6 +159,14 @@ export default function Dashboard()
     }
     
     
+    function handleSearch(term: string): void
+    {
+        setFilter(term);
+        setCurrentPage(1);
+        
+        router.replace(`/dashboard?page=1&search=${encodeURIComponent(term)}`);
+    }
+    
     
     function handleNextPage(): void
     {
@@ -164,7 +174,7 @@ export default function Dashboard()
         {
             const nextPage: number = currentPage + 1
             setCurrentPage(nextPage);
-            router.replace(`/dashboard?page=${nextPage}`);
+            router.replace(`/dashboard?page=${nextPage}&search=${encodeURIComponent(filter)}`);
             return;
         }
     }
@@ -175,7 +185,7 @@ export default function Dashboard()
         {
             const previousPage: number = currentPage - 1;
             setCurrentPage(previousPage);
-            router.replace(`/dashboard?page=${previousPage}`);
+            router.replace(`/dashboard?page=${previousPage}&search=${encodeURIComponent(filter)}`);
             return;
         }
     }
@@ -245,7 +255,10 @@ export default function Dashboard()
             </header>
             <section className={styles.searchFormSection}>
                 <h2 className="visually-hidden">Pesquisa de Notas</h2>
-                <SearchForm setFilter={setFilter} setCurrentPage={setCurrentPage}/>
+                <SearchForm
+                    filter={filter}
+                    handleSearch={handleSearch}
+                />
             </section>
             <section className={styles.notesSection}>
                 <h2 className="visually-hidden">Lista de Notas</h2>
