@@ -33,11 +33,13 @@ export default function ViewNote(props: ViewNoteProps)
     
     const searchParams = useSearchParams();
     const page = searchParams.get("page") ?? "1";
-    const search = searchParams.get("search");
+    const search = searchParams.get("search") ?? "";
     
     
     async function loadNote(): Promise<void>
     {
+        // Aqui idealmente pega as notas do context. Mas caso o usuario por exemplo
+        // aperte f5, pega (ou tenta) pegar do supabase
         const contextNote: Note | undefined = notes.find((note) => note.id === id);
         if (contextNote !== undefined)
         {

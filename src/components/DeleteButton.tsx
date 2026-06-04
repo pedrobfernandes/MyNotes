@@ -7,8 +7,16 @@ import { useNotes } from "@/context/NotesContext";
 import { Note, NoteMutationResult } from "@/types";
 
 
-export function DeleteButton({ id }: { id: string })
+type DeleteButtonProps =
 {
+    id: string;
+    page: string;
+    search: string;
+}
+
+export function DeleteButton(props: DeleteButtonProps)
+{
+    const { id, page, search } = props;
     const [deletedMessage, setDeletedMessage] = useState<string>("");
     const router = useRouter();
     const { notes, setNotes } = useNotes();
@@ -55,7 +63,7 @@ export function DeleteButton({ id }: { id: string })
             });
         }
         
-        router.push("/dashboard");
+        router.push(`/dashboard?page=${page}&search=${search}`);
     }
     
     return(

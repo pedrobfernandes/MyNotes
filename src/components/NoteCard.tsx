@@ -14,6 +14,8 @@ export default function NoteCard(props: NoteCardProps)
 {
     const { note, currentPage, filter } = props;
     
+    // Cuida de mostrar na interface a data no "nosso formato" ao invez
+    // do formato que o supabase usa.
     const created_at = new Date(note.created_at).toLocaleString(
         "pt-Br",
         {

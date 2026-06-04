@@ -46,6 +46,7 @@ export function NoteForm(props: NoteFormProps)
             const updatedData: Note | null = updatedNote.data;
             if (updatedData !== null)
             {
+                // Cuida de atualizar a interface (o estado)
                 setNotes((previousNotes) =>
                 {
                     const newNotes: Note[] = [];
@@ -79,6 +80,7 @@ export function NoteForm(props: NoteFormProps)
             const insertedData: Note | null = insertedNote.data;
             if (insertedData !== null)
             {
+                // Cuida de atualizar  interface
                 setNotes((previousNotes) => [insertedData].concat(previousNotes));
             }
         }

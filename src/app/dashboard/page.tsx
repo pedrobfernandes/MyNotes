@@ -17,6 +17,15 @@ import styles from "./page.module.css";
 
 export default function Dashboard()
 {
+    /*
+        Para rastreamento de página e de termo de pesquisa
+        usamos a url mesmo que fica mais facil para sincronizar
+        os casos em que entra no card, e volta. Se não rastrear
+        quando volta do card, se antes estava na página 3,
+        volta para a 1 - chato né..
+        Depois nos componentes e páginas que precisam, usamos
+        useSearchParams() novamente para pegar os itens..
+    */
     const searchParams = useSearchParams();
     const initialPage = Number(searchParams.get("page")) || 1;
     const initialSearch = searchParams.get("search") || "";
@@ -26,16 +35,35 @@ export default function Dashboard()
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>(initialSearch);
     
-    // Dá erro (ou issue) no next de 'qualquer coisa hydration' - whatever...
-    // Se não usar isto para renderizar a paginação apenas quando
-    // as notas estiverem prontas...
+    /*
+        Dá erro (ou issue) no next de 'qualquer coisa hydration' - whatever...
+        Se não usar isto para renderizar a paginação apenas quando
+        as notas estiverem prontas... Talvez tenha outra forma mais
+        "react/next-way... whatever..", isto foi o que me ocorreu..
+    */
     const [isReady, setIsReady] = useState<boolean>(false);
     
+    
+    /*
+        Aqui é para "agora", em "dev local" não executar o effect que pega
+        o userId 2 vezes. Outros effects dependem do userId. Novamente, talvez
+        tenha forma melhor e mais "react-way" de fazer, mas de novo é o que me
+        ocorreu. Já dei em louco em outros projetos por conta disto e esta abordagem
+        resolve e pronto.
+    */
     const didInitialize: React.RefObject<boolean> = useRef<boolean>(false);
     
     const { notes, setNotes } = useNotes();
     const router = useRouter();
     
+    
+    /*
+        Cuida de pegar a pesquisa "normalizada" (minuscúlas, sem espaços etc)
+        normalizedFilter fica de fora do filtro abaixo, pois ele é so 1 (o que foi digiado)
+        então não precisa ser "processado varias vezes", apenas comparado.
+        Apos apenas comparamos comparamos e colocamos no array as notas que correspondem
+        ao filtro.
+    */
     const normalizedFilter: string = normalize(filter);
     const filteredNotes: Note[] = notes.filter((note: Note) =>
     {
@@ -90,6 +118,9 @@ export default function Dashboard()
     }
     
     
+    
+    // Cuida de "normalizar" o filtro dgitado e o
+    // titulo e sumario das notas para comparação
     function normalize(str: string): string
     {
         return(
@@ -133,6 +164,13 @@ export default function Dashboard()
     }
     
     
+    
+    /*
+        Esta confesso que não entendi 100% o propósito.
+        Melhor, eu sei o que faz obvio, mas não entendi 100% o que
+        faz no dashboard.. Se a gente já está logado,
+        porque necessita mesmo disto??
+    */
     async function checkSession(): Promise<void>
     {
         try
@@ -159,11 +197,20 @@ export default function Dashboard()
     }
     
     
+    /*
+        Cuida da busca em si, configura o filtro/termo
+        coloca na página 1 né, pois se temos vários cards,
+        e eu uso 8 por pagina, se tivermos 15 correspondencias
+        queremos a página 1.
+    */
     function handleSearch(term: string): void
     {
         setFilter(term);
         setCurrentPage(1);
         
+        
+        // usando a url podemos fazer isto né? Mais facil e menos chato que estado,
+        // context whatever...
         router.replace(`/dashboard?page=1&search=${encodeURIComponent(term)}`);
     }
     
@@ -172,6 +219,11 @@ export default function Dashboard()
     {
         if (currentPage < totalPages)
         {
+            /*
+                Aqui segundo as "regras" deveria usar o estado anterior,
+                ao invéz disto, mas sinceramente... whatever, a não ser que a pessoa
+                tenha um tique nervoso e compulsivo de apertar o botão super rápido...
+            */
             const nextPage: number = currentPage + 1
             setCurrentPage(nextPage);
             router.replace(`/dashboard?page=${nextPage}&search=${encodeURIComponent(filter)}`);
@@ -183,6 +235,7 @@ export default function Dashboard()
     {
         if (currentPage > 1)
         {
+            // idem o item acima
             const previousPage: number = currentPage - 1;
             setCurrentPage(previousPage);
             router.replace(`/dashboard?page=${previousPage}&search=${encodeURIComponent(filter)}`);
@@ -219,12 +272,23 @@ export default function Dashboard()
     
     useEffect(() =>
     {
+        /*
+            Aqui garante que o "engracadinho" coloque na url
+            ....page=-15. Quer dizer, pode colocar á vontade né mas
+            vai para a página 1
+        */
         if (currentPage < 1)
         {
             setCurrentPage(1);
             return;
         }
         
+        
+        /*
+            E aqui idem.. se o engraçadinho(a) fizer algo como
+            ....page=89 e temos apenas 20 páginas vai para a
+            página 20
+        */
         if (currentPage > totalPages && totalPages > 0)
         {
             setCurrentPage(totalPages);
