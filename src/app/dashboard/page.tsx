@@ -244,6 +244,27 @@ export default function Dashboard()
     }
     
     
+    function handleGoToFirstPage(): void
+    {
+        if (currentPage > 1)
+        {
+            setCurrentPage(1);
+            router.replace(`/dashboard?page=1&search=${encodeURIComponent(filter)}`);
+            return;
+        }
+    }
+    
+    
+    function handleGoToLastPage(): void
+    {
+        if (currentPage < totalPages)
+        {
+            setCurrentPage(totalPages);
+            router.replace(`/dashboard?page=${totalPages}&search=${encodeURIComponent(filter)}`);
+            return;
+        }
+    }
+    
     
     useEffect(() =>
     {
@@ -333,6 +354,8 @@ export default function Dashboard()
                         <Pagination
                             handleNextPage={handleNextPage}
                             handlePreviousPage={handlePreviousPage}
+                            handleGoToFirstPage={handleGoToFirstPage}
+                            handleGoToLastPage={handleGoToLastPage}
                             currentPage={currentPage}
                             totalPages={totalPages}
                         />
