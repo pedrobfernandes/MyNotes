@@ -8,6 +8,7 @@ import { insertNote, updateNote } from "@/data/notes";
 import { supabase } from "@/lib/supabase/client";
 import {  UserResponse } from "@supabase/supabase-js";
 import { useNotes } from "@/context/NotesContext";
+import ReactMarkdown from "react-markdown";
 import styles from "./NoteForm.module.css";
 
 
@@ -29,6 +30,13 @@ export function NoteForm(props: NoteFormProps)
     const [title, setTitle] = useState(initialData?.title || "");
     const [summary, setSummary] = useState(initialData?.summary || "");
     const [content, setContent] = useState(initialData?.content || "");
+    const [previewMode, setPreviewMode] = useState<boolean>(false);
+    
+    const MARKDOWN_GUIDE_URL: string =
+        "https://docs.github.com/" +
+        "pt/get-started/writing-on-github/" +
+        "getting-started-with-writing-and-formatting-on-github/" +
+        "basic-writing-and-formatting-syntax";
 
     
     async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): Promise<void>
@@ -89,6 +97,29 @@ export function NoteForm(props: NoteFormProps)
     }
     
     
+    function renderTextOrMarkDown()
+    {
+        if (previewMode === true)
+        {
+            return(
+                <div className={styles.previewContainer}>
+                    <ReactMarkdown>
+                        {content}
+                    </ReactMarkdown>
+                </div>
+            );
+        }
+        
+        return(
+            <textarea
+                id="content"
+                value={content}
+                onChange={(event) => setContent(event.target.value)}
+            />
+        );
+    }
+    
+    
     function handleCancel()
     {
         router.push(redirectPath);
@@ -119,11 +150,20 @@ export function NoteForm(props: NoteFormProps)
             </div>
             <div className={styles.inputGroup}>
                 <label htmlFor="content">Conteudo</label>
-                <textarea
-                    id="content"
-                    value={content}
-                    onChange={(event) => setContent(event.target.value)}
-                />
+                <button
+                    type="button"
+                    onClick={() => setPreviewMode(!previewMode)}
+                >
+                    {previewMode ? "Continuar escrevendo" : "Pré-visualizar"}
+                </button>
+                <a
+                    href={MARKDOWN_GUIDE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Guia Markdown
+                </a>
+                {renderTextOrMarkDown()}
             </div>
             
             

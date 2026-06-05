@@ -32,14 +32,23 @@
         
         input,
         button,
-        textarea
+        textarea,
+        .previewContainer
         {
             width: 100%;
         }
         
         textarea
         {
+            min-height: calc(400 / 16 * 1rem);
+            resize: vertical;
+        }
+        
+        textarea,
+        .previewContainer
+        {
             max-width: 100%;
+            padding: 1rem;
         }
     }
     

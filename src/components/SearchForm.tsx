@@ -29,7 +29,7 @@ export default function SearchForm(props: SearchFormProps)
     
     
     // Prefiro que a busca seja mesmo apos apertar o botão ao invez daquele modelo
-    // moderno e chado de digitar e ir filtrando..
+    // moderno e chato de digitar e ir filtrando..
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): void
     {
         event.preventDefault();

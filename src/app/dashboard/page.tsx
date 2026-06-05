@@ -61,7 +61,7 @@ export default function Dashboard()
         Cuida de pegar a pesquisa "normalizada" (minuscúlas, sem espaços etc)
         normalizedFilter fica de fora do filtro abaixo, pois ele é so 1 (o que foi digiado)
         então não precisa ser "processado varias vezes", apenas comparado.
-        Apos apenas comparamos comparamos e colocamos no array as notas que correspondem
+        Apos apenas comparamos e colocamos no array as notas que correspondem
         ao filtro.
     */
     const normalizedFilter: string = normalize(filter);
@@ -294,7 +294,7 @@ export default function Dashboard()
     useEffect(() =>
     {
         /*
-            Aqui garante que o "engracadinho" coloque na url
+            Aqui garante que o "engracadinho" não coloque na url
             ....page=-15. Quer dizer, pode colocar á vontade né mas
             vai para a página 1
         */
