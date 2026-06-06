@@ -1,4 +1,10 @@
 .viewNoteContainer
 {
     padding: 1rem;
+    
+    .pdfExport
+    {
+        padding: 1rem;
+        max-width: calc(600 / 16 * 1rem);
+    }
 }
