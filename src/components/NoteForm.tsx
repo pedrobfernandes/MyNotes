@@ -57,6 +57,7 @@ export function NoteForm(props: NoteFormProps)
                 // Cuida de atualizar a interface (o estado)
                 setNotes((previousNotes) =>
                 {
+                    
                     const newNotes: Note[] = [];
                     for (const note of previousNotes)
                     {
@@ -64,9 +65,13 @@ export function NoteForm(props: NoteFormProps)
                         {
                             newNotes.push(note);
                         }
+                        else
+                        {
+                            newNotes.push(updatedData);
+                        }
                     }
                     
-                    return(newNotes.concat(updatedData));
+                    return(newNotes);
                 });
             }
             

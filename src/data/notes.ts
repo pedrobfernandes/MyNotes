@@ -9,7 +9,8 @@ export async function fetchNotes(userId: string): Promise<FetchNotesResult>
         const { data: fetchData, error: fetchError } = await supabase
             .from("notes")
             .select("*")
-            .eq("user_id", userId);
+            .eq("user_id", userId)
+            .order("created_at", { ascending: false });
         
         
         if (fetchError !== null && fetchError !== undefined)

@@ -35,14 +35,6 @@ export default function Dashboard()
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>(initialSearch);
     
-    /*
-        Dá erro (ou issue) no next de 'qualquer coisa hydration' - whatever...
-        Se não usar isto para renderizar a paginação apenas quando
-        as notas estiverem prontas... Talvez tenha outra forma mais
-        "react/next-way... whatever..", isto foi o que me ocorreu..
-    */
-    const [isReady, setIsReady] = useState<boolean>(false);
-    
     
     /*
         Aqui é para "agora", em "dev local" não executar o effect que pega
@@ -53,7 +45,7 @@ export default function Dashboard()
     */
     const didInitialize: React.RefObject<boolean> = useRef<boolean>(false);
     
-    const { notes, setNotes } = useNotes();
+    const { notes, setNotes, hasLoadedNotes, setHasLoadedNotes } = useNotes();
     const router = useRouter();
     
     
@@ -105,15 +97,18 @@ export default function Dashboard()
     {
         if (userId !== null)
         {
-            const savedNotes: FetchNotesResult = await fetchNotes(userId);
-            setNotes(savedNotes.data);
-            
-            if (savedNotes.error !== null)
+            if (hasLoadedNotes === false)
             {
-                setErrorMessage(savedNotes.error);
-            }
+                const savedNotes: FetchNotesResult = await fetchNotes(userId);
+                setNotes(savedNotes.data);
             
-            setIsReady(true);
+                if (savedNotes.error !== null)
+                {
+                    setErrorMessage(savedNotes.error);
+                }
+                
+                setHasLoadedNotes(true);
+            }
         }
     }
     
@@ -349,7 +344,7 @@ export default function Dashboard()
                 <h2 className="visually-hidden">Lista de Notas</h2>
                 <ul className={styles.notesContainer}>{renderNotes()}</ul>
                 {
-                    isReady &&
+                    hasLoadedNotes &&
                     (
                         <Pagination
                             handleNextPage={handleNextPage}
