@@ -16,13 +16,14 @@
         flex-direction: column;
         align-items: center;
         gap: 1rem;
-        border: 1px solid;
         
+/*
         input,
         button
         {
             padding: 0.5rem;
         }
+*/
         
         .titleInput,
         .summaryInput

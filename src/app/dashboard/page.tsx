@@ -321,7 +321,7 @@ export default function Dashboard()
                         Sair
                     </button>
                     <h1 className={styles.dashboardHeading}>
-                        Minhas Notas
+                        Notas
                         <NotebookPen className="icon"/>
                     </h1>
                 </div>

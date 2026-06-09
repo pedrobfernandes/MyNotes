@@ -2,10 +2,21 @@
 {
     width: 100%;
     display: flex;
+/*
+    flex-direction: column;
+*/
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-block: 1rem;
     text-align: center;
+    
+    button
+    {
+/*
+        width: 30%;
+*/
+        padding: 0.2rem;
+    }
 
 }

@@ -1,6 +1,7 @@
 .noteCard
 {
-    border: 1px solid brown;
+    border: 1px solid var(--c-border);
+    border-radius: 1rem;
     display: block;
     
     article

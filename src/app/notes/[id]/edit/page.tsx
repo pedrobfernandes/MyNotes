@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { use } from "react";
 import { NoteForm } from "@/components/NoteForm";
 import { useNotes } from "@/context/NotesContext";
-import { DeleteButton } from "@/components/DeleteButton";
 import { fetchNoteById } from "@/data/notes";
 import { Note } from "@/types";
 import styles from "./page.module.css";
@@ -88,11 +87,11 @@ export default function EditNote(props: EditNoteProps)
                 <NoteForm
                     initialData={note}
                     redirectPath={`/notes/${note.id}?page=${page}&search=${search}`}
-                />
-                <DeleteButton
-                    id={id}
-                    page={page}
-                    search={search}
+                   id={id}
+                   page={page}
+                   search={search}
+                   isEdit={true}
+                    
                 />
             </main>
         );

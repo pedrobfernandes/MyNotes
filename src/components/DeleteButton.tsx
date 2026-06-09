@@ -19,17 +19,11 @@ export function DeleteButton(props: DeleteButtonProps)
     const { id, page, search } = props;
     const [deletedMessage, setDeletedMessage] = useState<string>("");
     const router = useRouter();
-    const { notes, setNotes } = useNotes();
+    const { setNotes } = useNotes();
     
     
     async function handleDelete(): Promise<void>
     {
-        const toDelete: Note | undefined = notes.find((note) => note.id === id);
-        if (toDelete === undefined)
-        {
-            setDeletedMessage("Nota para deletar não encontrada.");
-            return;
-        }
         
         const confirmed = confirm("Tem a certeza que deseja excluir?");
         if (confirmed === false)
@@ -68,13 +62,13 @@ export function DeleteButton(props: DeleteButtonProps)
     
     return(
         <>
-        <p>{deletedMessage}</p>
         <button
             type="button"
             onClick={handleDelete}
         >
             Excluir
         </button>
+        <p>{deletedMessage}</p>
         </>
     );
 }

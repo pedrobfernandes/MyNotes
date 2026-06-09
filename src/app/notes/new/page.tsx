@@ -8,7 +8,10 @@ export  default function NewNote()
     return(
         <main className={styles.newNoteContainer}>
             <h1>Nova Nota</h1>
-            <NoteForm redirectPath="/dashboard"/>
+            <NoteForm
+                redirectPath="/dashboard"
+                isEdit={false}
+            />
         </main>
     );
 }

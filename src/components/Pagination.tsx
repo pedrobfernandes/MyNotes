@@ -26,11 +26,11 @@ export default function Pagination(props: PaginationProps)
         <div className={styles.paginationContainer}>
             <button
                 type="button"
-                aria-label="Ir para a primeira página"
+                aria-label="Ir para o início"
                 onClick={handleGoToFirstPage}
                 disabled={currentPage === 1 || totalPages === 0}
             >
-                Primeira
+                Início
             </button>
             <button
                 type="button"
@@ -38,24 +38,27 @@ export default function Pagination(props: PaginationProps)
                 onClick={handlePreviousPage}
                 disabled={currentPage === 1 || totalPages === 0}
             >
-                Anterior
+                {"<"}
             </button>
-            <span>Página {currentPage} de {totalPages}</span>
+            <span
+            >
+                {currentPage}/{totalPages}
+            </span>
             <button
                 type="button"
                 aria-label="Página Seguinte"
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages || totalPages === 0}
             >
-                Próximo
+                {">"}
             </button>
             <button
                 type="button"
-                aria-label="Ir para a última página"
+                aria-label="Ir para o fim"
                 onClick={handleGoToLastPage}
                 disabled={currentPage === totalPages || totalPages === 0}
             >
-                Última
+                Fim
             </button>
         </div>
     );

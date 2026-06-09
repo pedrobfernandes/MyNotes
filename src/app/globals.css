@@ -3,15 +3,6 @@
 
 :root
 {
-    /*
-    --fs-sm: clamp(0.8rem, 0.19vw + 0.76rem, 0.89rem);
-    --fs-base: clamp(1rem, 0.38vw + 0.92rem, 1.19rem);
-    --fs-md: clamp(1.25rem, 0.68vw + 1.11rem, 1.58rem);
-    --fs-lg: clamp(1.56rem, 1.12vw + 1.34rem, 2.11rem);
-    --fs-xl: clamp(1.95rem, 1.76vw + 1.6rem, 2.81rem);
-    --fs-xxl: clamp(2.44rem, 2.68vw + 1.9rem, 3.75rem);
-    --fs-xxxl: clamp(3.05rem, 9.99vw + 2.25rem, 5rem);
-    */
     
     --fs-sm: clamp(0.91rem, 0.06vw + 0.9rem, 0.94rem);
     --fs-base: clamp(1rem, 0.26vw + 0.95rem, 1.13rem);
@@ -21,6 +12,15 @@
     --fs-xxl: clamp(1.46rem, 1.78vw + 1.11rem, 2.33rem);
     --fs-xxxl: clamp(1.61rem, 2.44vw + 1.12rem, 2.8rem);
     --container-max-size: calc(1100 / 16 * 1rem);
+    
+    /* Cores */
+/*
+    --c-background: #FFFFFF;
+*/
+    --c-background: #141414;
+    --c-text: #E6E6E6;
+    --c-text-areas: #1e1e1e;
+    --c-border: #D0D7DE;
 }
 
 
@@ -87,6 +87,29 @@ textarea
 }
 
 
+input,
+button
+{
+    border: 0.1rem solid var(--c-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem
+}
+
+input,
+textarea
+{
+    background-color: var(--c-text-areas);
+    color: var(--c-text);
+}
+
+button
+{
+    background-color: var(--c-primary);
+    color: white;
+    min-width: calc(48 / 16 * 1rem);
+    cursor: pointer;
+}
+
 
 
 html,
@@ -108,10 +131,18 @@ body
     cursor: default;
     line-height: 1.5;
     font-size: var(--fs-base);
+    cursor: default;
 /*
     padding: 1rem;
 */
-    border: 1px solid pink;
+}
+
+
+body,
+main
+{
+    background-color: var(--c-background);
+    color: var(--c-text);
 }
 
 
