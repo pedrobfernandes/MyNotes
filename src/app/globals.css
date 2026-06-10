@@ -14,13 +14,11 @@
     --container-max-size: calc(1100 / 16 * 1rem);
     
     /* Cores */
-/*
-    --c-background: #FFFFFF;
-*/
-    --c-background: #141414;
-    --c-text: #E6E6E6;
-    --c-text-areas: #1e1e1e;
-    --c-border: #D0D7DE;
+
+    --c-primary: #141623;
+    --c-secondary: #232736;
+    --c-text: #E7ECEF;
+    --c-border: #594E5D;
 }
 
 
@@ -70,6 +68,11 @@ h2
     font-size: var(--fs-xl);
 }
 
+h3
+{
+    font-size: var(--fs-lg);
+}
+
 
 h1,
 h2
@@ -88,24 +91,100 @@ textarea
 
 
 input,
-button
+button,
+textarea
 {
     border: 0.1rem solid var(--c-border);
     border-radius: 0.5rem;
-    padding: 0.5rem
-}
-
-input,
-textarea
-{
-    background-color: var(--c-text-areas);
+    padding: 0.5rem;
+    background-color: var(--c-secondary);
     color: var(--c-text);
 }
 
+
+textarea,
+.markdown-content
+{
+    width: 100%;
+    max-width: 100%;
+}
+
+textarea
+{
+    padding: 1rem;
+    min-height: calc(400 / 16 * 1rem);
+    resize: vertical;
+}
+
+
+.markdown-content *
+{
+    overflow-wrap: break-word;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content ul,
+.markdown-content ol,
+.markdown-content li,
+.markdown-content p
+{
+    margin-block: 0.5rem;
+}
+
+
+.markdown-content ul
+{
+    list-style: disc;
+    margin-inline-start: 1rem;
+}
+
+.markdown-content ol
+{
+    list-style: decimal;
+    margin-inline-start: 1rem;
+}
+
+.markdown-content code
+{
+    background-color: var(--c-secondary);
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+}
+
+.markdown-content pre code
+{
+    background: transparent;
+    padding: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.markdown-content blockquote
+{
+    margin-block: 1rem;
+    padding-inline-start: 1rem;
+    border-inline-start: 0.2rem solid var(--c-border);
+}
+
+.markdown-content pre
+{
+    background-color: var(--c-secondary);
+    padding: 1rem;
+    border: 0.1rem solid var(--c-border);
+}
+
+.markdown-content a
+{
+    text-decoration: underline;
+}
+
+
+
 button
 {
-    background-color: var(--c-primary);
-    color: white;
     min-width: calc(48 / 16 * 1rem);
     cursor: pointer;
 }
@@ -132,16 +211,13 @@ body
     line-height: 1.5;
     font-size: var(--fs-base);
     cursor: default;
-/*
-    padding: 1rem;
-*/
 }
 
 
 body,
 main
 {
-    background-color: var(--c-background);
+    background-color: var(--c-primary);
     color: var(--c-text);
 }
 

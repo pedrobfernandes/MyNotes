@@ -7,6 +7,7 @@ import { useNotes } from "@/context/NotesContext";
 import { fetchNoteById } from "@/data/notes";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Note } from "@/types";
 import { useSearchParams } from "next/navigation";
 import jsPDF from "jspdf";
@@ -104,21 +105,47 @@ export default function ViewNote(props: ViewNoteProps)
                 da imagem e calcula a altura proporcional que a imagem
                 tem que ter dentro do PDF para manter a proporção original
             */
-            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const margin = 10;
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const contentWidth = pageWidth - (margin * 2);
+            
             const imageProperties = pdf.getImageProperties(imageData);
-            const imageDisplayHeight = (imageProperties.height * pdfWidth) / imageProperties.width;
+            const imageDisplayHeight = (imageProperties.height * contentWidth) / imageProperties.width;
             
+            let heightLeft = imageDisplayHeight;
+            let position = 0;
             
-            // Imagem, x = 0, y = 0 -> canto superior esquerdo
-            // largura , altura
             pdf.addImage(
                 imageData,
                 "PNG",
-                0,
-                0,
-                pdfWidth,
+                margin,
+                margin,
+                contentWidth,
                 imageDisplayHeight
             );
+            
+            heightLeft -= (pageHeight - margin * 2);
+            
+            
+            while (heightLeft > 0)
+            {
+                position = imageDisplayHeight - heightLeft;
+                pdf.addPage();
+                
+                
+                pdf.addImage(
+                    imageData,
+                    "PNG",
+                    margin,
+                    margin - position,
+                    contentWidth,
+                    imageDisplayHeight
+                );
+                
+                heightLeft -= (pageHeight - margin * 2);
+            }
+            
             
             return(pdf)
         }
@@ -206,29 +233,36 @@ export default function ViewNote(props: ViewNoteProps)
                         <h1>{note.title}</h1>
                     </header>
                     <section ref={noteContentRef}>
-                        <ReactMarkdown>
-                            {note.content}
-                        </ReactMarkdown>
+                        <div className="markdown-content">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {note.content}
+                            </ReactMarkdown>
+                        </div>
                     </section>
                     <footer>
-                        <Link href={`/notes/${note.id}/edit?page=${page}&search=${search}`}>
-                            Editar
-                        </Link>
-                        <Link href={`/dashboard?page=${page}&search=${search}`}>
-                            Voltar
-                        </Link>
-                        <button
-                            type="button"
-                            onClick={handleDownloadPdf}
-                        >
-                            Baixar PDF
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleSharePdf}
-                        >
-                            Compartilhar
-                        </button>
+                        <div className={styles.linkGroup}>
+                            <Link className={styles.link} href={`/notes/${note.id}/edit?page=${page}&search=${search}`}>
+                                Editar
+                            </Link>
+                            <Link className={styles.link} href={`/dashboard?page=${page}&search=${search}`}>
+                                Voltar
+                            </Link>
+                        </div>
+                        <div className={styles.buttonGroup}>
+                            <button
+                                type="button"
+                                onClick={handleDownloadPdf}
+                            >
+                                Baixar PDF
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleSharePdf}
+                            >
+                                Compartilhar
+                            </button>
+                        </div>
+                        
                     </footer>
                 </article>
             </main>

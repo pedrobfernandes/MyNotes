@@ -5,8 +5,9 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 0;
-    border: 1px solid;
+    padding: 1rem;
+    border: 1px solid var(--c-border);
+    border-radius: 1rem;
     
     .inputGroup
     {
@@ -17,13 +18,31 @@
         align-items: center;
         gap: 1rem;
         
-/*
-        input,
-        button
+        
+        .inputGroupOptions
         {
-            padding: 0.5rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            
+            .previewButton,
+            .helpLink
+            {
+                flex: 1;
+            }
+            
+            .helpLink
+            {
+                border: 0.1rem solid var(--c-border);
+                border-radius: 0.5rem;
+                padding: 0.5rem;
+                background-color: var(--c-secondary);
+                text-align: center;
+                line-height: normal;
+            }
         }
-*/
+        
         
         .titleInput,
         .summaryInput
@@ -32,25 +51,11 @@
         }
         
         input,
-        button,
-        textarea,
-        .previewContainer
+        button
         {
             width: 100%;
         }
         
-        textarea
-        {
-            min-height: calc(400 / 16 * 1rem);
-            resize: vertical;
-        }
-        
-        textarea,
-        .previewContainer
-        {
-            max-width: 100%;
-            padding: 1rem;
-        }
     }
     
     .buttonGroup

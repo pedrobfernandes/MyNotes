@@ -10,6 +10,7 @@ import {  UserResponse } from "@supabase/supabase-js";
 import { useNotes } from "@/context/NotesContext";
 import { DeleteButton } from "@/components/DeleteButton";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import styles from "./NoteForm.module.css";
 
 
@@ -112,8 +113,8 @@ export function NoteForm(props: NoteFormProps)
         if (previewMode === true)
         {
             return(
-                <div className={styles.previewContainer}>
-                    <ReactMarkdown>
+                <div className="markdown-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {content}
                     </ReactMarkdown>
                 </div>
@@ -181,19 +182,24 @@ export function NoteForm(props: NoteFormProps)
             </div>
             <div className={styles.inputGroup}>
                 <label htmlFor="content">Conteudo</label>
-                <button
-                    type="button"
-                    onClick={() => setPreviewMode(!previewMode)}
-                >
-                    {previewMode ? "Continuar escrevendo" : "Pré-visualizar"}
-                </button>
-                <a
-                    href={MARKDOWN_GUIDE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Guia Markdown
-                </a>
+                <div className={styles.inputGroupOptions}>
+                    <button
+                        className={styles.previewButton}
+                        type="button"
+                        onClick={() => setPreviewMode(!previewMode)}
+                    >
+                        {previewMode ? "Escrever" : "Pré-visualizar"}
+                    </button>
+                    <a
+                        className={styles.helpLink}
+                        aria-label="Visualizar ajuda sobre Markdown"
+                        href={MARKDOWN_GUIDE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                       Ajuda
+                    </a>
+                </div>
                 {renderTextOrMarkDown()}
             </div>
             

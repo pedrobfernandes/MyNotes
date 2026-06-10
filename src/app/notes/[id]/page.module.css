@@ -19,10 +19,52 @@
         padding: 1rem;
     }
     
+    
+    footer
+    {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        gap: 1rem;
+        
+        
+        .linkGroup,
+        .buttonGroup
+        {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .link
+        {
+            border: 0.1rem solid var(--c-border);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: var(--c-secondary);
+            line-height: normal;
+        }
+        
+        @media (min-width: calc(483 / 16 * 1rem))
+        {
+            flex-direction: row;
+        }
+    }
+    
+    
     .pdfExport
     {
-        padding: 1rem;
+
         max-width: calc(600 / 16 * 1rem);
-        color: black;
+    }
+    
+    .pdfExport *
+    {
+        font-size: calc(16 / 16 * 1rem);
+        background-color: #FFFFFF;
+        color: #000000;
     }
 }
