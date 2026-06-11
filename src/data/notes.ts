@@ -102,7 +102,7 @@ export async function insertNote(
     userId: string):
     Promise<NoteMutationResult>
 {
-    const { title, summary, content } = note;
+    const { title, content } = note;
 
     try
     {
@@ -111,7 +111,6 @@ export async function insertNote(
             .insert({
                 user_id: userId,
                 title: title,
-                summary: summary,
                 content: content,
             })
             .select()
@@ -159,7 +158,7 @@ export async function updateNote(
     noteId: string):
     Promise<NoteMutationResult>
 {
-    const { title, summary, content } = note;
+    const { title, content } = note;
     
     try
     {
@@ -167,7 +166,6 @@ export async function updateNote(
             .from("notes")
             .update({
                 title: title,
-                summary: summary,
                 content: content,
                 updated_at: new Date().toISOString(),
             })

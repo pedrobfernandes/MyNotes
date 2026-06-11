@@ -36,9 +36,6 @@ export default function NoteCard(props: NoteCardProps)
         return(
             <article>
                 <h2>{note.title}</h2>
-                <p>
-                    {note.summary}
-                </p>
                 <small>Criado: {created_at}</small>
                 <br/>
                 <small>Atualizado: {updated_at}</small>

@@ -1,16 +1,37 @@
 .noteCard
 {
-    border: 1px solid var(--c-border);
-    border-radius: 1rem;
-    display: block;
+    list-style: none;
+    
+    a
+    {
+        border: 0.1rem solid var(--c-border);
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        height: 10rem;
+    }
+    
     
     article
     {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.2rem;
+        justify-content: center;
         text-align: center;
-        padding: 0.5rem;
+        width: 100%;
+        height: 100%;
+        
+        h2
+        {
+            overflow: hidden;
+            
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            line-clamp: 2;
+            -webkik-line-clamp: 2;
+        }
     }
 }

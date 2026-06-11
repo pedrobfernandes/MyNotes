@@ -59,16 +59,9 @@ export default function Dashboard()
     const normalizedFilter: string = normalize(filter);
     const filteredNotes: Note[] = notes.filter((note: Note) =>
     {
-        let summary: string = "";
-        if (note.summary !== null)
-        {
-            summary = note.summary;
-        }
         
         return(
-            normalize(note.title).includes(normalizedFilter) ||
-            // Ou mais simples mas horroroso: normalize(note.summary ?? "")
-            normalize(summary).includes(normalizedFilter)
+            normalize(note.title).includes(normalizedFilter)
         );
     })
     
@@ -326,7 +319,7 @@ export default function Dashboard()
                     </h1>
                 </div>
  
-                <Link href="/notes/new">
+                <Link className={styles.newNoteLink} href="/notes/new">
                     <div className={styles.newNoteContainer}>
                         <SquarePlus/>
                         Nova Nota

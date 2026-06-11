@@ -81,6 +81,22 @@
             gap: 0.5rem;
             font-size: var(--fs-sm);
             text-wrap: balance;
+            padding: 0.5rem;
+            
+            a
+            {
+                outline: none;
+                padding: 0.5rem;
+                border: none;
+                border-radius: 0.5rem;
+                
+                &:hover,
+                &:focus-visible
+                {
+                    outline: 0.3rem solid var(--c-border);
+                    outline-offset: 0;
+                }
+            }
             
             @media (min-width: calc(430 / 16 * 1rem))
             {

@@ -34,7 +34,6 @@ export function NoteForm(props: NoteFormProps)
     const { setNotes } = useNotes();
     
     const [title, setTitle] = useState(initialData?.title || "");
-    const [summary, setSummary] = useState(initialData?.summary || "");
     const [content, setContent] = useState(initialData?.content || "");
     const [previewMode, setPreviewMode] = useState<boolean>(false);
     
@@ -53,7 +52,6 @@ export function NoteForm(props: NoteFormProps)
         {
             const updatedNote: NoteMutationResult = await updateNote({
                 title: title,
-                summary: summary,
                 content: content,
             }, initialData.id);
             
@@ -92,7 +90,6 @@ export function NoteForm(props: NoteFormProps)
             
             const insertedNote: NoteMutationResult = await insertNote({
                 title: title,
-                summary: summary,
                 content: content,
             }, user.data.user.id);
             
@@ -168,16 +165,6 @@ export function NoteForm(props: NoteFormProps)
                     type="text"
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
-                />
-            </div>
-            <div className={styles.inputGroup}>
-                <label htmlFor="summary">Sumário</label>
-                <input
-                    id="summary"
-                    className={styles.summaryInput}
-                    type="text"
-                    value={summary}
-                    onChange={(event) => setSummary(event.target.value)}
                 />
             </div>
             <div className={styles.inputGroup}>

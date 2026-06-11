@@ -3,7 +3,6 @@ export type Note =
     id: string;
     user_id: string;
     title: string;
-    summary: string | null;
     content: string;
     created_at: string;
     updated_at: string;
@@ -13,7 +12,6 @@ export type Note =
 export type InsertNoteType =
 {
     title: string;
-    summary: string | null;
     content: string;
 };
 
