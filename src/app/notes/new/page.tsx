@@ -10,7 +10,6 @@ export  default function NewNote()
             <h1>Nova Nota</h1>
             <NoteForm
                 redirectPath="/dashboard"
-                isEdit={false}
             />
         </main>
     );

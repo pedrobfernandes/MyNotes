@@ -11,6 +11,7 @@ import remarkGfm from "remark-gfm";
 import { Note } from "@/types";
 import { useSearchParams } from "next/navigation";
 import jsPDF from "jspdf";
+import { DeleteButton } from "@/components/DeleteButton";
 import html2canvas from "html2canvas";
 import styles from "./page.module.css";
 
@@ -247,6 +248,11 @@ export default function ViewNote(props: ViewNoteProps)
                             <Link className={styles.link} href={`/dashboard?page=${page}&search=${search}`}>
                                 Voltar
                             </Link>
+                             <DeleteButton
+                                id={id}
+                                page={page}
+                                search={search}
+                            />
                         </div>
                         <div className={styles.buttonGroup}>
                             <button

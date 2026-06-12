@@ -13,6 +13,7 @@ import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination"
 import { NotebookPen, SquarePlus } from "lucide-react";
 import styles from "./page.module.css";
+import NotesSkeleton from "@/components/NotesSkeleton";
 
 
 export default function Dashboard()
@@ -65,7 +66,7 @@ export default function Dashboard()
         );
     })
     
-    const notesPerPage: number = 6;
+    const notesPerPage: number = 8;
     const totalPages: number = Math.ceil(filteredNotes.length / notesPerPage);
     const startIndex: number = (currentPage - 1) * notesPerPage;
     const endIndex: number = startIndex + notesPerPage;
@@ -335,19 +336,24 @@ export default function Dashboard()
             </section>
             <section className={styles.notesSection}>
                 <h2 className="visually-hidden">Lista de Notas</h2>
-                <ul className={styles.notesContainer}>{renderNotes()}</ul>
                 {
-                    hasLoadedNotes &&
-                    (
-                        <Pagination
-                            handleNextPage={handleNextPage}
-                            handlePreviousPage={handlePreviousPage}
-                            handleGoToFirstPage={handleGoToFirstPage}
-                            handleGoToLastPage={handleGoToLastPage}
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                        />
-                    )
+                    hasLoadedNotes
+                        ? (
+                            <>
+                                <ul className={styles.notesContainer}>{renderNotes()}</ul>
+                                <Pagination
+                                    handleNextPage={handleNextPage}
+                                    handlePreviousPage={handlePreviousPage}
+                                    handleGoToFirstPage={handleGoToFirstPage}
+                                    handleGoToLastPage={handleGoToLastPage}
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                />
+                            </>
+                        )
+                        : (
+                                <NotesSkeleton/>
+                        )
                 }
             </section>
         </main>

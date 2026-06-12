@@ -88,10 +88,6 @@ export default function EditNote(props: EditNoteProps)
                     initialData={note}
                     redirectPath={`/notes/${note.id}?page=${page}&search=${search}`}
                    id={id}
-                   page={page}
-                   search={search}
-                   isEdit={true}
-                    
                 />
             </main>
         );

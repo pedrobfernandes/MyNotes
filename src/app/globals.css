@@ -99,6 +99,7 @@ textarea
     padding: 0.5rem;
     background-color: var(--c-secondary);
     color: var(--c-text);
+    font: inherit;
 }
 
 
@@ -107,6 +108,7 @@ textarea,
 {
     width: 100%;
     max-width: 100%;
+    font-family: var(--font-geist-mono);
 }
 
 textarea
@@ -180,7 +182,6 @@ a:active
     background-color: var(--c-secondary);
     padding: 0.25rem;
     border-radius: 0.25rem;
-    font-family: monospace;
 }
 
 .markdown-content pre code
@@ -238,6 +239,7 @@ body
     width: 100%;
     cursor: default;
     line-height: 1.5;
+    font-family: var(--font-geist-sans);
     font-size: var(--fs-base);
     cursor: default;
 }

@@ -8,7 +8,6 @@ import { insertNote, updateNote } from "@/data/notes";
 import { supabase } from "@/lib/supabase/client";
 import {  UserResponse } from "@supabase/supabase-js";
 import { useNotes } from "@/context/NotesContext";
-import { DeleteButton } from "@/components/DeleteButton";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./NoteForm.module.css";
@@ -20,15 +19,12 @@ type NoteFormProps =
     initialData?: Note;
     redirectPath: string;
     id?: string;
-    page?: string;
-    search?: string;
-    isEdit: boolean;
 }
 
 
 export function NoteForm(props: NoteFormProps)
 {
-    const { initialData, redirectPath, id, page, search, isEdit } = props;
+    const { initialData, redirectPath, id } = props;
     
     const router = useRouter();
     const { setNotes } = useNotes();
@@ -128,27 +124,6 @@ export function NoteForm(props: NoteFormProps)
     }
     
     
-    function renderDeletButton()
-    {
-        if (isEdit === true)
-        {
-            if (id !== undefined &&
-                page !== undefined &&
-                search !== undefined
-            )
-            {
-                return(
-                    <DeleteButton
-                        id={id}
-                        page={page}
-                        search={search}
-                    />
-                );
-            }
-        }
-    }
-    
-    
     function handleCancel()
     {
         router.push(redirectPath);
@@ -198,7 +173,6 @@ export function NoteForm(props: NoteFormProps)
                 <button type="button" onClick={handleCancel}>
                     Cancelar
                 </button>
-                {renderDeletButton()}
             </div>
         </form>
     );
