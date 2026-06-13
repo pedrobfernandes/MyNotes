@@ -12,6 +12,7 @@ import { Note } from "@/types";
 import { useSearchParams } from "next/navigation";
 import jsPDF from "jspdf";
 import { DeleteButton } from "@/components/DeleteButton";
+import LoadingSpinner from "@/components/LoadinSpinner";
 import html2canvas from "html2canvas";
 import styles from "./page.module.css";
 
@@ -275,5 +276,5 @@ export default function ViewNote(props: ViewNoteProps)
         );
     }
     
-    return(<p>Carregando nota...</p>);
+    return(<LoadingSpinner/>);
 }

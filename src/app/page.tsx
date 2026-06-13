@@ -274,6 +274,12 @@ export default function Auth()
                     >
                         {resendCooldown > 0 ? `Reenviar em ${resendCooldown}s` : "Reenviar código"}
                     </button>
+                    <button
+                        type="button"
+                        onClick={() => setStep("email")}
+                    >
+                        Voltar
+                    </button>
                     {resendMessage}
                 </form>
             );

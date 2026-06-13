@@ -6,6 +6,7 @@ import { NoteForm } from "@/components/NoteForm";
 import { useNotes } from "@/context/NotesContext";
 import { fetchNoteById } from "@/data/notes";
 import { Note } from "@/types";
+import EditNoteSkeleton from "@/components/EditNoteSkeleton";
 import styles from "./page.module.css";
 import { useSearchParams } from "next/navigation";
 
@@ -93,5 +94,5 @@ export default function EditNote(props: EditNoteProps)
         );
     }
     
-    return(<p>Carregando nota...</p>);
+    return(<EditNoteSkeleton/>);
 }

@@ -143,7 +143,7 @@ export function NoteForm(props: NoteFormProps)
                 />
             </div>
             <div className={styles.inputGroup}>
-                <label htmlFor="content">Conteudo</label>
+                <label htmlFor="content">Conteúdo</label>
                 <div className={styles.inputGroupOptions}>
                     <button
                         className={styles.previewButton}

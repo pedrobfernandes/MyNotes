@@ -1,0 +1,99 @@
+.editNoteContainer
+{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    width: min(var(--container-max-size), 90vw);
+    margin: 0 auto;
+    padding: 1rem 0;
+    gap: 1rem;
+}
+
+.heading
+{
+    font-size: var(--fs-xxl);
+    font-family: var(--font-geist-sans);
+}
+
+.noteForm
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--c-border);
+    border-radius: 1rem;
+}
+
+.titleInput
+{
+    width: 100%;
+    height: 2.8rem;
+    border: 0.1rem solid var(--c-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--c-secondary);
+}
+
+.inputGroup
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.inputGroupOptions
+{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.previewButton,
+.helpLink
+{
+    flex: 1;
+    border: 0.1rem solid var(--c-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--c-secondary);
+    text-align: center;
+    line-height: normal;
+}
+
+.buttonGroup
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.saveButton,
+.cancelButton
+{
+    width: 100%;
+    border: 0.1rem solid var(--c-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--c-secondary);
+}
+
+.textArea
+{
+    border: 0.1rem solid var(--c-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: var(--c-secondary);
+    width: 100%;
+    max-width: 100%;
+    min-height: calc(400 / 16 * 1rem);
+}
