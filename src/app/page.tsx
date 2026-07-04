@@ -20,16 +20,21 @@ export default function Auth()
     
     // Guarda a referencia para o timer
     const resendIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    
+    const isFirstRender = useRef<boolean>(true);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const otpRef = useRef<HTMLInputElement>(null);
+    
     const router = useRouter();
     
     
-    function resetAuthForm(): void
-    {
-        setEmail("");
-        setOtp("");
-        setStep("email");
-        setLoading(false);
-    }
+    //~ function resetAuthForm(): void
+    //~ {
+        //~ setEmail("");
+        //~ setOtp("");
+        //~ setStep("email");
+        //~ setLoading(false);
+    //~ }
     
     
     // Cuida de ver se já tem uma sessão. Se tem
@@ -59,8 +64,8 @@ export default function Auth()
     }
     
     
-    // Cuida de "agendar" a limpeza do timer na desmontagem
-    // "agenda" pois estamos retornando um callback e não executando na hora
+    // Cuida de "agendar" a limpeza do timer na desmontagem.
+    // "Agenda" pois estamos retornando um callback e não executando na hora
     useEffect(() =>
     {
         return(() =>
@@ -80,6 +85,32 @@ export default function Auth()
         
     }, []);
     
+    
+    useEffect(() =>
+    {
+        if (isFirstRender.current === true)
+        {
+            isFirstRender.current = false;
+            return;
+        }
+        
+        if (step === "email")
+        {
+            if (emailRef.current !== null)
+            {
+                emailRef.current.focus();
+            }
+        }
+        
+        if (step === "otp")
+        {
+            if (otpRef.current !== null)
+            {
+                otpRef.current.focus();
+            }
+        }
+    
+    }, [step]);
     
     
     function startResendCooldown()
@@ -118,6 +149,22 @@ export default function Auth()
     }
     
     
+    function handleBackToEmail(): void
+    {
+        setEmail("");
+        setOtp("");
+        setResendMessage("");
+        setResendCooldown(0);
+        
+        if (resendIntervalRef.current !== null)
+        {
+            clearInterval(resendIntervalRef.current);
+            resendIntervalRef.current = null;
+        }
+        
+        setStep("email");
+    }
+    
     
     async function handleResendOtp(): Promise<void>
     {
@@ -135,6 +182,11 @@ export default function Auth()
             else
             {
                 setResendMessage("Código reenviado. Verifique seu email.");
+                if (otpRef.current !== null)
+                {
+                    otpRef.current.focus();
+                }
+                
                 startResendCooldown();
             }
         }
@@ -202,7 +254,6 @@ export default function Auth()
             }
             else
             {
-                resetAuthForm();
                 router.push("/dashboard");
             }
         }
@@ -228,6 +279,7 @@ export default function Auth()
                 >
                     <label htmlFor="email-input">Endereço de e-mail</label>
                     <input
+                        ref={emailRef}
                         id="email-input"
                         type="email"
                         value={email}
@@ -253,6 +305,7 @@ export default function Auth()
                         Insira o código de 6 digitos enviado para o seu e-mail
                     </label>
                     <input
+                        ref={otpRef}
                         id="otp-input"
                         type="text"
                         inputMode="numeric"
@@ -276,7 +329,7 @@ export default function Auth()
                     </button>
                     <button
                         type="button"
-                        onClick={() => setStep("email")}
+                        onClick={handleBackToEmail}
                     >
                         Voltar
                     </button>

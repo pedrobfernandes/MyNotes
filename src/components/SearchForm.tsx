@@ -28,7 +28,7 @@ export default function SearchForm(props: SearchFormProps)
     }
     
     
-    // Prefiro que a busca seja mesmo apos apertar o botão ao invez daquele modelo
+    // Prefiro que a busca seja mesmo após apertar o botão ao invéz daquele modelo
     // moderno e chato de digitar e ir filtrando..
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): void
     {
@@ -37,11 +37,15 @@ export default function SearchForm(props: SearchFormProps)
     }
     
     
+    
+    // Agora não tenho já certeza do que este effect faz aqui..
+    // Investigar depois...
     useEffect(() =>
     {
         setSearchTerm(filter);
     
     }, [filter]);
+    
     
     
     return(
@@ -54,7 +58,17 @@ export default function SearchForm(props: SearchFormProps)
                 value={searchTerm}
                 onChange={handleChange}
             />
-            <button type="submit">
+            <button
+                id="search-button"
+                type="submit"
+                onClick={() =>
+                {
+                    sessionStorage.setItem(
+                        "restoreFocus",
+                        "search-button"
+                    );
+                }}
+            >
                 Buscar
             </button>
         </form>

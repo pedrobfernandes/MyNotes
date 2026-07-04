@@ -1,3 +1,19 @@
+/*
+.skipLink
+{
+    position: absolute;
+    left: -9999px;
+    top: 0;
+}
+
+.skipLink:focus
+{
+    left: 1rem;
+    top: 1rem;
+    z-index: 1000;
+}
+*/
+
 .dashboardContainer
 {
     height: 100%;
@@ -14,28 +30,74 @@
     {
         width: 100%;
         display: flex;
+/*
         flex-direction: column;
+*/
         align-items: center;
         justify-content: center;
         padding: 0.5rem;
         gap: 1rem;
         
+/*
         .dashboardHeaderLeft
         {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 1rem;
+        }
+*/
             
+        .dashboardHeading
+        {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+/*
+        .newNoteLink
+        {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            outline: none;
             
-            .dashboardHeading
+            &:hover,
+            &:focus-visible
             {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
+                outline: 0.3rem solid var(--c-border);
+                outline-offset: 0;
             }
         }
+        
+        .newNoteContainer
+        {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+*/
+        
+/*
+        @media(min-width: calc(700 / 16 * 1rem))
+        {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+*/
+        
+    }
+    
+    
+    .newNoteSection
+    {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-block: 1rem;
         
         .newNoteLink
         {
@@ -58,13 +120,6 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
-        @media(min-width: calc(700 / 16 * 1rem))
-        {
-            flex-direction: row;
-            justify-content: space-between;
-        }
-        
     }
     
     .searchFormSection
@@ -89,5 +144,15 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+    }
+    
+    .footerSection
+    {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem;
     }
 }
