@@ -19,21 +19,48 @@ export type InsertNoteType =
 type BaseResult =
 {
     error: string | null;
-    status:
-        | "success"
-        | "error"
-        | "not_created"
-        | "network_error";
 }
+
+
+type BaseStatus =
+    | "success"
+    | "error"
+    | "network_error";
+
+
+type FetchNotesStatus =
+    BaseStatus
+    | "empty";
+
+
+type FetchNoteStatus =
+    BaseStatus
+    | "not_found";
+
+
+type MutationStatus =
+    BaseStatus
+    | "unknown_error";
+
 
 export type FetchNotesResult =
     BaseResult &
 {
     data: Note[];
+    status: FetchNotesStatus; 
 }
+
+export type FetchNoteResult =
+    BaseResult &
+{
+    data: Note | null;
+    status: FetchNoteStatus;
+}
+
 
 export type NoteMutationResult =
     BaseResult &
 {
     data: Note | null;
+    status: MutationStatus;
 }

@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { NotebookPen } from "lucide-react";
+import { useFormFieldValidation } from "@/hooks/useFormFieldValidation";
+import FormFieldStatusMessage from "@/components/FormFieldStatusMessage";
 import styles from "./page.module.css";
 
 
@@ -13,9 +15,18 @@ export default function Auth()
     const [email, setEmail] = useState<string>("");
     const [otp, setOtp] = useState<string>("");
     const [step, setStep] = useState<"email" | "otp">("email");
+    const [supabaseError, setSupabaseError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [resendMessage, setResendMessage] = useState<string>("");
     const [resendCooldown, setResendCooldown] = useState<number>(0);
+    
+    
+    const {
+            error, clearError,
+            validateEmail, focusField,
+            validateInputTextNumeric
+    
+    } = useFormFieldValidation();
     
     
     // Guarda a referencia para o timer
@@ -26,15 +37,6 @@ export default function Auth()
     const otpRef = useRef<HTMLInputElement>(null);
     
     const router = useRouter();
-    
-    
-    //~ function resetAuthForm(): void
-    //~ {
-        //~ setEmail("");
-        //~ setOtp("");
-        //~ setStep("email");
-        //~ setLoading(false);
-    //~ }
     
     
     // Cuida de ver se já tem uma sessão. Se tem
@@ -153,6 +155,8 @@ export default function Auth()
     {
         setEmail("");
         setOtp("");
+        setSupabaseError("");
+        clearError();
         setResendMessage("");
         setResendCooldown(0);
         
@@ -169,7 +173,10 @@ export default function Auth()
     async function handleResendOtp(): Promise<void>
     {
         setLoading(true);
+        setSupabaseError("");
         setResendMessage("");
+        clearError();
+        
         
         try
         {
@@ -177,7 +184,7 @@ export default function Auth()
             
             if (resendRequestError !== null)
             {
-                console.log(resendRequestError.message);
+                setSupabaseError("Erro ao reenviar código: " + resendRequestError.message);
             }
             else
             {
@@ -192,7 +199,7 @@ export default function Auth()
         }
         catch
         {
-            console.log("Erro ao reenviar código");
+            setSupabaseError("Algo deu errado ao reenviar o código.");
         }
         finally
         {
@@ -208,6 +215,16 @@ export default function Auth()
     {
         event.preventDefault();
         setLoading(true);
+        setSupabaseError("");
+        clearError();
+        
+        
+        if (validateEmail(email, "o e-mail") === false)
+        {
+            focusField("email-input");
+            setLoading(false);
+            return;
+        }
         
         try
         {
@@ -215,7 +232,10 @@ export default function Auth()
             
             if (sendRequestError !== null)
             {
-                console.log("Erro ao enviar codigo de verificação para o email: " + sendRequestError.message);
+                setSupabaseError(
+                    "Erro ao enviar codigo de" +
+                    " verificação para o email: " + sendRequestError.message
+                );
             }
             else
             {
@@ -224,7 +244,10 @@ export default function Auth()
         }
         catch
         {
-            console.log("Algo deu errado ao enviar o código de verificação para o e-mail.");
+            setSupabaseError(
+                "Algo deu errado ao enviar" +
+                " o código de verificação para o e-mail."
+            );
         }
         finally
         {
@@ -239,6 +262,16 @@ export default function Auth()
     {
         event.preventDefault();
         setLoading(true);
+        setSupabaseError("");
+        clearError();
+        
+        
+        if (validateInputTextNumeric(otp, "código", { exactLength: 6 }) === false)
+        {
+            focusField("otp-input");
+            setLoading(false);
+            return;
+        }
         
         try
         {
@@ -250,7 +283,7 @@ export default function Auth()
             
             if (otpVerifyError !== null)
             {
-                console.log("Código inválido ou expirado");
+                setSupabaseError("Código inválido ou expirado");
             }
             else
             {
@@ -259,7 +292,7 @@ export default function Auth()
         }
         catch
         {
-            console.log("Erro ao verificar código.");
+            setSupabaseError("Erro ao verificar código.");
         }
         finally
         {
@@ -276,6 +309,7 @@ export default function Auth()
                 <form
                     className={styles.loginForm}
                     onSubmit={handleSendOtp}
+                    noValidate
                 >
                     <label htmlFor="email-input">Endereço de e-mail</label>
                     <input
@@ -291,6 +325,9 @@ export default function Auth()
                     >
                         {loading ? "Aguarde" : "Seguinte"}
                     </button>
+                    
+                    <FormFieldStatusMessage status={error || supabaseError}/>
+                    
                 </form>
             );
         }
@@ -300,6 +337,7 @@ export default function Auth()
                 <form
                     className={styles.loginForm}
                     onSubmit={handleVerifyOtp}
+                    noValidate
                 >
                     <label htmlFor="otp-input">
                         Insira o código de 6 digitos enviado para o seu e-mail
@@ -330,10 +368,13 @@ export default function Auth()
                     <button
                         type="button"
                         onClick={handleBackToEmail}
+                        aria-label="Voltar atrás para a etapa de e-mail"
                     >
                         Voltar
                     </button>
-                    {resendMessage}
+                    
+                    <FormFieldStatusMessage status={error || supabaseError || resendMessage}/>
+                    
                 </form>
             );
         }

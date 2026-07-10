@@ -1,0 +1,31 @@
+.placeholderCard
+{
+    height: 10rem;
+    border-radius: 1rem;
+    border: 0.1rem solid var(--c-border);
+}
+
+
+@keyframes skeleton
+{
+    0%
+    {
+        opacity: .5;
+    }
+    
+    50%
+    {
+        opacity: 1;
+    }
+    
+    100%
+    {
+        opacity: .5;
+    }
+}
+
+
+.animated
+{
+    animation: skeleton 1.2s ease-in-out infinite;
+}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Note } from "@/types";
+import { formatDateTime, formatAccessibleDateTime } from "@/utils/date";
 import styles from "./NoteCard.module.css"
 
 
@@ -15,21 +16,12 @@ export default function NoteCard(props: NoteCardProps)
 {
     const { note, currentPage, filter } = props;
     
-    // Cuida de mostrar na interface a data no "nosso formato" ao invéz
-    // do formato que o supabase usa.
-    const created_at = new Date(note.created_at).toLocaleString(
-        "pt-Br",
-        {
-             timeZone: "America/Sao_paulo",
-        }
-    );
+    const createdAtVisual = formatDateTime(note.created_at);
+    const createdAtAccessible = formatAccessibleDateTime(note.created_at);
     
-    const updated_at = new Date(note.updated_at).toLocaleString(
-        "pt-Br",
-        {
-            timeZone: "America/Sao_paulo",
-        }
-    );
+    const updatedAtVisual = formatDateTime(note.updated_at);
+    const updatedAtAccessible = formatAccessibleDateTime(note.updated_at);
+
     
     
     function renderContent()
@@ -37,10 +29,15 @@ export default function NoteCard(props: NoteCardProps)
         return(
             <article>
                 <h2 id={`title-${note.id}`}>{note.title}</h2>
-                <div id={`meta-${note.id}`}>
-                    <small>Criado: {created_at}</small>
+                <div aria-hidden="true">
+                    <small>Criado: {createdAtVisual}</small>
                     <br/>
-                    <small>Atualizado: {updated_at}</small>
+                    <small>Atualizado: {updatedAtVisual}</small>
+                </div>
+                <div id={`meta-${note.id}`} className="visually-hidden">
+                    <small>Criado: {createdAtAccessible}</small>
+                    <br/>
+                    <small>Atualizado: {updatedAtAccessible}</small>
                 </div>
             </article>
         );

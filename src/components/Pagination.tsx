@@ -40,9 +40,13 @@ export default function Pagination(props: PaginationProps)
             >
                 {"<"}
             </button>
-            <span
-            >
-                {currentPage}/{totalPages}
+            <span>
+                <span className="visually-hidden">
+                    Página {currentPage} de {totalPages}
+                </span>
+                <span aria-hidden="true">
+                    {currentPage}/{totalPages}
+                </span>
             </span>
             <button
                 type="button"

@@ -9,11 +9,14 @@ import { UserResponse } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchNotes } from "@/data/notes";
 import { useNotes } from "@/context/NotesContext";
+import { useModal } from "@/context/InfoModalContext";
 import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination"
+import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import { NotebookPen, SquarePlus } from "lucide-react";
 import styles from "./page.module.css";
-import NotesSkeleton from "@/components/NotesSkeleton";
+import NotesPlaceHolder from "@/components/NotesPlaceHolder";
+import SearchFormPlaceholder from "@/components/SearchFormPlaceholder";
 
 
 export default function DashboardClient()
@@ -35,6 +38,9 @@ export default function DashboardClient()
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>(initialSearch);
+    const [hasSearched, setHasSearched] = useState<boolean>(false);
+    
+    const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
     
     /*
@@ -44,9 +50,18 @@ export default function DashboardClient()
         ocorreu. Já dei em louco em outros projetos por conta disto e esta abordagem
         resolve e pronto.
     */
-    const didInitialize: React.RefObject<boolean> = useRef<boolean>(false);
+    const didInitialize = useRef<boolean>(false);
     
-    const { notes, setNotes, hasLoadedNotes, setHasLoadedNotes } = useNotes();
+    
+    const
+    {
+        notes, setNotes, hasLoadedNotes,
+        setHasLoadedNotes, hasDeletedMessage,
+        setHasDeletedMessage
+    
+    } = useNotes();
+    
+    const { confirm } = useModal();
     const router = useRouter();
     
     
@@ -66,7 +81,7 @@ export default function DashboardClient()
         );
     })
     
-    const notesPerPage: number = 8;
+    const notesPerPage: number = 6;
     const totalPages: number = Math.ceil(filteredNotes.length / notesPerPage);
     const startIndex: number = (currentPage - 1) * notesPerPage;
     const endIndex: number = startIndex + notesPerPage;
@@ -93,10 +108,12 @@ export default function DashboardClient()
         {
             if (hasLoadedNotes === false)
             {
+                await announce("Carregando notas.");
                 const savedNotes: FetchNotesResult = await fetchNotes(userId);
                 setNotes(savedNotes.data);
             
-                if (savedNotes.error !== null)
+                if (savedNotes.error !== null &&
+                    savedNotes.status !== "empty")
                 {
                     setErrorMessage(savedNotes.error);
                 }
@@ -153,6 +170,25 @@ export default function DashboardClient()
     }
     
     
+    async function handleExcludeAccount(): Promise<void>
+    {
+        const confirmedExclusion = await confirm(
+            "Tem a certeza que deseja excluir a sua conta?" +
+            " Todos os seus dados serão deletados.",
+            {
+                onConfirm: async () => await announce("Excluindo conta e dados"),
+                onCancel: async () => await announce("Exclusão de conta cancelada"),
+                focusButton: "secondary",
+            }
+        );
+        
+        if (confirmedExclusion === false)
+        {
+            return;
+        }
+    }
+    
+    
     
     /*
         Esta confesso que não entendi 100% o propósito.
@@ -194,6 +230,7 @@ export default function DashboardClient()
     */
     function handleSearch(term: string): void
     {
+        setHasSearched(true);
         setFilter(term);
         setCurrentPage(1);
         
@@ -204,6 +241,15 @@ export default function DashboardClient()
     }
     
     
+    function goToPage(page: number): void
+    {
+        setCurrentPage(page);
+        router.replace(`/dashboard?page=${page}&search=${encodeURIComponent(filter)}`);
+        
+        announce(`Página ${page} de ${totalPages}`);
+    }
+    
+        
     function handleNextPage(): void
     {
         if (currentPage < totalPages)
@@ -213,21 +259,18 @@ export default function DashboardClient()
                 ao invéz disto, mas sinceramente... whatever, a não ser que a pessoa
                 tenha um tique nervoso e compulsivo de apertar o botão super rápido...
             */
-            const nextPage: number = currentPage + 1
-            setCurrentPage(nextPage);
-            router.replace(`/dashboard?page=${nextPage}&search=${encodeURIComponent(filter)}`);
+            goToPage(currentPage + 1);
             return;
         }
     }
+    
     
     function handlePreviousPage(): void
     {
         if (currentPage > 1)
         {
             // idem o item acima
-            const previousPage: number = currentPage - 1;
-            setCurrentPage(previousPage);
-            router.replace(`/dashboard?page=${previousPage}&search=${encodeURIComponent(filter)}`);
+            goToPage(currentPage - 1);
             return;
         }
     }
@@ -237,8 +280,7 @@ export default function DashboardClient()
     {
         if (currentPage > 1)
         {
-            setCurrentPage(1);
-            router.replace(`/dashboard?page=1&search=${encodeURIComponent(filter)}`);
+            goToPage(1);
             return;
         }
     }
@@ -248,11 +290,29 @@ export default function DashboardClient()
     {
         if (currentPage < totalPages)
         {
-            setCurrentPage(totalPages);
-            router.replace(`/dashboard?page=${totalPages}&search=${encodeURIComponent(filter)}`);
+            goToPage(totalPages);
             return;
         }
     }
+    
+    
+    useEffect(() =>
+    {
+       announce("Página principal: Minhas Notas");
+    
+    }, []);
+    
+    
+    useEffect(() =>
+    {
+        const message = sessionStorage.getItem("dashboardAnnouncement");
+        
+        if (message !== null)
+        {
+            announce(message);
+            sessionStorage.removeItem("dashboardAnnouncement");
+        }
+    }, []);    
     
     
     useEffect(() =>
@@ -336,12 +396,63 @@ export default function DashboardClient()
     }, [hasLoadedNotes]);
     
     
+    // Cuida de anunciar os resultados da pesquisa, se algum..
+    useEffect(() =>
+    {
+        if (hasLoadedNotes === false ||
+            hasSearched === false ||
+            filter === ""
+        )
+        {
+            return;
+        }
+        
+        if (filteredNotes.length === 0)
+        {
+            announce("Nenhuma correspondência encontrada.");
+        }
+        else if (filteredNotes.length === 1)
+        {
+            announce("Uma correspondência encontrada.");
+        }
+        else
+        {
+            announce(`${filteredNotes.length} correspondências encontradas.`);
+        }
+        
+    }, [filter, filteredNotes.length, hasLoadedNotes, hasSearched, announce]);
+    
+    
+    // Cuida de anunciar que a nota foi deletada
+    useEffect(() =>
+    {
+        if (hasDeletedMessage === "")
+        {
+            return;
+        }
+        
+        announce(hasDeletedMessage);
+        setHasDeletedMessage("");
+    
+    }, [hasDeletedMessage, announce, setHasDeletedMessage]);
+    
+  
     return(
         <>
-
+        
         <main className={styles.dashboardContainer}>
+            <p
+                className="visually-hidden"
+                aria-live="polite"
+                aria-atomic="true"
+            >
+                {ariaMessage}
+            </p>
+            
             <header className={styles.dashboardHeader}>
-                <h1 className={styles.dashboardHeading}>
+                <h1
+                    className={styles.dashboardHeading}
+                >
                     MyNotes
                     <NotebookPen className="icon"/>
                 </h1>
@@ -365,34 +476,73 @@ export default function DashboardClient()
                     </div>
                 </Link>
             </section>
-            <section id="search-section" tabIndex={-1} className={styles.searchFormSection}>
-                <h2 className="visually-hidden">Pesquisa de Notas</h2>
-                <SearchForm
-                    filter={filter}
-                    handleSearch={handleSearch}
-                />
+            <section className={styles.searchFormSection}>
+                {
+                    (!hasLoadedNotes || notes.length === 0) &&
+                        <SearchFormPlaceholder/>
+                }
+                
+                {
+                    hasLoadedNotes && notes.length > 0 &&
+                        <>
+                        <h2 className="visually-hidden">Pesquisa de Notas</h2>
+                        <SearchForm
+                            filter={filter}
+                            handleSearch={handleSearch}
+                        />
+                        </>
+                }
             </section>
             <section className={styles.notesSection}>
-                <h2 className="visually-hidden">Lista de Notas</h2>
                 {
-                    hasLoadedNotes
-                        ? (
-                            <>
-                                <ul className={styles.notesContainer}>{renderNotes()}</ul>
-                                <Pagination
-                                    handleNextPage={handleNextPage}
-                                    handlePreviousPage={handlePreviousPage}
-                                    handleGoToFirstPage={handleGoToFirstPage}
-                                    handleGoToLastPage={handleGoToLastPage}
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                />
-                            </>
-                        )
-                        : (
-                                <NotesSkeleton/>
-                        )
+                    !hasLoadedNotes &&
+                        <>
+                        <ul className={styles.notesContainer}>
+                            <NotesPlaceHolder count={6} animated={true}/>
+                        </ul> 
+                        <p className={styles.emptyMessage} aria-hidden="true">
+                            Carregando Notas.
+                        </p>
+                        </>
+                    
+                }            
+                
+                {
+                    hasLoadedNotes && notes.length > 0 &&
+                        <>
+                        <h2 className="visually-hidden">Lista de notas</h2>
+                        <ul className={styles.notesContainer}>
+                            {renderNotes()}
+                            <NotesPlaceHolder count={Math.max(0, 6 - notes.length)}/>
+                        
+                        </ul>
+                    </>
                 }
+                
+                {
+                    hasLoadedNotes && notes.length > 0 &&
+                        <Pagination
+                            handleNextPage={handleNextPage}
+                            handlePreviousPage={handlePreviousPage}
+                            handleGoToFirstPage={handleGoToFirstPage}
+                            handleGoToLastPage={handleGoToLastPage}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                        />
+                }
+                
+                {
+                    hasLoadedNotes && notes.length === 0 &&
+                        <>
+                        <ul className={styles.notesContainer}>
+                                <NotesPlaceHolder count={6}/>
+                           </ul> 
+                        <p className={styles.emptyMessage}>
+                            Ainda não há notas criadas
+                        </p>
+                        </>
+                }
+
             </section>
             <footer className={styles.footerSection}>
                 <button
@@ -400,6 +550,12 @@ export default function DashboardClient()
                     onClick={handleLogout}
                 >
                     Sair
+                </button>
+                <button
+                    type="button"
+                    onClick={handleExcludeAccount}
+                >
+                    Excluir Conta
                 </button>
             </footer>
         </main>

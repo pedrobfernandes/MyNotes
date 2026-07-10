@@ -10,6 +10,11 @@ import {  UserResponse } from "@supabase/supabase-js";
 import { useNotes } from "@/context/NotesContext";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
+import { useFormFieldValidation } from "@/hooks/useFormFieldValidation";
+import FormFieldStatusMessage from "./FormFieldStatusMessage";
+
 import styles from "./NoteForm.module.css";
 
 
@@ -33,6 +38,11 @@ export function NoteForm(props: NoteFormProps)
     const [content, setContent] = useState(initialData?.content || "");
     const [previewMode, setPreviewMode] = useState<boolean>(false);
     
+    const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
+    
+    const { error, clearError, focusField, validateText } = useFormFieldValidation();
+    
+    
     const MARKDOWN_GUIDE_URL: string =
         "https://docs.github.com/" +
         "pt/get-started/writing-on-github/" +
@@ -43,6 +53,20 @@ export function NoteForm(props: NoteFormProps)
     async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>): Promise<void>
     {
         event.preventDefault();
+        clearError();
+        
+        if (validateText(title, "título") === false)
+        {
+            focusField("title");
+            return;
+        }
+        
+        if (validateText(content, "área de texto") === false)
+        {
+            focusField("content");
+            return;
+        }
+        
         
         if (initialData !== undefined)
         {
@@ -97,6 +121,12 @@ export function NoteForm(props: NoteFormProps)
             }
         }
         
+        await announce(
+            initialData !== undefined
+                ? "Nota atualizada com sucesso."
+                : "Nota criada com sucesso."
+        );
+        
         router.push(redirectPath);
     }
     
@@ -124,14 +154,19 @@ export function NoteForm(props: NoteFormProps)
     }
     
     
-    function handleCancel()
+    async function handleCancel()
     {
+        await announce("Cancelado.");
         router.push(redirectPath);
     }
     
     
     return(
-        <form onSubmit={handleSubmit} className={styles.noteForm}>
+        <form
+            onSubmit={handleSubmit}
+            className={styles.noteForm}
+            noValidate
+        >
             <div className={styles.inputGroup}>
                 <label htmlFor="title">Título</label>
                 <input
@@ -143,23 +178,27 @@ export function NoteForm(props: NoteFormProps)
                 />
             </div>
             <div className={styles.inputGroup}>
-                <label htmlFor="content">Conteúdo</label>
+                <label htmlFor="content">Conteúdo (Aceita Markdown)</label>
                 <div className={styles.inputGroupOptions}>
                     <button
                         className={styles.previewButton}
                         type="button"
+                        aria-labelledby="preview-button-description"
+                        aria-pressed={previewMode}
                         onClick={() => setPreviewMode(!previewMode)}
                     >
-                        {previewMode ? "Escrever" : "Pré-visualizar"}
+                        Alternar Visualização
                     </button>
+                    <p className="visually-hidden" id="preview-button-description">
+                        Alternar entre o modo de visualização e edição
+                    </p>
                     <a
                         className={styles.helpLink}
-                        aria-label="Visualizar ajuda sobre Markdown"
                         href={MARKDOWN_GUIDE_URL}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                       Ajuda
+                       Ajuda Markdown
                     </a>
                 </div>
                 {renderTextOrMarkDown()}
@@ -174,6 +213,16 @@ export function NoteForm(props: NoteFormProps)
                     Cancelar
                 </button>
             </div>
+            
+            <FormFieldStatusMessage status={error}/>
+            
+            <p
+                className="visually-hidden"
+                aria-live="polite"
+                aria-atomic="true"
+            >
+                {ariaMessage}
+            </p>
         </form>
     );
 }

@@ -15,7 +15,7 @@ export default function EditNoteSkeleton()
                     <span>Conteúdo</span>
                     <div className={styles.inputGroupOptions}>
                         <span className={styles.previewButton}>
-                           Escrever
+                           Pré-visualizar
                        </span>
                         <span className={styles.helpLink}>
                             Ajuda

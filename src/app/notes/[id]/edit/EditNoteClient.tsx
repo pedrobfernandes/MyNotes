@@ -6,6 +6,7 @@ import { useNotes } from "@/context/NotesContext";
 import { fetchNoteById } from "@/data/notes";
 import { Note } from "@/types";
 import EditNoteSkeleton from "@/components/EditNoteSkeleton";
+import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import styles from "./page.module.css";
 import { useSearchParams } from "next/navigation";
 
@@ -21,6 +22,7 @@ export default function EditNoteClient(props: EditNoteClientProps)
     const [loadMessage, setLoadMessage] = useState<string | null>(null);
     
     const { id } = props;
+    const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
     const { notes } = useNotes();
     
@@ -66,6 +68,16 @@ export default function EditNoteClient(props: EditNoteClientProps)
     
     useEffect(() =>
     {
+        if (note !== null)
+        {
+            announce(`Editar: ${note.title}`);
+        }
+    
+    }, [note]);
+    
+    
+    useEffect(() =>
+    {
         loadNote();
     
     }, [id, notes]);
@@ -86,6 +98,13 @@ export default function EditNoteClient(props: EditNoteClientProps)
                     redirectPath={`/notes/${note.id}?page=${page}&search=${search}`}
                    id={id}
                 />
+                <div
+                    className="visually-hidden"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+                    {ariaMessage}
+                </div>
             </main>
         );
     }

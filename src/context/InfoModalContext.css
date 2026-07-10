@@ -1,0 +1,95 @@
+.infoModal-wrapper
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1200;
+}
+
+
+.infoModal-backdrop
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.300);
+    z-index: 1100;
+}
+
+
+.infoModal
+{
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 60vw;
+    transform: translate(-50%, -50%);
+    border: var(--c-border);
+    background-color: var(--c-primary);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    z-index: 1100;
+}
+
+
+.infoModal button
+{
+    background-color: var(--c-secondary);
+}
+
+.infoModal:focus
+{
+    outline: var(--c-border);
+    outline-offset: 0;
+}
+
+
+.infoModal-content-container
+{
+    height: 100%;
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    padding: 2rem;
+    overflow: auto;
+}
+
+
+.infoModal-message
+{
+    font-weight: 500;
+    text-align: center;
+}
+
+
+.infoModal-buttons-container
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto;
+    gap: 2rem;
+}
+
+
+.infoModal-buttons-container button
+{
+    width: 50%;
+}
+
+
+@media (min-width: 28.2em)
+{
+    .infoModal
+    {
+        max-width: 25rem;
+    }
+}

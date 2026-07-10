@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/client";
-import { FetchNotesResult, NoteMutationResult, InsertNoteType } from "@/types";
+import { FetchNotesResult, FetchNoteResult, NoteMutationResult, InsertNoteType } from "@/types";
 
 
 export async function fetchNotes(userId: string): Promise<FetchNotesResult>
@@ -35,7 +35,7 @@ export async function fetchNotes(userId: string): Promise<FetchNotesResult>
         return({
             data: [],
             error: "Sem notas criadas ainda.",
-            status: "not_created",
+            status: "empty",
         });
     }
     catch (error)
@@ -50,7 +50,7 @@ export async function fetchNotes(userId: string): Promise<FetchNotesResult>
 }
 
 
-export async function fetchNoteById(id: string): Promise<NoteMutationResult>
+export async function fetchNoteById(id: string): Promise<FetchNoteResult>
 {
     try
     {
@@ -82,7 +82,7 @@ export async function fetchNoteById(id: string): Promise<NoteMutationResult>
         return({
             data: null,
             error: "Nota não existe",
-            status: "not_created",
+            status: "not_found",
         });
     }
     catch
@@ -138,7 +138,7 @@ export async function insertNote(
         return({
             data: null,
             error: "Erro desconhecido ao tentar inserir nota.",
-            status: "not_created",
+            status: "unknown_error",
         });
     }
     catch (error)
@@ -194,7 +194,7 @@ export async function updateNote(
         return({
             data: null,
             error: "Erro desconhecido ao tentar atualizar nota.",
-            status: "not_created",
+            status: "unknown_error",
         });
     }
     catch
@@ -243,7 +243,7 @@ export async function deleteNote(
         return({
             data: null,
             error: "Erro desconhecido ao tentar deletar nota.",
-            status: "not_created",
+            status: "unknown_error",
         });
     }
     catch

@@ -1,0 +1,6 @@
+.form-field-status-message
+{
+    color: var(--c-text);
+    font-weight: 700;
+    min-block-size: 1rem;
+}

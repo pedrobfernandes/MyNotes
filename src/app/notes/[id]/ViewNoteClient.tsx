@@ -12,6 +12,8 @@ import { useSearchParams } from "next/navigation";
 import jsPDF from "jspdf";
 import { DeleteButton } from "@/components/DeleteButton";
 import LoadingSpinner from "@/components/LoadinSpinner";
+import { useModal } from "@/context/InfoModalContext";
+import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import html2canvas from "html2canvas";
 import styles from "./page.module.css";
 
@@ -31,6 +33,9 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     const { id } = props;
     
     const { notes } = useNotes();
+    const { alert, confirm } = useModal();
+    
+    const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
     const searchParams = useSearchParams();
     const page = searchParams.get("page") ?? "1";
@@ -212,6 +217,16 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     
     useEffect(() =>
     {
+        if (note !== null)
+        {
+            announce(`Visualizar: ${note.title}`);
+        }
+    
+    }, [note]);
+    
+    
+    useEffect(() =>
+    {
         loadNote();
     
     }, [id, notes]);
@@ -249,10 +264,19 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
         return(<p>{loadMessage}</p>);
     }
     
+    
     if (note !== null)
     {
         return(
             <main className={styles.viewNoteContainer}>
+                <div
+                    className="visually-hidden"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+                    {ariaMessage}
+                </div>
+                
                 <article>
                     <header>
                         <h1>{note.title}</h1>

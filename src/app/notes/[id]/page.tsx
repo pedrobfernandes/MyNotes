@@ -10,7 +10,7 @@ type PageProps =
 }
 
 
-export const metadata: Metadata = { title: "Visualizar" };
+export const metadata: Metadata = { title: "Visualizar Nota" };
 
 
 export default async function Page(props: PageProps)
