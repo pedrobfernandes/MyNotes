@@ -2,40 +2,10 @@
 {
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-block: 1rem;
     text-align: center;
-    
-    .paginationForm
-    {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        
-        .paginationInputGroup
-        {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            
-            input
-            {
-                width: 8rem;
-                text-align: center;
-            }
-        }
-    }
-    
-    .paginationButtons
-    {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
 
 }

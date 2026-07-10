@@ -85,6 +85,7 @@ export default function DashboardClient()
     const totalPages: number = Math.ceil(filteredNotes.length / notesPerPage);
     const startIndex: number = (currentPage - 1) * notesPerPage;
     const endIndex: number = startIndex + notesPerPage;
+    const notesToShow: Note[] = filteredNotes.slice(startIndex, endIndex);
     
     
     
@@ -144,7 +145,6 @@ export default function DashboardClient()
     {
         if (notes.length > 0)
         {
-            const notesToShow: Note[] = filteredNotes.slice(startIndex, endIndex);
             const notesList = notesToShow.map((note: Note) =>
             {
                 return(
@@ -243,11 +243,6 @@ export default function DashboardClient()
     
     function goToPage(page: number): void
     {
-        if (page < 1 || page > totalPages)
-        {
-            return;
-        }
-        
         setCurrentPage(page);
         router.replace(`/dashboard?page=${page}&search=${encodeURIComponent(filter)}`);
         
@@ -370,7 +365,6 @@ export default function DashboardClient()
         }
     
     }, [currentPage, totalPages]);
-    
     
     
     // Cuida de restaurar os focus(), incluindo se apertar f5...
@@ -536,7 +530,6 @@ export default function DashboardClient()
                             handlePreviousPage={handlePreviousPage}
                             handleGoToFirstPage={handleGoToFirstPage}
                             handleGoToLastPage={handleGoToLastPage}
-                            goToPage={goToPage}
                             currentPage={currentPage}
                             totalPages={totalPages}
                         />
