@@ -49,7 +49,11 @@ export default function SearchForm(props: SearchFormProps)
     
     
     return(
-        <form className={styles.searchForm} onSubmit={handleSubmit}>
+        <form
+            className={styles.searchForm}
+            onSubmit={handleSubmit}
+            aria-labelledby="search-form-title"
+        >
             <label htmlFor="search-input" className="visually-hidden">Procure o termo</label>
             <input
                 id="search-input"

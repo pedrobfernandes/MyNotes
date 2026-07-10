@@ -243,6 +243,11 @@ export default function DashboardClient()
     
     function goToPage(page: number): void
     {
+        if (page < 1 || page > totalPages)
+        {
+            return;
+        }
+        
         setCurrentPage(page);
         router.replace(`/dashboard?page=${page}&search=${encodeURIComponent(filter)}`);
         
@@ -485,7 +490,12 @@ export default function DashboardClient()
                 {
                     hasLoadedNotes && notes.length > 0 &&
                         <>
-                        <h2 className="visually-hidden">Pesquisa de Notas</h2>
+                        <h2
+                            id="search-form-title"
+                            className="visually-hidden"
+                        >
+                            Pesquisa de Notas
+                        </h2>
                         <SearchForm
                             filter={filter}
                             handleSearch={handleSearch}
@@ -526,6 +536,7 @@ export default function DashboardClient()
                             handlePreviousPage={handlePreviousPage}
                             handleGoToFirstPage={handleGoToFirstPage}
                             handleGoToLastPage={handleGoToLastPage}
+                            goToPage={goToPage}
                             currentPage={currentPage}
                             totalPages={totalPages}
                         />
