@@ -6,7 +6,7 @@ import NoteCard from "@/components/NoteCard";
 import { Note, FetchNotesResult } from "@/types";
 import { supabase } from "@/lib/supabase/client";
 import { UserResponse } from "@supabase/supabase-js";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { fetchNotes } from "@/data/notes";
 import { useNotes } from "@/context/NotesContext";
 import { useModal } from "@/context/InfoModalContext";
@@ -19,8 +19,16 @@ import NotesPlaceHolder from "@/components/NotesPlaceHolder";
 import SearchFormPlaceholder from "@/components/SearchFormPlaceholder";
 
 
-export default function DashboardClient()
+type DashboardClientProps =
 {
+    initialPage: number;
+    initialSearch: string;
+}
+
+
+export default function DashboardClient(props: DashboardClientProps)
+{
+    const { initialPage, initialSearch } = props;
     /*
         Para rastreamento de página e de termo de pesquisa
         usamos a url mesmo que fica mais facil para sincronizar
@@ -30,9 +38,9 @@ export default function DashboardClient()
         Depois nos componentes e páginas que precisam, usamos
         useSearchParams() novamente para pegar os itens..
     */
-    const searchParams = useSearchParams();
-    const initialPage = Number(searchParams.get("page")) || 1;
-    const initialSearch = searchParams.get("search") || "";
+    //~ const searchParams = useSearchParams();
+    //~ const initialPage = Number(searchParams.get("page")) || 1;
+    //~ const initialSearch = searchParams.get("search") || "";
     
     const [userId, setUserId] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>("");

@@ -8,7 +8,6 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Note } from "@/types";
-import { useSearchParams } from "next/navigation";
 import jsPDF from "jspdf";
 import { DeleteButton } from "@/components/DeleteButton";
 import LoadingSpinner from "@/components/LoadinSpinner";
@@ -21,6 +20,8 @@ import styles from "./page.module.css";
 type ViewNoteClientProps =
 {
     id: string;
+    page: number;
+    search: string;
 };
 
 
@@ -29,15 +30,11 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     const [note, setNote] = useState<Note | null>(null);
     const [loadMessage, setLoadMessage] = useState<string | null>(null);
     
-    const { id } = props;
+    const { id, page, search } = props;
     
     const { notes } = useNotes();
     const { alert } = useModal();
     
-    
-    const searchParams = useSearchParams();
-    const page = searchParams.get("page") ?? "1";
-    const search = searchParams.get("search") ?? "";
     
     const noteContentRef = useRef<HTMLElement | null>(null);
     
@@ -288,7 +285,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
                             </Link>
                              <DeleteButton
                                 id={id}
-                                page={page}
+                                page={String(page)}
                                 search={search}
                             />
                         </div>
