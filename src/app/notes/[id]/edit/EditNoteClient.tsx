@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { NoteForm } from "@/components/NoteForm";
 import { useNotes } from "@/context/NotesContext";
+import { useSearchParams } from "next/navigation";
 import { fetchNoteById } from "@/data/notes";
 import { Note } from "@/types";
 import EditNoteSkeleton from "@/components/EditNoteSkeleton";
@@ -12,14 +13,17 @@ import styles from "./page.module.css";
 type EditNoteClientProps =
 {
     id: string;
-    page: number;
-    search: string;
 };
 
 export default function EditNoteClient(props: EditNoteClientProps)
 {
     const [note, setNote] = useState<Note | null>(null);
     const [loadMessage, setLoadMessage] = useState<string | null>(null);
+    
+    
+    const { id } = props;
+    const { notes } = useNotes();
+    
     
     /*  
         Aqui, cuida de pegar a página atual (antes de editar), e o
@@ -31,8 +35,9 @@ export default function EditNoteClient(props: EditNoteClientProps)
         onde estavamos e com a mesma "filtragem que usamos" (o termo de pesquisa).
         Então aqui pega eles da url, porque o NoteForm recebe como props redirectPath
     */
-    const { id, page, search } = props;
-    const { notes } = useNotes();
+    const searchParams = useSearchParams();
+    const page = searchParams.get("page") ?? "1";
+    const search = searchParams.get("search") ?? "";
     
     
     async function loadNote(): Promise<void>

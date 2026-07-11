@@ -28,7 +28,7 @@ type DashboardClientProps =
 
 export default function DashboardClient(props: DashboardClientProps)
 {
-    const { initialPage, initialSearch } = props;
+    
     /*
         Para rastreamento de página e de termo de pesquisa
         usamos a url mesmo que fica mais facil para sincronizar
@@ -38,9 +38,7 @@ export default function DashboardClient(props: DashboardClientProps)
         Depois nos componentes e páginas que precisam, usamos
         useSearchParams() novamente para pegar os itens..
     */
-    //~ const searchParams = useSearchParams();
-    //~ const initialPage = Number(searchParams.get("page")) || 1;
-    //~ const initialSearch = searchParams.get("search") || "";
+    const { initialPage, initialSearch } = props;
     
     const [userId, setUserId] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>("");
