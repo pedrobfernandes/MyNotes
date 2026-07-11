@@ -40,6 +40,10 @@ export default function DashboardClient()
     const [filter, setFilter] = useState<string>(initialSearch);
     const [hasSearched, setHasSearched] = useState<boolean>(false);
     
+    // Url da edge function para remover a conta
+    const deleteUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_DELETE_ACCOUNT_URL;
+    
+    // Hook de anununcios para o leitor de tela (ORCA)
     const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
     
@@ -61,7 +65,8 @@ export default function DashboardClient()
     
     } = useNotes();
     
-    const { confirm } = useModal();
+    // Hook de modal que substitui alert e confirm nativo
+    const { alert , confirm } = useModal();
     const router = useRouter();
     
     
@@ -176,7 +181,6 @@ export default function DashboardClient()
             "Tem a certeza que deseja excluir a sua conta?" +
             " Todos os seus dados serão deletados.",
             {
-                onConfirm: async () => await announce("Excluindo conta e dados"),
                 onCancel: async () => await announce("Exclusão de conta cancelada"),
                 focusButton: "secondary",
             }
@@ -185,6 +189,50 @@ export default function DashboardClient()
         if (confirmedExclusion === false)
         {
             return;
+        }
+        
+        try
+        {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session === null)
+            {
+                throw new Error("Nenhuma sessão ativa")
+            }
+            
+            
+            if (deleteUrl === undefined)
+            {
+                throw new Error("URL da Edge Function não configurada.")
+            }
+            
+            const response = await fetch(deleteUrl, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            
+            const result = await response.json();
+            
+            if (result.ok === false)
+            {
+                throw new Error(result.error || "Falha ao deletar conta");
+            }
+            
+            await alert(
+                "Sua conta e todos os dados foram excluidos com sucesso." +
+                " Em seguida irá sair da aplicação e retornar" +
+                " á página inicial."
+            );
+            
+            await supabase.auth.signOut();
+            router.push("/");
+        }
+        catch (error)
+        {
+            await alert(`Erro ao deletar conta: ${error}`);
         }
     }
     
@@ -294,25 +342,6 @@ export default function DashboardClient()
             return;
         }
     }
-    
-    
-    useEffect(() =>
-    {
-       announce("Página principal: Minhas Notas");
-    
-    }, []);
-    
-    
-    useEffect(() =>
-    {
-        const message = sessionStorage.getItem("dashboardAnnouncement");
-        
-        if (message !== null)
-        {
-            announce(message);
-            sessionStorage.removeItem("dashboardAnnouncement");
-        }
-    }, []);    
     
     
     useEffect(() =>

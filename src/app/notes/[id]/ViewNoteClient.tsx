@@ -13,7 +13,6 @@ import jsPDF from "jspdf";
 import { DeleteButton } from "@/components/DeleteButton";
 import LoadingSpinner from "@/components/LoadinSpinner";
 import { useModal } from "@/context/InfoModalContext";
-import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import html2canvas from "html2canvas";
 import styles from "./page.module.css";
 
@@ -33,9 +32,8 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     const { id } = props;
     
     const { notes } = useNotes();
-    const { alert, confirm } = useModal();
+    const { alert } = useModal();
     
-    const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
     const searchParams = useSearchParams();
     const page = searchParams.get("page") ?? "1";
@@ -165,7 +163,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
         
         if (pdf === undefined)
         {
-            alert("Falha ao gerar o PDF");
+            await alert("Falha ao gerar o PDF");
             return;
         }
         
@@ -190,7 +188,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
         
         if (pdf === undefined)
         {
-            alert("Falha ao gerar o PDF");
+            await alert("Falha ao gerar o PDF");
             return;
         }
         
@@ -211,18 +209,8 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
             return;
         }
         
-        alert("Compartilhamento de arquivos não suportado. Utilize o botão Baixar PDF");
+        await alert("Compartilhamento de arquivos não suportado. Utilize o botão Baixar PDF");
     }
-    
-    
-    useEffect(() =>
-    {
-        if (note !== null)
-        {
-            announce(`Visualizar: ${note.title}`);
-        }
-    
-    }, [note]);
     
     
     useEffect(() =>
@@ -269,14 +257,6 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     {
         return(
             <main className={styles.viewNoteContainer}>
-                <div
-                    className="visually-hidden"
-                    aria-live="polite"
-                    aria-atomic="true"
-                >
-                    {ariaMessage}
-                </div>
-                
                 <article>
                     <header>
                         <h1>{note.title}</h1>
