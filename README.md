@@ -259,16 +259,21 @@ Autenticação (OTP)
       │
       ├────────► Criar nota
       │
-      ├────────► Visualizar nota
-      │                 │
-      │                 ├────► Editar
-      │                 ├────► Eliminar
-      │                 ├────► Exportar PDF
-      │                 └────► Partilhar
-      │
-      ├────────► Pesquisa
-      │
-      └────────► Paginação
+      └────────► Pesquisa
+                     │
+                     ▼
+              Lista de notas
+                     │
+        ┌────────────┴────────────┐
+        ▼                         ▼
+   Paginação               Visualizar nota
+                                     │
+                           ┌─────────┼─────────┐
+                           ▼         ▼         ▼
+                        Editar   Eliminar   Exportar PDF
+                                           │
+                                           ▼
+                                      Partilhar
 ```
 
 ---
