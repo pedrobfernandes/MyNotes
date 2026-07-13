@@ -169,7 +169,7 @@ A paginação apresenta atualmente seis notas por página.
 
 ---
 
-## Arquitetura da aplicação
+## 🏗️ Arquitetura da aplicação
 
 Embora o MyNotes utilize o Next.js, a arquitetura atual é maioritariamente orientada para o cliente (*client-side*).
 
@@ -384,7 +384,7 @@ Em vez de manter duas implementações distintas, ambas as páginas reutilizam e
 
 ---
 
-# Acessibilidade
+# ♿ Acessibilidade
 
 A acessibilidade foi uma preocupação desde o início do desenvolvimento e fez parte das decisões de implementação ao longo de todo o projeto.
 
@@ -464,7 +464,7 @@ Acredito que a honestidade sobre o processo de validação é mais importante do
 
 ---
 
-# O que aprendi
+# 💡 O que aprendi
 
 Embora o objetivo inicial fosse aprender Next.js, este projeto acabou por proporcionar aprendizagem em áreas bastante mais abrangentes.
 
@@ -509,7 +509,7 @@ Cada um destes desafios contribuiu para compreender melhor não apenas a utiliza
 
 ---
 
-# Roadmap
+# 🗺️ Roadmap
 
 Embora a aplicação já seja totalmente funcional para o objetivo a que se destina, existem várias melhorias que pretendo implementar à medida que continuo a aprofundar os meus conhecimentos em Next.js e no ecossistema React.
 
@@ -541,7 +541,7 @@ Estas evoluções fazem parte do processo de aprendizagem que motivou este proje
 
 ---
 
-# Como executar o projeto
+# 🚀 Como executar o projeto
 
 ## Pré-requisitos
 
