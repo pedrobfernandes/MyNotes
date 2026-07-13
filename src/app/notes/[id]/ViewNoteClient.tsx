@@ -209,7 +209,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
             return;
         }
         
-        await alert("Compartilhamento de arquivos não suportado. Utilize o botão Baixar PDF");
+        await alert("O compartilhamento de arquivos não está disponível neste navegador. Utilize o botão 'Baixar PDF'.");
     }
     
     
