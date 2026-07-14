@@ -45,7 +45,7 @@
 }
 
 
-ul
+ul, ol
 {
     list-style: none;
 }
@@ -168,13 +168,20 @@ a:active
 .markdown-content ul
 {
     list-style: disc;
+    list-style-position: outside;
     margin-inline-start: 1rem;
 }
 
 .markdown-content ol
 {
     list-style: decimal;
-    margin-inline-start: 1rem;
+    list-style-position: outsite;
+    margin-inline-start: 2rem;
+}
+
+.markdown-content li
+{
+    padding-inline-start: 0.25rem;
 }
 
 .markdown-content code
