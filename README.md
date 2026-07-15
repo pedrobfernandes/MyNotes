@@ -18,6 +18,40 @@ Embora tenha sido desenvolvido como um projeto de aprendizagem, o objetivo nunca
 
 ---
 
+## Demonstração
+
+### Página inicial
+
+![Página inicial](screenshots/otp.png)
+
+Tela de autenticação utilizando OTP através do Supabase Authentication.
+
+---
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+Lista de notas com pesquisa, paginação e navegação para visualização.
+
+---
+
+### Visualização da nota
+
+![Visualização](screenshots/visualization.png)
+
+Suporte a texto simples e Markdown, com opções de exportação para PDF, partilha e edição.
+
+---
+
+### Edição de nota
+
+![Editar nota](screenshots/edition.png)
+
+Formulário reutilizado para criação e edição, com pré-visualização em Markdown.
+
+---
+
 ## Objetivos do projeto
 
 Este projeto teve vários objetivos de aprendizagem e evolução técnica.
