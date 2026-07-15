@@ -593,13 +593,13 @@ Também será necessária uma conta no Supabase para criar o projeto e obter as 
 Clone o repositório:
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/pedrobfernandes/MyNotes.git
 ```
 
 Entre na pasta do projeto:
 
 ```bash
-cd mynotes
+cd my-notes
 ```
 
 Instale as dependências:
@@ -608,34 +608,93 @@ Instale as dependências:
 npm install
 ```
 
-Crie um ficheiro `.env.local` e configure as variáveis de ambiente necessárias.
-
-Depois execute:
+Crie um ficheiro `.env.local` e configure as variáveis de ambiente necessárias:
 
 ```bash
-npm run dev
+NEXT_PUBLIC_SUPABASE_URL=url_do_projeto
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua_chave_anon_publica
+NEXT_PUBLIC_SUPABASE_DELETE_ACCOUNT_URL=url_da_edge_function_para_excluir_conta
 ```
 
+Configure a base de dados:
+
+- Copie e execute o script que está na pasta `database/my-notes-setup.sql` no editor SQL do projeto no Supabase
+- Crie uma Edge Function com o nome: `delete-user-account`, usando este script:
+
+  ```typescript
+   import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+   // Se colocar online substituir o Access-Control-Allow-Origin: '*'
+   // por Access-Control-Allow-Origin': 'url-do-deploy'
+   const corsHeaders = {
+     'Access-Control-Allow-Origin': '*',
+     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+   };
+   serve(async (req)=>{
+     // Handle CORS
+     if (req.method === 'OPTIONS') {
+       return new Response('ok', {
+         headers: corsHeaders
+       });
+     }
+     try {
+       // Criar cliente Supabase com service role key
+       const supabaseAdmin = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
+       // Obter o token JWT do header
+       const authHeader = req.headers.get('Authorization');
+       if (!authHeader) {
+         throw new Error('Missing authorization header');
+       }
+       // Verificar e validar o token do usuário
+       const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''));
+       if (userError || !user) {
+         throw new Error('Invalid token');
+       }
+       const userId = user.id;
+       // ✅ SIMPLES: Apenas deletar o usuário
+       // O CASCADE vai automaticamente deletar todos os dados relacionados
+       const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+       if (deleteUserError) {
+         throw deleteUserError;
+       }
+       return new Response(JSON.stringify({
+         success: true,
+         message: 'Conta e todos os dados foram deletados com sucesso'
+       }), {
+         headers: {
+           ...corsHeaders,
+           'Content-Type': 'application/json'
+         },
+         status: 200
+       });
+     } catch (error) {
+       console.error('Erro na função delete-user:', error);
+       return new Response(JSON.stringify({
+         success: false,
+         error: error.message
+       }), {
+         headers: {
+           ...corsHeaders,
+           'Content-Type': 'application/json'
+         },
+         status: 400
+       });
+     }
+   });
+
+  ```
+- No dashboard do Supabase, procure pelos templates de Email, e use o template da pasta `database/email-template` para "Confirm sign up" e "Magic link"
+- Execute a aplicação
+
+  ```bash
+  npm run dev
+  ```
 A aplicação ficará disponível em:
 
 ```text
 http://localhost:3000
 ```
-
----
-
-# Variáveis de ambiente
-
-O projeto necessita das credenciais do Supabase.
-
-Exemplo:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
-
-Dependendo da configuração da Edge Function utilizada para eliminação da conta, poderão existir outras variáveis adicionais.
 
 ---
 
