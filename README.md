@@ -684,7 +684,7 @@ Configure a base de dados:
    });
 
   ```
-- No dashboard do Supabase, procure pelos templates de Email, e use o template da pasta `database/email-template` para "Confirm sign up" e "Magic link"
+- No dashboard do Supabase, procure pelos templates de Email, e use o template da pasta `database/supabase-email-template` para "Confirm sign up" e "Magic link"
 - Execute a aplicação
 
   ```bash
