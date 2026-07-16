@@ -47,6 +47,7 @@
             display: block;
             width: 100%;
             height: auto;
+            max-height: 30rem;
             margin-block-end: 1rem;
         }
         
@@ -85,6 +86,12 @@
         @media (min-width: calc(715 / 16 * 1rem))
         {
             flex-direction: row;
+            
+            svg
+            {
+                max-height: none;
+                min-height: 30rem;
+            }
         }
         
     }
