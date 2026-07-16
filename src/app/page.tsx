@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { NotebookPen } from "lucide-react";
 import { useFormFieldValidation } from "@/hooks/useFormFieldValidation";
 import FormFieldStatusMessage from "@/components/FormFieldStatusMessage";
+import NotesIllustrarion from "@/components/NotesIlustration";
 import styles from "./page.module.css";
 
 
@@ -383,17 +384,22 @@ export default function Auth()
     
     return(
         <div className={styles.loginPageWrapper}>
-            <main className={styles.loginMain}>
+            <header className={styles.loginHeader}>
                 <h1 className={styles.loginHeading}>
                     MyNotes
                     <NotebookPen className={styles.icon}/>
                 </h1>
-                <p className={styles.appDescription}>
-                    Suas notas organizadas em um só lugar.
-                </p>
-                <section className={styles.formSection} key={step}>
-                    {renderEmailOrOtpForm()}
-                </section>
+            </header>
+            <main className={styles.loginMain}>
+                <NotesIllustrarion/>
+                <div className={styles.loginInputSection}>
+                    <p className={styles.appDescription}>
+                        Suas notas organizadas em um só lugar.
+                    </p>
+                    <section className={styles.formSection} key={step}>
+                        {renderEmailOrOtpForm()}
+                    </section>
+                </div>
             </main>
             <footer className={styles.loginFooter}>
                 <p className={styles.authorLink}>

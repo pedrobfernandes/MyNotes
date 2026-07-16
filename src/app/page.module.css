@@ -2,11 +2,31 @@
 {
     height: 100%;
     width: min(var(--container-max-size), 90vw);
+
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    
+    .loginHeader
+    {
+        margin-block: 2rem;
+    }
+    
+    .loginHeading
+    {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        
+        .icon
+        {
+            width: 1.8rem;
+            height: 1.8rem;
+        }
+    }
+    
     
     .loginMain
     {
@@ -21,29 +41,30 @@
         text-align: center;
         gap: 1rem;
         
-        
-        .loginHeading
-        {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
             
-            .icon
-            {
-                width: 1.8rem;
-                height: 1.8rem;
-            }
+        svg
+        {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin-block-end: 1rem;
         }
         
+        .loginInputSection
+        {
+            width: 100%;
+        }
+    
         .appDescription
         {
             text-wrap: balance;
+            margin-block: 1rem;
         }
         
         .formSection
         {
             width: 100%;
-            
+        
             .loginForm
             {
                 display: flex;
@@ -56,15 +77,18 @@
                 {
                     width: 100%;
                     padding: 0.5rem;
-                    
-                    @media (min-width: calc(630 / 16 * 1rem))
-                    {
-                        width: 35rem;
-                    }
                 }
             }
         }
+        
+        
+        @media (min-width: calc(715 / 16 * 1rem))
+        {
+            flex-direction: row;
+        }
+        
     }
+
     
     .loginFooter
     {

@@ -9,8 +9,6 @@
     --fs-md: clamp(1.1rem, 0.51vw + 1rem, 1.35rem);
     --fs-lg: clamp(1.21rem, 0.84vw + 1.04rem, 1.62rem);
     --fs-xl: clamp(1.33rem, 1.26vw + 1.08rem, 1.94rem);
-    --fs-xxl: clamp(1.46rem, 1.78vw + 1.11rem, 2.33rem);
-    --fs-xxxl: clamp(1.61rem, 2.44vw + 1.12rem, 2.8rem);
     --container-max-size: calc(1100 / 16 * 1rem);
     
     /* Cores */
@@ -60,22 +58,23 @@ a
 
 h1
 {
-    font-size: var(--fs-xxl);
-}
-
-h2
-{
     font-size: var(--fs-xl);
 }
 
-h3
+h2
 {
     font-size: var(--fs-lg);
 }
 
+h3
+{
+    font-size: var(--fs-md);
+}
+
 
 h1,
-h2
+h2,
+h3
 {
     text-wrap: balance;
 }
