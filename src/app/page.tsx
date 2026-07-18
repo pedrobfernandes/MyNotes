@@ -391,7 +391,8 @@ export default function Auth()
                 </h1>
             </header>
             <main className={styles.loginMain}>
-                <NotesIllustrarion/>
+
+                <NotesIllustrarion className={styles.illustration}/>
                 <div className={styles.loginInputSection}>
                     <p className={styles.appDescription}>
                         Suas notas organizadas em um só lugar.
@@ -400,6 +401,7 @@ export default function Auth()
                         {renderEmailOrOtpForm()}
                     </section>
                 </div>
+
             </main>
             <footer className={styles.loginFooter}>
                 <p className={styles.authorLink}>

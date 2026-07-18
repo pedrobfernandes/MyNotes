@@ -32,7 +32,7 @@
     {
         width: 100%;
         flex: 1;
-
+        padding: 1rem;
         margin-block: 1rem;
         display: flex;
         flex-direction: column;
@@ -41,18 +41,18 @@
         text-align: center;
         gap: 1rem;
         
-            
-        svg
+        
+        .illustration
         {
             display: block;
-            width: 100%;
-            height: auto;
-            max-height: 30rem;
+            width: auto;
+            max-inline-size: 100%;
             margin-block-end: 1rem;
         }
         
         .loginInputSection
         {
+            
             width: 100%;
         }
     
@@ -86,12 +86,6 @@
         @media (min-width: calc(715 / 16 * 1rem))
         {
             flex-direction: row;
-            
-            svg
-            {
-                max-height: none;
-                min-height: 30rem;
-            }
         }
         
     }
@@ -99,8 +93,9 @@
     
     .loginFooter
     {
-        width: 100%;
+        width: 100vw;
         padding: 0.5rem;
+        border-top: 0.1rem solid var(--c-border);
         
         .authorLink
         {
@@ -122,7 +117,7 @@
                 border-radius: 0.5rem;
                 
                 &:hover,
-                &:focus-visible
+                &:focus
                 {
                     outline: 0.3rem solid var(--c-border);
                     outline-offset: 0;
