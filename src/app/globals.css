@@ -147,9 +147,9 @@ a:active
 
 
 
-.markdown-content *
+.markdown-content
 {
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .markdown-content h1,
@@ -167,14 +167,12 @@ a:active
 .markdown-content ul
 {
     list-style: disc;
-    list-style-position: outside;
     margin-inline-start: 1rem;
 }
 
 .markdown-content ol
 {
     list-style: decimal;
-    list-style-position: outsite;
     margin-inline-start: 2rem;
 }
 
@@ -190,12 +188,12 @@ a:active
     border-radius: 0.25rem;
 }
 
+
 .markdown-content pre code
 {
     background: transparent;
     padding: 0;
     white-space: pre-wrap;
-    word-break: break-word;
 }
 
 .markdown-content blockquote
