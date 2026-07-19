@@ -708,7 +708,6 @@ Cada nota possui:
 - utilizador proprietário;
 - título;
 - conteúdo;
-- resumo;
 - data de criação;
 - data da última atualização.
 
