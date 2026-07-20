@@ -45,7 +45,7 @@ export default function Pagination(props: PaginationProps)
                     Página {currentPage} de {totalPages}
                 </span>
                 <span aria-hidden="true">
-                    {currentPage}/{totalPages}
+                    {Math.ceil(currentPage)}/{Math.ceil(totalPages)}
                 </span>
             </span>
             <button

@@ -3,13 +3,14 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import NoteCard from "@/components/NoteCard";
-import { Note, FetchNotesResult } from "@/types";
+import { Note } from "@/types";
 import { supabase } from "@/lib/supabase/client";
 import { UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { fetchNotes } from "@/data/notes";
 import { useNotes } from "@/context/NotesContext";
 import { useModal } from "@/context/InfoModalContext";
+import { useQuery } from "@tanstack/react-query";
 import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination"
 import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
@@ -45,6 +46,27 @@ export default function DashboardClient(props: DashboardClientProps)
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>(initialSearch);
     const [hasSearched, setHasSearched] = useState<boolean>(false);
+    
+    const notesPerPage: number = 6;
+    const notesQuery = useQuery({
+        queryKey: ["notes", userId, currentPage],
+        
+        queryFn: () =>
+            fetchNotes(
+                userId!,
+                currentPage,
+                notesPerPage
+            ),
+        
+        staleTime: 60 *1000,
+        gcTime: 10 * 60 * 1000,
+        enabled: userId !== null,
+    });
+    
+    const fetchedNotes = notesQuery.data?.data ?? [];
+    console.log("FetchedNotes:", fetchedNotes.length);
+    
+    //~ console.log("Notes Query:", notesQuery);
     
     // Url da edge function para remover a conta
     const deleteUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_DELETE_ACCOUNT_URL;
@@ -84,7 +106,7 @@ export default function DashboardClient(props: DashboardClientProps)
         ao filtro.
     */
     const normalizedFilter: string = normalize(filter);
-    const filteredNotes: Note[] = notes.filter((note: Note) =>
+    const filteredNotes: Note[] = fetchedNotes.filter((note: Note) =>
     {
         
         return(
@@ -92,11 +114,11 @@ export default function DashboardClient(props: DashboardClientProps)
         );
     })
     
-    const notesPerPage: number = 6;
-    const totalPages: number = Math.ceil(filteredNotes.length / notesPerPage);
-    const startIndex: number = (currentPage - 1) * notesPerPage;
-    const endIndex: number = startIndex + notesPerPage;
-    const notesToShow: Note[] = filteredNotes.slice(startIndex, endIndex);
+    
+    const totalPages: number = Math.ceil((notesQuery.data?.count ?? 0) / notesPerPage);
+    //~ const startIndex: number = (currentPage - 1) * notesPerPage;
+    //~ const endIndex: number = startIndex + notesPerPage;
+    //~ const notesToShow: Note[] = filteredNotes.slice(startIndex, endIndex);
     
     
     
@@ -114,26 +136,26 @@ export default function DashboardClient(props: DashboardClientProps)
     }
     
     
-    async function getNotes(): Promise<void>
-    {
-        if (userId !== null)
-        {
-            if (hasLoadedNotes === false)
-            {
-                await announce("Carregando notas.");
-                const savedNotes: FetchNotesResult = await fetchNotes(userId);
-                setNotes(savedNotes.data);
+    //~ async function getNotes(): Promise<void>
+    //~ {
+        //~ if (userId !== null)
+        //~ {
+            //~ if (hasLoadedNotes === false)
+            //~ {
+                //~ await announce("Carregando notas.");
+                //~ const savedNotes: FetchNotesResult = await fetchNotes(userId, currentPage, notesPerPage);
+                //~ setNotes(savedNotes.data);
             
-                if (savedNotes.error !== null &&
-                    savedNotes.status !== "empty")
-                {
-                    setErrorMessage(savedNotes.error);
-                }
+                //~ if (savedNotes.error !== null &&
+                    //~ savedNotes.status !== "empty")
+                //~ {
+                    //~ setErrorMessage(savedNotes.error);
+                //~ }
                 
-                setHasLoadedNotes(true);
-            }
-        }
-    }
+                //~ setHasLoadedNotes(true);
+            //~ }
+        //~ }
+    //~ }
     
     
     
@@ -154,9 +176,9 @@ export default function DashboardClient(props: DashboardClientProps)
     
     function renderNotes()
     {
-        if (notes.length > 0)
+        if (filteredNotes.length > 0)
         {
-            const notesList = notesToShow.map((note: Note) =>
+            const notesList = filteredNotes.map((note: Note) =>
             {
                 return(
                     <NoteCard
@@ -368,11 +390,11 @@ export default function DashboardClient(props: DashboardClientProps)
     }, []);
     
     
-    useEffect(() =>
-    {
-        getNotes();
+    //~ useEffect(() =>
+    //~ {
+        //~ getNotes();
     
-    }, [userId]);
+    //~ }, [userId]);
     
     
     useEffect(() =>
@@ -405,7 +427,7 @@ export default function DashboardClient(props: DashboardClientProps)
     // Cuida de restaurar os focus(), incluindo se apertar f5...
     useEffect(() =>
     {
-        if (hasLoadedNotes === false)
+        if (notesQuery.isLoading)
         {
             return;
         }
@@ -427,13 +449,13 @@ export default function DashboardClient(props: DashboardClientProps)
         // Limpa o sessionStorage
         sessionStorage.removeItem("restoreFocus");
     
-    }, [hasLoadedNotes]);
+    }, [notesQuery.isLoading]);
     
     
     // Cuida de anunciar os resultados da pesquisa, se algum..
     useEffect(() =>
     {
-        if (hasLoadedNotes === false ||
+        if (notesQuery.isLoading ||
             hasSearched === false ||
             filter === ""
         )
@@ -454,7 +476,7 @@ export default function DashboardClient(props: DashboardClientProps)
             announce(`${filteredNotes.length} correspondências encontradas.`);
         }
         
-    }, [filter, filteredNotes.length, hasLoadedNotes, hasSearched, announce]);
+    }, [filter, filteredNotes.length, notesQuery.isLoading, hasSearched, announce]);
     
     
     // Cuida de anunciar que a nota foi deletada
@@ -512,12 +534,12 @@ export default function DashboardClient(props: DashboardClientProps)
             </section>
             <section className={styles.searchFormSection}>
                 {
-                    (!hasLoadedNotes || notes.length === 0) &&
+                    (notesQuery.isLoading || fetchedNotes.length === 0) &&
                         <SearchFormPlaceholder/>
                 }
                 
                 {
-                    hasLoadedNotes && notes.length > 0 &&
+                    !notesQuery.isLoading && fetchedNotes.length > 0 &&
                         <>
                         <h2
                             id="search-form-title"
@@ -534,7 +556,7 @@ export default function DashboardClient(props: DashboardClientProps)
             </section>
             <section className={styles.notesSection}>
                 {
-                    !hasLoadedNotes &&
+                    notesQuery.isLoading &&
                         <>
                         <ul className={styles.notesContainer}>
                             <NotesPlaceHolder count={6} animated={true}/>
@@ -547,19 +569,19 @@ export default function DashboardClient(props: DashboardClientProps)
                 }            
                 
                 {
-                    hasLoadedNotes && notes.length > 0 &&
+                    !notesQuery.isLoading && fetchedNotes.length > 0 &&
                         <>
                         <h2 className="visually-hidden">Lista de notas</h2>
                         <ul className={styles.notesContainer}>
                             {renderNotes()}
-                            <NotesPlaceHolder count={Math.max(0, 6 - notes.length)}/>
+                            <NotesPlaceHolder count={Math.max(0, 6 - fetchedNotes.length)}/>
                         
                         </ul>
                     </>
                 }
                 
                 {
-                    hasLoadedNotes && notes.length > 0 &&
+                    !notesQuery.isLoading && fetchedNotes.length > 0 &&
                         <Pagination
                             handleNextPage={handleNextPage}
                             handlePreviousPage={handlePreviousPage}
@@ -571,7 +593,7 @@ export default function DashboardClient(props: DashboardClientProps)
                 }
                 
                 {
-                    hasLoadedNotes && notes.length === 0 &&
+                    !notesQuery.isLoading && fetchedNotes.length === 0 &&
                         <>
                         <ul className={styles.notesContainer}>
                                 <NotesPlaceHolder count={6}/>

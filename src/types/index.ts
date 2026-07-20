@@ -47,6 +47,7 @@ export type FetchNotesResult =
     BaseResult &
 {
     data: Note[];
+    count: number;
     status: FetchNotesStatus; 
 }
 

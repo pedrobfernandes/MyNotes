@@ -2,46 +2,72 @@ import { supabase } from "@/lib/supabase/client";
 import { FetchNotesResult, FetchNoteResult, NoteMutationResult, InsertNoteType } from "@/types";
 
 
-export async function fetchNotes(userId: string): Promise<FetchNotesResult>
+export async function fetchNotes(
+    userId: string,
+    page: number,
+    notesPerPage: number
+): Promise<FetchNotesResult>
 {
+    const from = (page - 1) * notesPerPage;
+    const to = from + notesPerPage - 1;
+    
+    console.log({
+        page,
+        notesPerPage,
+        from,
+        to,
+    });
+    
     try
     {
-        const { data: fetchData, error: fetchError } = await supabase
+        const { data: fetchData, error: fetchError, count } = await supabase
             .from("notes")
-            .select("*")
+            .select("*", { count: "exact" })
             .eq("user_id", userId)
-            .order("created_at", { ascending: false });
+            .order("created_at", { ascending: false })
+            .range(from, to);
+        
+        console.log({
+    quantidadeRecebida: fetchData?.length,
+    count,
+    fetchData
+});
         
         
         if (fetchError !== null && fetchError !== undefined)
         {
             return({
                 data: [],
+                count: 0,
                 error: "Erro ao buscar notas",
                 status: "error",
+
             });
         }
-
-        if (fetchData !== null && fetchData !== undefined &&
-            Array.isArray(fetchData) && fetchData.length > 0)
+        
+        if ((count ?? 0) === 0)
         {
             return({
-                data: fetchData,
-                error: null,
-                status: "success",
+                data: [],
+                count: 0,
+                error: "Sem notas criadas ainda.",
+                status: "empty",
             });
         }
 
+       
         return({
-            data: [],
-            error: "Sem notas criadas ainda.",
-            status: "empty",
+            data: fetchData ?? [],
+            count: count ?? 0,
+            error: null,
+            status: "success",
         });
     }
     catch (error)
     {
         return({
             data: [],
+            count: 0,
             error: "Erro de conexão. " +
             "Verifique sua internet ou tente mais tarde.",
             status: "network_error",
