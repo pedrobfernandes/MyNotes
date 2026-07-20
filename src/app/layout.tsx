@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {  Geist, Geist_Mono } from "next/font/google";
 import { InfoModalProvider } from "@/context/InfoModalContext";
 import { NotesProvider } from "@/context/NotesContext";
+import QueryProvider from "@/providers/QueryProvider";
 
 import "./globals.css";
 
@@ -34,9 +35,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <InfoModalProvider>
-            <NotesProvider>{children}</NotesProvider>
-        </InfoModalProvider>
+      <QueryProvider>
+            <InfoModalProvider>
+                <NotesProvider>{children}</NotesProvider>
+            </InfoModalProvider>
+        </QueryProvider>
       </body>
     </html>
   );
