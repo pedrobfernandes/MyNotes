@@ -42,6 +42,8 @@ export default function DashboardClient(props: DashboardClientProps)
     const { initialPage, initialSearch } = props;
     
     const [userId, setUserId] = useState<string | null>(null);
+    console.log("userId:", userId);
+    
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>(initialSearch);
@@ -49,13 +51,14 @@ export default function DashboardClient(props: DashboardClientProps)
     
     const notesPerPage: number = 6;
     const notesQuery = useQuery({
-        queryKey: ["notes", userId, currentPage],
+        queryKey: ["notes", userId, currentPage, filter],
         
         queryFn: () =>
             fetchNotes(
                 userId!,
                 currentPage,
-                notesPerPage
+                notesPerPage,
+                filter
             ),
         
         staleTime: 60 *1000,
@@ -64,9 +67,6 @@ export default function DashboardClient(props: DashboardClientProps)
     });
     
     const fetchedNotes = notesQuery.data?.data ?? [];
-    console.log("FetchedNotes:", fetchedNotes.length);
-    
-    //~ console.log("Notes Query:", notesQuery);
     
     // Url da edge function para remover a conta
     const deleteUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_DELETE_ACCOUNT_URL;
@@ -84,7 +84,6 @@ export default function DashboardClient(props: DashboardClientProps)
     */
     const didInitialize = useRef<boolean>(false);
     
-    
     const
     {
         notes, setNotes, hasLoadedNotes,
@@ -98,28 +97,7 @@ export default function DashboardClient(props: DashboardClientProps)
     const router = useRouter();
     
     
-    /*
-        Cuida de pegar a pesquisa "normalizada" (minuscúlas, sem espaços etc)
-        normalizedFilter fica de fora do filtro abaixo, pois ele é so 1 (o que foi digiado)
-        então não precisa ser "processado varias vezes", apenas comparado.
-        Apos apenas comparamos e colocamos no array as notas que correspondem
-        ao filtro.
-    */
-    const normalizedFilter: string = normalize(filter);
-    const filteredNotes: Note[] = fetchedNotes.filter((note: Note) =>
-    {
-        
-        return(
-            normalize(note.title).includes(normalizedFilter)
-        );
-    })
-    
-    
     const totalPages: number = Math.ceil((notesQuery.data?.count ?? 0) / notesPerPage);
-    //~ const startIndex: number = (currentPage - 1) * notesPerPage;
-    //~ const endIndex: number = startIndex + notesPerPage;
-    //~ const notesToShow: Note[] = filteredNotes.slice(startIndex, endIndex);
-    
     
     
     async function getId(): Promise<void>
@@ -136,49 +114,26 @@ export default function DashboardClient(props: DashboardClientProps)
     }
     
     
-    //~ async function getNotes(): Promise<void>
-    //~ {
-        //~ if (userId !== null)
-        //~ {
-            //~ if (hasLoadedNotes === false)
-            //~ {
-                //~ await announce("Carregando notas.");
-                //~ const savedNotes: FetchNotesResult = await fetchNotes(userId, currentPage, notesPerPage);
-                //~ setNotes(savedNotes.data);
-            
-                //~ if (savedNotes.error !== null &&
-                    //~ savedNotes.status !== "empty")
-                //~ {
-                    //~ setErrorMessage(savedNotes.error);
-                //~ }
-                
-                //~ setHasLoadedNotes(true);
-            //~ }
-        //~ }
-    //~ }
-    
-    
-    
     // Cuida de "normalizar" o filtro dgitado e o
     // titulo e sumario das notas para comparação
-    function normalize(str: string): string
-    {
-        return(
-            str
-            .toLowerCase()
-            .normalize("NFD") // caracteres acentuados
-            .replace(/[\u0300-\u036f]/g, "") // acentos
-            .replace(/ç/g, "c")
-            .replace(/\s+/g, "") // remove espaços
-        );
-    }
+    //~ function normalize(str: string): string
+    //~ {
+        //~ return(
+            //~ str
+            //~ .toLowerCase()
+            //~ .normalize("NFD") // caracteres acentuados
+            //~ .replace(/[\u0300-\u036f]/g, "") // acentos
+            //~ .replace(/ç/g, "c")
+            //~ .replace(/\s+/g, "") // remove espaços
+        //~ );
+    //~ }
     
     
     function renderNotes()
     {
-        if (filteredNotes.length > 0)
+        if (fetchedNotes.length > 0)
         {
-            const notesList = filteredNotes.map((note: Note) =>
+            const notesList = fetchedNotes.map((note: Note) =>
             {
                 return(
                     <NoteCard
@@ -319,6 +274,11 @@ export default function DashboardClient(props: DashboardClientProps)
     
     function goToPage(page: number): void
     {
+        if (page === currentPage)
+        {
+            return;
+        }
+        
         setCurrentPage(page);
         router.replace(`/dashboard?page=${page}&search=${encodeURIComponent(filter)}`);
         
@@ -390,13 +350,6 @@ export default function DashboardClient(props: DashboardClientProps)
     }, []);
     
     
-    //~ useEffect(() =>
-    //~ {
-        //~ getNotes();
-    
-    //~ }, [userId]);
-    
-    
     useEffect(() =>
     {
         /*
@@ -406,7 +359,7 @@ export default function DashboardClient(props: DashboardClientProps)
         */
         if (currentPage < 1)
         {
-            setCurrentPage(1);
+            goToPage(1);
             return;
         }
         
@@ -416,12 +369,17 @@ export default function DashboardClient(props: DashboardClientProps)
             ....page=89 e temos apenas 20 páginas vai para a
             página 20
         */
-        if (currentPage > totalPages && totalPages > 0)
+        if (notesQuery.data?.status === "invalid_page")
         {
-            setCurrentPage(totalPages);
+            const lastPage = Math.max(
+                1,
+                Math.ceil((notesQuery.data.count ?? 0) / notesPerPage)
+            );
+            
+            goToPage(lastPage);
         }
     
-    }, [currentPage, totalPages]);
+    }, [currentPage, notesQuery.data?.status, notesQuery.data?.count, notesPerPage]);
     
     
     // Cuida de restaurar os focus(), incluindo se apertar f5...
@@ -463,20 +421,22 @@ export default function DashboardClient(props: DashboardClientProps)
             return;
         }
         
-        if (filteredNotes.length === 0)
+        const totalNotes = notesQuery.data?.count ?? 0;
+        
+        if (totalNotes === 0)
         {
             announce("Nenhuma correspondência encontrada.");
         }
-        else if (filteredNotes.length === 1)
+        else if (totalNotes === 1)
         {
             announce("Uma correspondência encontrada.");
         }
         else
         {
-            announce(`${filteredNotes.length} correspondências encontradas.`);
+            announce(`${totalNotes} correspondências encontradas.`);
         }
         
-    }, [filter, filteredNotes.length, notesQuery.isLoading, hasSearched, announce]);
+    }, [filter, notesQuery.data?.count, notesQuery.isLoading, hasSearched, announce]);
     
     
     // Cuida de anunciar que a nota foi deletada
@@ -492,6 +452,13 @@ export default function DashboardClient(props: DashboardClientProps)
     
     }, [hasDeletedMessage, announce, setHasDeletedMessage]);
     
+    
+    //~ console.log({
+    //~ currentPage,
+    //~ totalPages,
+    //~ count: notesQuery.data?.count,
+    //~ fetchedNotes
+//~ });
   
     return(
         <>

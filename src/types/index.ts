@@ -30,7 +30,8 @@ type BaseStatus =
 
 type FetchNotesStatus =
     BaseStatus
-    | "empty";
+    | "empty"
+    | "invalid_page";
 
 
 type FetchNoteStatus =

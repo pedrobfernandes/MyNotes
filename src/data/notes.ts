@@ -5,45 +5,73 @@ import { FetchNotesResult, FetchNoteResult, NoteMutationResult, InsertNoteType }
 export async function fetchNotes(
     userId: string,
     page: number,
-    notesPerPage: number
+    notesPerPage: number,
+    search: string
 ): Promise<FetchNotesResult>
 {
     const from = (page - 1) * notesPerPage;
     const to = from + notesPerPage - 1;
     
-    console.log({
-        page,
-        notesPerPage,
-        from,
-        to,
-    });
+    const normalizedSearch = search.trim();
     
     try
     {
-        const { data: fetchData, error: fetchError, count } = await supabase
-            .from("notes")
-            .select("*", { count: "exact" })
-            .eq("user_id", userId)
+        let query = supabase
+        .from("notes")
+        .select("*", { count: "exact" })
+        .eq("user_id", userId);
+    
+        if (normalizedSearch !== "")
+        {
+            query = query.ilike(
+                "title",
+                `%${normalizedSearch}%`
+            );
+        }
+        
+        const { data: fetchData, error: fetchError, count } = await query
             .order("created_at", { ascending: false })
             .range(from, to);
-        
-        console.log({
-    quantidadeRecebida: fetchData?.length,
-    count,
-    fetchData
-});
         
         
         if (fetchError !== null && fetchError !== undefined)
         {
-            return({
-                data: [],
-                count: 0,
-                error: "Erro ao buscar notas",
-                status: "error",
+            if (fetchError.code === "PGRST103")
+            {
+                const { count, error: countError } = await supabase
+                    .from("notes")
+                    .select("*", { count: "exact", head: true })
+                    .eq("user_id", userId);
+                
+                if (countError !== null)
+                {
+                    return({
+                        data: [],
+                        count: 0,
+                        error: "Erro ao buscar notas",
+                        status: "error"
+                    });
+                }
+                
+                return({
+                    data: [],
+                    count: count ?? 0,
+                    error: null,
+                    status: "invalid_page",
+                });
+            }
+            else
+            {
+                return({
+                    data: [],
+                    count: 0,
+                    error: "Erro ao buscar notas",
+                    status: "error",
 
-            });
+                });
+            }
         }
+        
         
         if ((count ?? 0) === 0)
         {
