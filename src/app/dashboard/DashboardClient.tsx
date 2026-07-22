@@ -58,6 +58,8 @@ export default function DashboardClient(props: DashboardClientProps)
                 filter
             ),
         
+        placeholderData: (previousData) => previousData,
+        
         staleTime: 60 *1000,
         gcTime: 10 * 60 * 1000,
         enabled: userId !== null,
@@ -374,7 +376,13 @@ export default function DashboardClient(props: DashboardClientProps)
     }, [currentPage, notesQuery.data?.status, notesQuery.data?.count, notesPerPage]);
     
     
-    // Cuida de restaurar os focus(), incluindo se apertar f5...
+    /*
+        Cuida de restaurar o foco após a navegação entre páginas.
+        O sessionStorage permite manter a referência do elemento
+        memo apos refresh (f5) em páginas intermediárias
+        Claro que se der refresh na pagina atual,
+        (onde o elemnto estava focado) o foco é perdido.
+    */
     useEffect(() =>
     {
         if (!notesQuery.isSuccess)
