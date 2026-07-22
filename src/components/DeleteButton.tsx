@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteNote } from "@/data/notes";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNotes } from "@/context/NotesContext";
 import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import { useModal } from "@/context/InfoModalContext";
@@ -22,9 +23,11 @@ export function DeleteButton(props: DeleteButtonProps)
     const [deletedMessage, setDeletedMessage] = useState<string>("");
     
     const router = useRouter();
-    const { setNotes, setHasDeletedMessage } = useNotes();
+    const { setHasDeletedMessage } = useNotes();
     const { confirm } = useModal();
     const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
+    
+    const queryClient = useQueryClient();
     
     
     async function handleDelete(): Promise<void>
@@ -56,21 +59,10 @@ export function DeleteButton(props: DeleteButtonProps)
         
         if (deletedData !== null)
         {
-            setNotes((previousNotes) =>
-            {
-                const newNotes: Note[] = [];
-                for (const note of previousNotes)
-                {
-                    if (note.id !== deletedData.id)
-                    {
-                        newNotes.push(note);
-                    }
-                }
-                return(newNotes);
-            });
+            setHasDeletedMessage("Nota deletada com sucesso.");
+            queryClient.invalidateQueries({ queryKey: ["notes"] });
         }
         
-        setHasDeletedMessage("Nota deletada com sucesso.");
         router.push(`/dashboard?page=${page}&search=${search}`);
     }
     

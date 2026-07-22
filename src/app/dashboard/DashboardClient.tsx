@@ -66,7 +66,22 @@ export default function DashboardClient(props: DashboardClientProps)
         enabled: userId !== null,
     });
     
+    
+    /*
+        Notas retornadas pela query atual.
+        Enquanto a query ainda não possui dados, utiliza um array vazio
+        para evitar verificações de undefined na interface.
+    */
     const fetchedNotes = notesQuery.data?.data ?? [];
+    
+    
+    /*
+        Quantidade de notas retornadas pela query atual.
+        Quando existe pesquisa, representa apenas as notas
+        que correspondem ao filtro.
+        Usado para controlar estados da interface e paginação.
+    */
+    const totalNotes = notesQuery.data?.count ?? 0;
     
     // Url da edge function para remover a conta
     const deleteUrl: string | undefined = process.env.NEXT_PUBLIC_SUPABASE_DELETE_ACCOUNT_URL;
@@ -86,8 +101,7 @@ export default function DashboardClient(props: DashboardClientProps)
     
     const
     {
-        notes, setNotes, hasLoadedNotes,
-        setHasLoadedNotes, hasDeletedMessage,
+        hasDeletedMessage,
         setHasDeletedMessage
     
     } = useNotes();
@@ -95,7 +109,6 @@ export default function DashboardClient(props: DashboardClientProps)
     // Hook de modal que substitui alert e confirm nativo
     const { alert , confirm } = useModal();
     const router = useRouter();
-    
     
     const totalPages: number = Math.ceil((notesQuery.data?.count ?? 0) / notesPerPage);
     
@@ -112,21 +125,6 @@ export default function DashboardClient(props: DashboardClientProps)
         
         setUserId(user.data.user.id);
     }
-    
-    
-    // Cuida de "normalizar" o filtro dgitado e o
-    // titulo e sumario das notas para comparação
-    //~ function normalize(str: string): string
-    //~ {
-        //~ return(
-            //~ str
-            //~ .toLowerCase()
-            //~ .normalize("NFD") // caracteres acentuados
-            //~ .replace(/[\u0300-\u036f]/g, "") // acentos
-            //~ .replace(/ç/g, "c")
-            //~ .replace(/\s+/g, "") // remove espaços
-        //~ );
-    //~ }
     
     
     function renderNotes()
@@ -421,8 +419,6 @@ export default function DashboardClient(props: DashboardClientProps)
             return;
         }
         
-        const totalNotes = notesQuery.data?.count ?? 0;
-        
         if (totalNotes === 0)
         {
             announce("Nenhuma correspondência encontrada.");
@@ -452,14 +448,7 @@ export default function DashboardClient(props: DashboardClientProps)
     
     }, [hasDeletedMessage, announce, setHasDeletedMessage]);
     
-    
-    //~ console.log({
-    //~ currentPage,
-    //~ totalPages,
-    //~ count: notesQuery.data?.count,
-    //~ fetchedNotes
-//~ });
-  
+
     return(
         <>
         
@@ -501,12 +490,12 @@ export default function DashboardClient(props: DashboardClientProps)
             </section>
             <section className={styles.searchFormSection}>
                 {
-                    (notesQuery.isLoading || fetchedNotes.length === 0) &&
+                    notesQuery.isLoading &&
                         <SearchFormPlaceholder/>
                 }
                 
                 {
-                    !notesQuery.isLoading && fetchedNotes.length > 0 &&
+                    notesQuery.isSuccess && totalNotes > 0 &&
                         <>
                         <h2
                             id="search-form-title"
@@ -520,6 +509,27 @@ export default function DashboardClient(props: DashboardClientProps)
                         />
                         </>
                 }
+                
+                
+                {
+                    notesQuery.isSuccess &&
+                    totalNotes == 0 &&
+                    fetchedNotes.length === 0 &&
+                    filter !== "" &&
+                        <>
+                        <h2
+                            id="search-form-title"
+                            className="visually-hidden"
+                        >
+                            Pesquisa de Notas
+                        </h2>
+                        <SearchForm
+                            filter={filter}
+                            handleSearch={handleSearch}
+                        />
+                        </>
+                }
+                
             </section>
             <section className={styles.notesSection}>
                 {
@@ -536,7 +546,7 @@ export default function DashboardClient(props: DashboardClientProps)
                 }            
                 
                 {
-                    !notesQuery.isLoading && fetchedNotes.length > 0 &&
+                    notesQuery.isSuccess && fetchedNotes.length > 0 &&
                         <>
                         <h2 className="visually-hidden">Lista de notas</h2>
                         <ul className={styles.notesContainer}>
@@ -548,7 +558,7 @@ export default function DashboardClient(props: DashboardClientProps)
                 }
                 
                 {
-                    !notesQuery.isLoading && fetchedNotes.length > 0 &&
+                    notesQuery.isSuccess && fetchedNotes.length > 0 &&
                         <Pagination
                             handleNextPage={handleNextPage}
                             handlePreviousPage={handlePreviousPage}
@@ -560,7 +570,10 @@ export default function DashboardClient(props: DashboardClientProps)
                 }
                 
                 {
-                    !notesQuery.isLoading && fetchedNotes.length === 0 &&
+                    notesQuery.isSuccess &&
+                    totalNotes === 0 &&
+                    fetchedNotes.length === 0
+                    && filter === "" &&
                         <>
                         <ul className={styles.notesContainer}>
                                 <NotesPlaceHolder count={6}/>
@@ -569,6 +582,16 @@ export default function DashboardClient(props: DashboardClientProps)
                             Ainda não há notas criadas
                         </p>
                         </>
+                }
+                
+                {
+                    notesQuery.isSuccess &&
+                    totalNotes == 0 &&
+                    fetchedNotes.length === 0 &&
+                    filter !== "" &&
+                        <p className={styles.emptyMessage}>
+                            Nenhuma nota encontrada.
+                        </p>
                 }
 
             </section>

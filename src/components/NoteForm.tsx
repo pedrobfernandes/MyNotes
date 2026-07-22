@@ -7,7 +7,7 @@ import { Note, NoteMutationResult } from "@/types";
 import { insertNote, updateNote } from "@/data/notes";
 import { supabase } from "@/lib/supabase/client";
 import {  UserResponse } from "@supabase/supabase-js";
-import { useNotes } from "@/context/NotesContext";
+import { useQueryClient } from "@tanstack/react-query";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -32,11 +32,13 @@ export function NoteForm(props: NoteFormProps)
     const { initialData, redirectPath, id } = props;
     
     const router = useRouter();
-    const { setNotes } = useNotes();
+
     
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
     const [previewMode, setPreviewMode] = useState<boolean>(false);
+    
+    const queryClient = useQueryClient();
     
     const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
@@ -78,25 +80,7 @@ export function NoteForm(props: NoteFormProps)
             const updatedData: Note | null = updatedNote.data;
             if (updatedData !== null)
             {
-                // Cuida de atualizar a interface (o estado)
-                setNotes((previousNotes) =>
-                {
-                    
-                    const newNotes: Note[] = [];
-                    for (const note of previousNotes)
-                    {
-                        if (note.id !== updatedData.id)
-                        {
-                            newNotes.push(note);
-                        }
-                        else
-                        {
-                            newNotes.push(updatedData);
-                        }
-                    }
-                    
-                    return(newNotes);
-                });
+                queryClient.invalidateQueries({ queryKey: ["notes"] });
             }
             
         }
@@ -116,8 +100,7 @@ export function NoteForm(props: NoteFormProps)
             const insertedData: Note | null = insertedNote.data;
             if (insertedData !== null)
             {
-                // Cuida de atualizar  interface
-                setNotes((previousNotes) => [insertedData].concat(previousNotes));
+                queryClient.invalidateQueries({ queryKey: ["notes"] });
             }
         }
         

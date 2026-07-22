@@ -2,6 +2,19 @@ import { supabase } from "@/lib/supabase/client";
 import { FetchNotesResult, FetchNoteResult, NoteMutationResult, InsertNoteType } from "@/types";
 
 
+function normalize(str: string): string
+{
+    return (
+        str
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/ç/g, "c")
+            .replace(/\s+/g, "")
+    );
+}
+
+
 export async function fetchNotes(
     userId: string,
     page: number,
@@ -12,7 +25,7 @@ export async function fetchNotes(
     const from = (page - 1) * notesPerPage;
     const to = from + notesPerPage - 1;
     
-    const normalizedSearch = search.trim();
+    const normalizedSearch = normalize(search);
     
     try
     {
@@ -24,7 +37,7 @@ export async function fetchNotes(
         if (normalizedSearch !== "")
         {
             query = query.ilike(
-                "title",
+                "title_normalized",
                 `%${normalizedSearch}%`
             );
         }
@@ -165,6 +178,7 @@ export async function insertNote(
             .insert({
                 user_id: userId,
                 title: title,
+                title_normalized: normalize(title),
                 content: content,
             })
             .select()
@@ -220,6 +234,7 @@ export async function updateNote(
             .from("notes")
             .update({
                 title: title,
+                title_normalized: normalize(title),
                 content: content,
                 updated_at: new Date().toISOString(),
             })
