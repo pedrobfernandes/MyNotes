@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import {  Geist, Geist_Mono } from "next/font/google";
 import { InfoModalProvider } from "@/context/InfoModalContext";
-import { NotesProvider } from "@/context/NotesContext";
+import { StatusMessageProvider } from "@/context/StatusMessageContext";
 import QueryProvider from "@/providers/QueryProvider";
 
 import "./globals.css";
@@ -37,7 +37,7 @@ export default function RootLayout({
       <body>
       <QueryProvider>
             <InfoModalProvider>
-                <NotesProvider>{children}</NotesProvider>
+                <StatusMessageProvider>{children}</StatusMessageProvider>
             </InfoModalProvider>
         </QueryProvider>
       </body>

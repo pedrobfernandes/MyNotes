@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase/client";
 import { UserResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { fetchNotes } from "@/data/notes";
-import { useNotes } from "@/context/NotesContext";
+import { useStatusMessage } from "@/context/StatusMessageContext";
 import { useModal } from "@/context/InfoModalContext";
 import { useQuery } from "@tanstack/react-query";
 import SearchForm from "@/components/SearchForm";
@@ -42,9 +42,6 @@ export default function DashboardClient(props: DashboardClientProps)
     const { initialPage, initialSearch } = props;
     
     const [userId, setUserId] = useState<string | null>(null);
-    console.log("userId:", userId);
-    
-    const [errorMessage, setErrorMessage] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [filter, setFilter] = useState<string>(initialSearch);
     const [hasSearched, setHasSearched] = useState<boolean>(false);
@@ -65,7 +62,6 @@ export default function DashboardClient(props: DashboardClientProps)
         gcTime: 10 * 60 * 1000,
         enabled: userId !== null,
     });
-    
     
     /*
         Notas retornadas pela query atual.
@@ -104,7 +100,7 @@ export default function DashboardClient(props: DashboardClientProps)
         hasDeletedMessage,
         setHasDeletedMessage
     
-    } = useNotes();
+    } = useStatusMessage();
     
     // Hook de modal que substitui alert e confirm nativo
     const { alert , confirm } = useModal();
@@ -144,8 +140,6 @@ export default function DashboardClient(props: DashboardClientProps)
             
             return(notesList);
         }
-
-        return(<p>{errorMessage}</p>);
     }
     
     
@@ -383,7 +377,7 @@ export default function DashboardClient(props: DashboardClientProps)
     // Cuida de restaurar os focus(), incluindo se apertar f5...
     useEffect(() =>
     {
-        if (notesQuery.isLoading)
+        if (!notesQuery.isSuccess)
         {
             return;
         }
@@ -400,12 +394,12 @@ export default function DashboardClient(props: DashboardClientProps)
         if (element !== null)
         {
             element.focus();
+            
+            // Remove o identificador após restaurar o foco com sucesso
+            sessionStorage.removeItem("restoreFocus");
         }
-        
-        // Limpa o sessionStorage
-        sessionStorage.removeItem("restoreFocus");
     
-    }, [notesQuery.isLoading]);
+    }, [notesQuery.isSuccess, fetchedNotes]);
     
     
     // Cuida de anunciar os resultados da pesquisa, se algum..
@@ -490,7 +484,7 @@ export default function DashboardClient(props: DashboardClientProps)
             </section>
             <section className={styles.searchFormSection}>
                 {
-                    notesQuery.isLoading &&
+                    (userId === null || notesQuery.isLoading) &&
                         <SearchFormPlaceholder/>
                 }
                 
@@ -533,7 +527,7 @@ export default function DashboardClient(props: DashboardClientProps)
             </section>
             <section className={styles.notesSection}>
                 {
-                    notesQuery.isLoading &&
+                    (userId === null || notesQuery.isLoading) &&
                         <>
                         <ul className={styles.notesContainer}>
                             <NotesPlaceHolder count={6} animated={true}/>

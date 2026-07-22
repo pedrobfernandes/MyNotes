@@ -1,14 +1,14 @@
 "use client";
 
 
-import { useState, useEffect, useRef } from "react";
-import { useNotes } from "@/context/NotesContext";
+import { useEffect, useRef } from "react";
 import { fetchNoteById } from "@/data/notes";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { useSearchParams } from "next/navigation";
 import remarkGfm from "remark-gfm";
-import { Note } from "@/types";
+//~ import { Note } from "@/types";
 import jsPDF from "jspdf";
 import { DeleteButton } from "@/components/DeleteButton";
 import LoadingSpinner from "@/components/LoadinSpinner";
@@ -26,45 +26,30 @@ type ViewNoteClientProps =
 
 export default function ViewNoteClient(props: ViewNoteClientProps)
 {
-    const [note, setNote] = useState<Note | null>(null);
-    const [loadMessage, setLoadMessage] = useState<string | null>(null);
-    
     const { id } = props;
     
     const searchParams = useSearchParams();
     const page = searchParams.get("page") ?? "1";
     const search = searchParams.get("search") ?? "";
     
-    const { notes } = useNotes();
+    const noteQuery = useQuery({
+        queryKey: ["note", id],
+        queryFn: async () =>
+        {
+            const result = await fetchNoteById(id);
+            
+            if (result.error !== null)
+            {
+                throw new Error(result.error);
+            }
+            
+            return(result.data);
+        }
+    });
+    
+    const note = noteQuery.data;
     const { alert } = useModal();
-    
-    
     const noteContentRef = useRef<HTMLElement | null>(null);
-    
-    
-    async function loadNote(): Promise<void>
-    {
-        // Aqui idealmente pega as notas do context. Mas caso o usuario por exemplo
-        // aperte f5, pega (ou tenta) pegar do supabase
-        const contextNote: Note | undefined = notes.find((note) => note.id === id);
-        if (contextNote !== undefined)
-        {
-            setNote(contextNote);
-            setLoadMessage(null);
-            return;
-        }
-        
-        const dataBaseNote = await fetchNoteById(id);
-        if (dataBaseNote.error !== null)
-        {
-            setLoadMessage(dataBaseNote.error);
-            setNote(null);
-            return;
-        }
-        
-        setNote(dataBaseNote.data);
-        setLoadMessage(null);
-    }
     
     
     async function generatePdf(): Promise<jsPDF | undefined>
@@ -170,7 +155,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
         
         // Ou se quiserem moderno e horroroso
         // pdf.save(`${note?.title ?? "nota"}.pdf`)
-        if (note !== null)
+        if (note !== null && note !== undefined)
         {
             pdf.save(`${note.title}.pdf`);
         }
@@ -195,7 +180,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
         const pdfBlob = pdf.output("blob");
         const pdfFile = new File(
             [pdfBlob],
-            note !== null
+            note !== null && note !== undefined
                 ? `${note.title}.pdf`
                 : "nota.pdf",
             {
@@ -215,15 +200,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     
     useEffect(() =>
     {
-        loadNote();
-    
-    }, [id, notes]);
-    
-   
-    
-    useEffect(() =>
-    {
-        if (note  === null)
+        if (note === null || note === undefined)
         {
             return;
         }
@@ -247,13 +224,19 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     }, [note]);
     
     
-    if (loadMessage !== null)
+    if (noteQuery.isLoading)
     {
-        return(<p>{loadMessage}</p>);
+        return(<LoadingSpinner/>);
     }
     
     
-    if (note !== null)
+    if (noteQuery.isError)
+    {
+        return(<p>{noteQuery.error.message}</p>);
+    }
+    
+    
+    if (note !== null && note !== undefined)
     {
         return(
             <main className={styles.viewNoteContainer}>
@@ -312,6 +295,4 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
             </main>
         );
     }
-    
-    return(<LoadingSpinner/>);
 }

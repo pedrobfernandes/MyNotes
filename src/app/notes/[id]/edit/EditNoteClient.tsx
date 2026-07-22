@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { NoteForm } from "@/components/NoteForm";
-import { useNotes } from "@/context/NotesContext";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { fetchNoteById } from "@/data/notes";
-import { Note } from "@/types";
 import EditNoteSkeleton from "@/components/EditNoteSkeleton";
 import styles from "./page.module.css";
 
@@ -17,13 +15,24 @@ type EditNoteClientProps =
 
 export default function EditNoteClient(props: EditNoteClientProps)
 {
-    const [note, setNote] = useState<Note | null>(null);
-    const [loadMessage, setLoadMessage] = useState<string | null>(null);
-    
-    
     const { id } = props;
-    const { notes } = useNotes();
     
+    const noteQuery = useQuery({
+        queryKey: ["note", id],
+        queryFn: async () =>
+        {
+            const result = await fetchNoteById(id);
+            
+            if (result.error !== null)
+            {
+                throw new Error(result.error);
+            }
+            
+            return(result.data);
+        }
+    });
+    
+    const note = noteQuery.data;
     
     /*  
         Aqui, cuida de pegar a página atual (antes de editar), e o
@@ -40,44 +49,18 @@ export default function EditNoteClient(props: EditNoteClientProps)
     const search = searchParams.get("search") ?? "";
     
     
-    async function loadNote(): Promise<void>
+    if (noteQuery.isLoading)
     {
-        // Aqui idealmente pega as notas do context. Mas caso o usuario por exemplo
-        // aperte f5, pega (ou tenta) pegar do supabase
-        const contextNote: Note | undefined = notes.find((note) => note.id === id);
-        if (contextNote !== undefined)
-        {
-            setNote(contextNote);
-            setLoadMessage(null);
-            return;
-        }
-        
-        const dataBaseNote = await fetchNoteById(id);
-        if (dataBaseNote.error !== null)
-        {
-            setLoadMessage(dataBaseNote.error);
-            setNote(null);
-            return;
-        }
-        
-        setNote(dataBaseNote.data);
-        setLoadMessage(null);
+        return(<EditNoteSkeleton/>);
+    }
+    
+    if (noteQuery.isError)
+    {
+        return(<p>{noteQuery.error.message}</p>)
     }
     
     
-    useEffect(() =>
-    {
-        loadNote();
-    
-    }, [id, notes]);
-    
-    
-    if (loadMessage !== null)
-    {
-        return(<p>{loadMessage}</p>);
-    }
-    
-    if (note !== null)
+    if (note !== null && note !== undefined)
     {
         return(
             <main className={styles.editNoteContainer}>
@@ -85,7 +68,6 @@ export default function EditNoteClient(props: EditNoteClientProps)
                 <NoteForm
                     initialData={note}
                     redirectPath={`/notes/${note.id}?page=${page}&search=${search}`}
-                   id={id}
                 />
             </main>
         );

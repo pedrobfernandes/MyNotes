@@ -23,13 +23,12 @@ type NoteFormProps =
 {
     initialData?: Note;
     redirectPath: string;
-    id?: string;
 }
 
 
 export function NoteForm(props: NoteFormProps)
 {
-    const { initialData, redirectPath, id } = props;
+    const { initialData, redirectPath } = props;
     
     const router = useRouter();
 
@@ -77,11 +76,14 @@ export function NoteForm(props: NoteFormProps)
                 content: content,
             }, initialData.id);
             
-            const updatedData: Note | null = updatedNote.data;
-            if (updatedData !== null)
+            if (updatedNote.error !== null)
             {
-                queryClient.invalidateQueries({ queryKey: ["notes"] });
+                await announce(updatedNote.error);
+                return;
             }
+            
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            void queryClient.invalidateQueries({ queryKey: ["note", initialData.id] });
             
         }
         else
@@ -97,11 +99,14 @@ export function NoteForm(props: NoteFormProps)
                 content: content,
             }, user.data.user.id);
             
-            const insertedData: Note | null = insertedNote.data;
-            if (insertedData !== null)
+            
+            if (insertedNote.error !== null)
             {
-                queryClient.invalidateQueries({ queryKey: ["notes"] });
+                await announce(insertedNote.error);
+                return;
             }
+            
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
         }
         
         await announce(

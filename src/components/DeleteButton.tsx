@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteNote } from "@/data/notes";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNotes } from "@/context/NotesContext";
+import { useStatusMessage } from "@/context/StatusMessageContext";
 import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import { useModal } from "@/context/InfoModalContext";
 import { Note, NoteMutationResult } from "@/types";
@@ -23,7 +23,7 @@ export function DeleteButton(props: DeleteButtonProps)
     const [deletedMessage, setDeletedMessage] = useState<string>("");
     
     const router = useRouter();
-    const { setHasDeletedMessage } = useNotes();
+    const { setHasDeletedMessage } = useStatusMessage();
     const { confirm } = useModal();
     const { ariaMessage, announce } = useAriaActionStatusAnnouncer();
     
@@ -60,7 +60,8 @@ export function DeleteButton(props: DeleteButtonProps)
         if (deletedData !== null)
         {
             setHasDeletedMessage("Nota deletada com sucesso.");
-            queryClient.invalidateQueries({ queryKey: ["notes"] });
+            void queryClient.invalidateQueries({ queryKey: ["notes"] });
+            void queryClient.invalidateQueries({ queryKey: ["note", id] });
         }
         
         router.push(`/dashboard?page=${page}&search=${search}`);
