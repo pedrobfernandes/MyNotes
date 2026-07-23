@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS notes (
     ON DELETE CASCADE,
 
   title TEXT NOT NULL,
+  
+  title_normalized TEXT NOT NULL,
 
   content TEXT NOT NULL,
 
