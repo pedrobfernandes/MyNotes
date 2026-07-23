@@ -379,7 +379,7 @@ export default function DashboardClient(props: DashboardClientProps)
     /*
         Cuida de restaurar o foco após a navegação entre páginas.
         O sessionStorage permite manter a referência do elemento
-        memo apos refresh (f5) em páginas intermediárias
+        mesmo após refresh (f5) em páginas intermediárias
         Claro que se der refresh na pagina atual,
         (onde o elemnto estava focado) o foco é perdido.
     */

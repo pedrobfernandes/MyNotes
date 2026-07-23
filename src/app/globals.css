@@ -125,10 +125,20 @@ button, a
     transition: transform 0.15s ease;
 }
 
-button:hover,
-a:hover,
-input:hover,
-textarea:hover,
+
+@media (hover: hover)
+{
+    button:hover,
+    a:hover,
+    input:hover,
+    textarea:hover
+    {
+        outline: 0.2rem solid var(--c-border);
+        outline-offset: 0;
+    }
+}
+
+
 button:focus,
 a:focus,
 input:focus,
