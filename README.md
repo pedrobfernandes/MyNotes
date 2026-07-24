@@ -1,24 +1,124 @@
 # MyNotes
 
-> Uma aplicação de notas e how-tos construída com Next.js, React, TypeScript e Supabase, com foco em acessibilidade, simplicidade e evolução contínua da arquitetura.
+O **MyNotes** é uma aplicação web desenvolvida para organizar conhecimento técnico de forma simples, rápida e acessível.
 
-## Sobre o projeto
+O projeto nasceu para resolver um problema real do meu dia a dia. Ao longo de vários anos fui acumulando centenas de pequenas notas e *how-tos* em ficheiros de texto: comandos de Linux, configurações de ferramentas, soluções para erros recorrentes, apontamentos sobre JavaScript, Bash e outros temas técnicos.
 
-O **MyNotes** nasceu com um objetivo muito simples: criar uma aplicação que eu próprio utilizasse no dia a dia.
+Encontrar uma determinada informação dentro de um ficheiro nunca foi um problema.
 
-Há vários anos que utilizo Linux como sistema operativo principal e, ao longo desse tempo, fui acumulando centenas de notas e pequenos how-tos sobre distribuições, ferramentas, editores de texto, configuração de ambientes de desenvolvimento e resolução de problemas.
+O verdadeiro desafio era lembrar **em que ficheiro essa informação estava**.
 
-Essas notas encontravam-se espalhadas por inúmeros ficheiros de texto, tornando cada vez mais difícil encontrar rapidamente a informação quando precisava dela.
+Em vez de adaptar a minha forma de trabalhar a uma aplicação existente, decidi desenvolver uma ferramenta que refletisse exatamente a forma como organizo o meu próprio conhecimento.
 
-Este projeto surgiu para resolver esse problema.
+Assim nasceu o **MyNotes**.
 
-Em vez de procurar manualmente entre dezenas ou centenas de ficheiros, posso agora organizar as minhas notas, pesquisá-las rapidamente, editá-las, utilizar Markdown quando necessário e aceder a tudo através de uma interface simples, responsiva e acessível.
+Embora tenha começado como um projeto pessoal, acabou também por se tornar uma excelente oportunidade para começar a aprender os fundamentos do **Next.js**, explorando o seu ecossistema enquanto desenvolvia uma aplicação que utilizo diariamente.
 
-Embora tenha sido desenvolvido como um projeto de aprendizagem, o objetivo nunca foi criar apenas um projeto de portefólio. Desde o início procurei desenvolver uma aplicação suficientemente útil para continuar a utilizá-la depois de concluída.
+Hoje o MyNotes é simultaneamente:
 
----
+- uma ferramenta que utilizo para organizar conhecimento técnico;
+- um projeto que demonstra a minha abordagem ao desenvolvimento frontend;
+- uma aplicação construída com especial atenção à acessibilidade, experiência de utilização e simplicidade.
 
-## Demonstração
+## Filosofia do projeto
+
+Durante todo o desenvolvimento procurei seguir uma ideia muito simples:
+
+> **Quando uma solução simples resolve adequadamente um problema, não faz sentido introduzir uma solução mais complexa apenas porque ela existe.**
+
+Por esse motivo, várias funcionalidades e abordagens foram analisadas durante o desenvolvimento, mas apenas foram implementadas quando acrescentavam valor real à aplicação.
+
+O MyNotes continua a evoluir através do uso diário. Novas funcionalidades ou alterações arquiteturais serão sempre avaliadas com base em necessidades reais identificadas durante a utilização da aplicação, e não apenas por seguirem tendências ou convenções.
+
+# Motivação
+
+Utilizo Linux há cerca de 12 anos e, ao longo desse tempo, fui acumulando uma quantidade considerável de notas técnicas.
+
+A maioria eram pequenos *how-tos* criados para resolver problemas específicos ou guardar informação que sabia que iria voltar a precisar no futuro. Desde configurações de distribuições Linux, comandos Bash, apontamentos sobre JavaScript, até procedimentos de instalação e resolução de erros.
+
+Durante muito tempo essas notas viveram em dezenas — ou melhor, centenas — de ficheiros de texto.
+
+Esse método tinha uma vantagem importante: era extremamente simples.
+
+Mas também tinha um problema.
+
+À medida que a quantidade de informação aumentava, deixava de ser difícil encontrar uma determinada nota **dentro de um ficheiro**.
+
+O verdadeiro problema era lembrar **em que ficheiro essa nota estava**.
+
+Foi precisamente essa necessidade que deu origem ao MyNotes.
+
+O objetivo nunca foi criar uma aplicação de notas genérica nem substituir ferramentas já existentes.
+
+Queria apenas construir uma ferramenta que se adaptasse à forma como eu próprio organizo o meu conhecimento técnico.
+
+Ao longo do desenvolvimento aconteceu algo curioso.
+
+O projeto deixou de ser apenas uma forma de resolver um problema pessoal e transformou-se também numa excelente oportunidade para aprender novas tecnologias e consolidar conhecimentos de desenvolvimento frontend.
+
+Embora o objetivo inicial fosse começar a aprender **Next.js**, rapidamente percebi que este projeto também me permitia aprofundar áreas igualmente importantes, como:
+
+- arquitetura de aplicações frontend;
+- gestão eficiente de estado e cache com TanStack Query;
+- integração com Supabase;
+- acessibilidade;
+- experiência de utilização;
+- organização de código;
+- tomada de decisões arquiteturais.
+
+Mais do que aprender funcionalidades específicas de uma framework, este projeto acabou por me ensinar algo que considero ainda mais importante:
+
+> **Nem todas as funcionalidades disponíveis precisam de ser utilizadas.**
+
+Ao longo do desenvolvimento procurei sempre encontrar o equilíbrio entre simplicidade, manutenção e experiência de utilização.
+
+Sempre que uma solução simples resolvia adequadamente o problema, essa foi a solução escolhida.
+
+Essa filosofia continua a orientar a evolução do MyNotes.
+
+# Objetivos do projeto
+
+Desde o início, o MyNotes foi desenvolvido com alguns objetivos muito claros.
+
+Mais do que construir uma aplicação de notas, a intenção era desenvolver uma ferramenta simples, rápida e agradável de utilizar no dia a dia, aplicando simultaneamente boas práticas de desenvolvimento frontend.
+
+Os principais objetivos foram:
+
+- Organizar conhecimento técnico de forma simples e eficiente.
+- Permitir localizar rapidamente qualquer nota através da pesquisa.
+- Criar uma interface limpa, responsiva e intuitiva.
+- Desenvolver uma aplicação acessível desde o início, e não como uma preocupação adicionada no final do projeto.
+- Explorar os fundamentos do ecossistema Next.js através de um projeto real.
+- Consolidar conhecimentos de React, TypeScript e integração com Supabase.
+- Construir uma aplicação que eu próprio utilizasse diariamente, permitindo que a evolução do projeto fosse orientada pelo uso real.
+
+## O que este projeto não pretende ser
+
+O MyNotes não pretende ser uma plataforma completa de gestão de conhecimento nem competir diretamente com aplicações como Notion, Obsidian ou Joplin.
+
+O foco sempre foi outro.
+
+Cada decisão tomada durante o desenvolvimento procurou responder à seguinte pergunta:
+
+> **Esta funcionalidade resolve um problema que tenho atualmente?**
+
+Quando a resposta era "sim", a funcionalidade era implementada.
+
+Quando a resposta era "não", mesmo que fosse tecnicamente interessante ou comum noutras aplicações, a funcionalidade ficava de fora.
+
+Esta abordagem permitiu manter o projeto simples, coerente e fácil de manter, evitando adicionar complexidade desnecessária apenas porque uma determinada tecnologia ou funcionalidade existia.
+
+Ao mesmo tempo, a arquitetura da aplicação foi desenvolvida de forma a permitir evolução futura, caso novas necessidades reais venham a surgir durante a utilização do MyNotes.
+
+# Demonstração
+
+O projeto encontra-se disponível online e pode ser explorado através do link abaixo.
+
+## Aplicação
+
+🔗 **Deploy:** *https://my-awesome-notes.vercel.app*
+
+## Capturas de ecrã
 
 ### Página inicial
 
@@ -50,578 +150,538 @@ Suporte a texto simples e Markdown, com opções de exportação para PDF, parti
 
 Formulário reutilizado para criação e edição, com pré-visualização em Markdown.
 
----
+# Funcionalidades
 
-## Objetivos do projeto
+O MyNotes foi desenvolvido para tornar a organização e recuperação de conhecimento técnico simples e eficiente.
 
-Este projeto teve vários objetivos de aprendizagem e evolução técnica.
-
-### Desenvolver uma aplicação completa
-
-O principal objetivo foi desenvolver uma aplicação real, desde a autenticação até à gestão completa de dados, incluindo:
-
-- criação de conta;
-- autenticação;
-- criação de notas;
-- edição;
-- eliminação;
-- pesquisa;
-- paginação;
-- partilha;
-- exportação para PDF.
-
----
-
-### Aprender Next.js
-
-Outro objetivo importante foi começar a aprender o ecossistema do **Next.js**.
-
-Em vez de tentar utilizar imediatamente todas as funcionalidades da framework, optei por uma abordagem incremental.
-
-Nesta primeira versão procurei compreender bem conceitos como:
-
-- App Router;
-- estrutura de um projeto Next.js;
-- páginas dinâmicas;
-- sistema de routing;
-- Metadata API;
-- Route Announcements.
-
-Grande parte da aplicação utiliza atualmente Client Components. Esta foi uma decisão consciente durante a fase inicial de aprendizagem, permitindo-me concentrar primeiro na estrutura da framework antes de aprofundar conceitos mais avançados como Server Components, Data Fetching no servidor ou Server Actions.
-
-A arquitetura foi organizada de forma a facilitar uma migração gradual para uma abordagem mais orientada ao servidor no futuro.
-
----
-
-### Acessibilidade desde o início
-
-Outro objetivo muito importante foi desenvolver a aplicação com acessibilidade como parte integrante do projeto, e não como uma etapa final.
-
-Desde as primeiras páginas houve preocupação com:
-
-- HTML semântico;
-- navegação completa por teclado;
-- gestão correta do foco;
-- utilização criteriosa de atributos ARIA;
-- contraste entre cores;
-- tamanhos de texto adequados;
-- compatibilidade com leitores de ecrã.
-
-Toda a aplicação foi testada manualmente utilizando apenas teclado e o leitor de ecrã ORCA.
-
----
-
-## Funcionalidades
-
-O MyNotes permite que cada utilizador tenha o seu próprio espaço privado para armazenar notas e how-tos.
-
-Entre as principais funcionalidades encontram-se:
-
-- autenticação por código OTP enviado por email;
-- criação de conta;
-- início e encerramento de sessão;
-- reenvio do código de autenticação;
-- criação de notas;
-- edição de notas;
-- eliminação de notas;
-- pesquisa por título;
-- paginação dos resultados;
-- visualização de notas em texto simples ou Markdown;
-- pré-visualização de Markdown durante a edição;
-- exportação de notas para PDF;
-- partilha de notas através da Web Share API (quando suportada pelo navegador);
-- eliminação da conta do utilizador;
-- remoção automática das notas através de `ON DELETE CASCADE`.
-
----
-
-## Tecnologias utilizadas
-
-### Frontend
-
-- Next.js (App Router)
-- React
-- TypeScript
-
-### Backend / BaaS
-
-- Supabase
-- Supabase Authentication (OTP)
-- Supabase Database
-- Supabase Edge Functions
-
-### Renderização de conteúdo
-
-- react-markdown
-- remark-gfm
-
-### Outras bibliotecas
-
-- Lucide React
-- html2pdf.js
-
----
-
-## Demonstração da aplicação
-
-A aplicação está organizada em diferentes páginas, cada uma com uma responsabilidade específica.
-
-### Página inicial
-
-A página inicial apresenta uma breve descrição da aplicação e o formulário de autenticação.
-
-O acesso é realizado através de um código OTP enviado por email utilizando o sistema de autenticação do Supabase.
-
-Após introduzir o código recebido, o utilizador é autenticado e encaminhado para o Dashboard.
-
-Também existe a possibilidade de reenviar um novo código caso seja necessário.
-
----
-
-### Dashboard
-
-O Dashboard funciona como o ponto central da aplicação.
-
-A partir desta página o utilizador pode:
-
-- criar novas notas;
-- pesquisar notas existentes;
-- navegar entre páginas de resultados;
-- abrir qualquer nota;
-- terminar sessão;
-- eliminar a própria conta.
-
-Cada nota é apresentada sob a forma de um cartão contendo:
-
-- título;
-- data de criação;
-- data da última atualização.
-
-Cada cartão funciona como um link para a página de visualização completa da nota.
-
-A paginação apresenta atualmente seis notas por página.
-
----
-
-## 🏗️ Arquitetura da aplicação
-
-Embora o MyNotes utilize o Next.js, a arquitetura atual é maioritariamente orientada para o cliente (*client-side*).
-
-Esta foi uma decisão consciente durante o desenvolvimento.
-
-Como um dos objetivos deste projeto era aprender a estrutura e os conceitos fundamentais do Next.js sem tentar utilizar todas as suas funcionalidades de uma só vez, optei por construir inicialmente uma aplicação baseada em Client Components, aproveitando o conhecimento que já possuía em React.
-
-Esta abordagem permitiu-me concentrar primeiro em conceitos como:
-
-- App Router;
-- organização do projeto;
-- páginas dinâmicas;
-- Metadata API;
-- Route Announcements;
-- integração com o Supabase.
-
-Ao mesmo tempo, procurei estruturar o projeto de forma a permitir uma migração gradual para uma arquitetura mais orientada ao servidor, sem necessidade de uma reescrita completa da aplicação.
-
-Essa evolução encontra-se descrita na secção **Roadmap** deste README.
-
----
-
-## Fluxo da aplicação
-
-Depois da autenticação, o fluxo principal da aplicação é o seguinte:
-
-1. O utilizador inicia sessão através do Supabase Authentication.
-2. O Dashboard realiza o carregamento das notas armazenadas no Supabase.
-3. As notas são guardadas em memória através de um Context do React.
-4. A partir desse momento, operações como pesquisa, paginação e navegação utilizam prioritariamente os dados já carregados.
-5. Sempre que uma nota é criada, editada ou eliminada, a alteração é enviada para o Supabase e o Context é atualizado para refletir imediatamente a mudança na interface.
-
-Caso o utilizador atualize manualmente a página (por exemplo, utilizando F5), os dados necessários são novamente obtidos diretamente do Supabase.
-
-Esta estratégia simplifica a experiência de utilização e reduz pedidos desnecessários ao backend durante a navegação normal da aplicação.
-
----
-
-## Porque utilizei React Context?
-
-Neste momento, o Context funciona como um pequeno armazenamento em memória das notas do utilizador.
-
-Para o objetivo desta primeira versão, esta abordagem apresentou algumas vantagens:
-
-- implementação simples;
-- navegação rápida entre páginas;
-- pesquisa instantânea;
-- atualização imediata da interface após alterações.
-
-Embora esta estratégia funcione muito bem para uma quantidade reduzida de notas, não seria necessariamente a abordagem mais adequada para aplicações com um volume muito elevado de dados.
-
-Por esse motivo, a arquitetura foi preparada para que, futuramente, o carregamento das notas possa ser realizado diretamente no servidor, utilizando as ferramentas disponibilizadas pelo próprio ecossistema do Next.js e do Supabase.
-
----
-
-## Organização do Metadata
-
-Uma das funcionalidades do Next.js que mais despertou o meu interesse foi a Metadata API.
-
-Para tirar partido deste recurso, cada página possui um pequeno ficheiro responsável apenas pela definição do respetivo metadata.
-
-Esse ficheiro atua como um "wrapper" do componente principal da página.
-
-Esta abordagem permite:
-
-- manter o código de apresentação separado da configuração da página;
-- definir facilmente o `document.title`;
-- beneficiar dos Route Announcements fornecidos pelo App Router do Next.js;
-- manter a organização do projeto simples e consistente.
-
----
-
-## Estrutura geral da aplicação
-
-A aplicação encontra-se organizada em diferentes áreas de responsabilidade.
-
-De forma simplificada, o fluxo de navegação é o seguinte:
-
-```text
-Página Inicial
-      │
-      ▼
-Autenticação (OTP)
-      │
-      ▼
- Dashboard
-      │
-      ├────────► Criar nota
-      │
-      └────────► Pesquisa
-                     │
-                     ▼
-              Lista de notas
-                     │
-        ┌────────────┴────────────┐
-        ▼                         ▼
-   Paginação               Visualizar nota
-                                     │
-                           ┌─────────┼─────────┐
-                           ▼         ▼         ▼
-                        Editar   Eliminar   Exportar PDF
-                                           │
-                                           ▼
-                                      Partilhar
-```
+Atualmente a aplicação oferece as seguintes funcionalidades.
 
 ---
 
 ## Autenticação
 
-A autenticação é realizada através do Supabase Authentication utilizando códigos OTP enviados por email.
-
-Este modelo elimina a necessidade de criação e gestão de palavras-passe pela própria aplicação.
-
-O fluxo é simples:
-
-1. o utilizador introduz o email;
-2. o Supabase envia um código numérico;
-3. o utilizador introduz esse código;
-4. a sessão é criada;
-5. o utilizador é encaminhado para o Dashboard.
-
-Também existe a possibilidade de solicitar o reenvio de um novo código caso seja necessário.
+- Autenticação através de **OTP (One-Time Password)** utilizando o Supabase.
+- Sessões persistentes.
+- Proteção de todas as rotas autenticadas.
 
 ---
 
-## Gestão das notas
+## Gestão de notas
 
-Cada utilizador possui acesso apenas às suas próprias notas.
+- Criar novas notas.
+- Editar notas existentes.
+- Eliminar notas.
+- Visualizar notas individuais.
 
-As operações disponíveis incluem:
+Cada nota pode ser escrita utilizando:
 
-- criação;
-- edição;
-- eliminação;
-- pesquisa;
-- visualização.
-
-A persistência é realizada através do Supabase Database.
-
-As permissões de acesso são controladas através de Row Level Security (RLS), garantindo que cada utilizador apenas consegue aceder aos seus próprios dados.
+- texto simples;
+- Markdown.
 
 ---
 
-## Eliminação da conta
+## Pesquisa
 
-A aplicação permite ao utilizador eliminar permanentemente a sua conta.
+A pesquisa permite localizar rapidamente qualquer nota através do seu título.
 
-Para esta operação foi utilizada uma Edge Function do Supabase.
+Para realizar uma pesquisa, o utilizador introduz o termo pretendido e confirma a ação através do botão **Buscar**.
 
-Após a remoção do utilizador, as respetivas notas são automaticamente eliminadas através da relação configurada na base de dados com `ON DELETE CASCADE`.
-
-Desta forma, evita-se a existência de dados órfãos e garante-se que toda a informação associada ao utilizador é removida de forma consistente.
+Esta abordagem foi uma escolha consciente, privilegiando um comportamento simples e previsível, adequado à forma como utilizo a aplicação no dia a dia.
 
 ---
 
-## Suporte a Markdown
+## Paginação
 
-As notas podem ser escritas em texto simples ou utilizando Markdown.
+O dashboard apresenta as notas de forma paginada.
 
-Para esse efeito são utilizadas as bibliotecas:
+Em vez de carregar todas as notas após a autenticação, a aplicação obtém apenas os registos necessários para cada página.
 
-- `react-markdown`
-- `remark-gfm`
-
-Durante a edição existe uma funcionalidade de pré-visualização que permite verificar imediatamente o resultado da formatação antes de guardar a nota.
-
-Além disso, encontra-se disponível um atalho direto para a documentação oficial do Markdown no GitHub, facilitando a consulta da sintaxe sempre que necessário.
+Esta abordagem reduz a quantidade de dados transferidos e melhora a experiência de utilização, mantendo tempos de resposta consistentes mesmo com um número crescente de notas.
 
 ---
 
-## Exportação e partilha
+## Pré-visualização em Markdown
 
-Cada nota pode ser:
+Durante a edição, é possível alternar entre:
 
-- exportada para PDF;
-- partilhada através da Web Share API (quando suportada pelo navegador).
+- modo de edição;
+- pré-visualização.
 
-Estas funcionalidades procuram facilitar a reutilização do conteúdo fora da aplicação, permitindo guardar ou partilhar rapidamente qualquer nota.
-
----
-
-## Design Responsivo
-
-Toda a interface foi desenvolvida utilizando uma abordagem **Mobile First**.
-
-O layout adapta-se a diferentes resoluções, desde dispositivos com aproximadamente **320px de largura** até ecrãs de maiores dimensões.
-
-O objetivo foi garantir uma experiência consistente independentemente do dispositivo utilizado.
+Isto permite verificar imediatamente o resultado final antes de guardar a nota.
 
 ---
 
-## Estrutura do projeto
+## Exportação para PDF
 
-A estrutura segue a organização recomendada pelo App Router do Next.js, procurando separar responsabilidades e facilitar a manutenção do código.
+Cada nota pode ser exportada diretamente para PDF, preservando a estrutura e a formatação do conteúdo.
 
-Entre os principais elementos encontram-se:
-
-- páginas;
-- componentes reutilizáveis;
-- Context API;
-- hooks personalizados;
-- integração com o Supabase;
-- utilitários;
-- tipos TypeScript.
-
-Ao longo do desenvolvimento procurei privilegiar componentes reutilizáveis sempre que possível.
-
-Um exemplo disso é o formulário de criação e edição de notas.
-
-Em vez de manter duas implementações distintas, ambas as páginas reutilizam exatamente o mesmo componente, alterando apenas os dados iniciais recebidos.
+Esta funcionalidade facilita o arquivo ou impressão de informação técnica.
 
 ---
 
-# ♿ Acessibilidade
+## Partilha
 
-A acessibilidade foi uma preocupação desde o início do desenvolvimento e fez parte das decisões de implementação ao longo de todo o projeto.
-
-O objetivo nunca foi adicionar atributos ARIA indiscriminadamente ou cumprir uma lista de verificações, mas sim procurar construir uma interface simples, consistente e utilizável pelo maior número possível de pessoas.
-
-Sempre que possível procurei privilegiar HTML semântico e recorrer a atributos ARIA apenas quando estes acrescentavam informação ou contexto que não era transmitido pelos elementos HTML nativos.
-
-Entre os aspetos considerados durante o desenvolvimento encontram-se:
-
-- utilização de HTML semântico;
-- navegação integral através do teclado;
-- gestão de foco durante a navegação;
-- textos descritivos para elementos interativos;
-- utilização criteriosa de atributos ARIA;
-- contraste entre cores;
-- tamanhos de letra adequados;
-- hierarquia consistente de títulos;
-- compatibilidade com leitores de ecrã.
+Quando suportado pelo navegador e pelo dispositivo, é possível partilhar notas utilizando a **Web Share API**.
 
 ---
 
-## Testes automatizados
+## Interface responsiva
 
-Ao longo do desenvolvimento foram utilizados diferentes analisadores de acessibilidade para identificar potenciais problemas e validar a interface.
+Toda a aplicação foi desenvolvida para funcionar corretamente em:
 
-As principais ferramentas utilizadas foram:
+- computadores;
+- tablets;
+- dispositivos móveis.
 
-- WAVE
-- IBM Equal Access Accessibility Checker
-- Firefox Accessibility Inspector
-- Lighthouse
-- ARIA DevTools
-
-Estas ferramentas permitiram identificar problemas comuns relacionados com semântica, contraste, atributos ARIA, formulários e navegação.
+Os componentes adaptam-se automaticamente a diferentes tamanhos de ecrã sem comprometer a experiência de utilização.
 
 ---
-
-## Testes manuais
-
-Para além dos testes automatizados, toda a aplicação foi utilizada manualmente recorrendo exclusivamente ao teclado e a um leitor de ecrã.
-
-Os testes foram realizados utilizando:
-
-- Sistema operativo Linux;
-- Navegador Firefox;
-- Leitor de ecrã ORCA.
-
-Durante estes testes foram validados cenários como:
-
-- autenticação;
-- navegação entre páginas;
-- criação de notas;
-- edição;
-- pesquisa;
-- paginação;
-- eliminação de notas;
-- exportação para PDF;
-- eliminação da conta.
-
-O objetivo foi garantir que todas as funcionalidades principais da aplicação pudessem ser utilizadas sem recorrer ao rato.
-
----
-
-## Uma nota sobre compatibilidade
-
-Os testes manuais realizados neste projeto foram efetuados utilizando a combinação **Firefox + ORCA**, por ser o ambiente que utilizo diariamente.
-
-Posso, por isso, afirmar com confiança que a aplicação foi cuidadosamente testada nesse contexto.
-
-No entanto, não seria correto afirmar que a aplicação apresenta exatamente o mesmo comportamento em todas as combinações possíveis de navegadores, sistemas operativos e tecnologias de apoio.
-
-Leitores de ecrã como NVDA, JAWS, VoiceOver ou Narrator podem apresentar diferenças de comportamento consoante o navegador utilizado.
-
-Por esse motivo, este projeto não pretende afirmar uma compatibilidade universal, mas sim documentar de forma transparente o ambiente em que os testes foram efetivamente realizados.
-
-Acredito que a honestidade sobre o processo de validação é mais importante do que fazer afirmações impossíveis de garantir.
-
----
-
-# 💡 O que aprendi
-
-Embora o objetivo inicial fosse aprender Next.js, este projeto acabou por proporcionar aprendizagem em áreas bastante mais abrangentes.
-
-Ao longo do desenvolvimento aprofundei conhecimentos em:
-
-- React;
-- TypeScript;
-- Next.js App Router;
-- Metadata API;
-- Supabase Authentication;
-- Supabase Database;
-- Supabase Edge Functions;
-- integração entre frontend e backend;
-- gestão de estado;
-- organização de projetos;
-- acessibilidade;
-- HTML semântico;
-- navegação por teclado;
-- utilização prática de leitores de ecrã.
-
-Mais do que aprender novas tecnologias, este projeto ajudou-me a compreender melhor a importância das decisões de arquitetura e da evolução incremental de uma aplicação.
-
-Em vez de tentar utilizar todas as funcionalidades disponíveis desde o primeiro dia, procurei construir uma base sólida sobre a qual possa continuar a evoluir.
-
-Essa abordagem permitiu-me terminar uma aplicação funcional sem deixar de criar espaço para continuar a aprender.
-
----
-
-# Desafios encontrados
-
-Algumas das dificuldades mais interessantes durante o desenvolvimento estiveram relacionadas com a acessibilidade e com a experiência de utilização.
-
-Entre elas destacam-se:
-
-- gestão correta do foco após alterações de página;
-- integração entre o sistema de Metadata do Next.js e os Route Announcements;
-- comportamento de leitores de ecrã em diferentes componentes;
-- reutilização do formulário de criação e edição de notas;
-- organização da arquitetura para permitir futuras migrações para uma abordagem mais orientada ao servidor.
-
-Cada um destes desafios contribuiu para compreender melhor não apenas a utilização das ferramentas, mas também a importância de tomar decisões que facilitem a manutenção futura da aplicação.
-
----
-
-# 🗺️ Roadmap
-
-Embora a aplicação já seja totalmente funcional para o objetivo a que se destina, existem várias melhorias que pretendo implementar à medida que continuo a aprofundar os meus conhecimentos em Next.js e no ecossistema React.
-
-Estas evoluções fazem parte do processo de aprendizagem que motivou este projeto.
 
 ## Acessibilidade
 
-- [ ] Melhorar a gestão do foco após a mudança de página na paginação, colocando automaticamente o foco no primeiro cartão da nova página.
-- [ ] Continuar a validar a aplicação com outras tecnologias de apoio sempre que tiver acesso a diferentes ambientes de teste.
+Desde o início do desenvolvimento procurei construir uma aplicação acessível.
 
-## Arquitetura
+Entre as medidas implementadas encontram-se:
 
-- [ ] Reduzir gradualmente a dependência de Client Components.
-- [ ] Introduzir Server Components sempre que fizer sentido.
-- [ ] Explorar Server Actions.
-- [ ] Migrar progressivamente o acesso aos dados para uma abordagem mais orientada ao servidor.
+- HTML semântico;
+- navegação completa por teclado;
+- gestão de foco;
+- utilização criteriosa de atributos ARIA;
+- contraste adequado;
+- mensagens anunciadas corretamente durante alterações importantes da interface.
 
-## Gestão de dados
+Para além das validações automáticas, foram realizados testes manuais utilizando:
 
-- [ ] Deixar de carregar todas as notas após o login.
-- [ ] Implementar paginação diretamente na base de dados.
-- [ ] Carregar apenas as notas necessárias para cada página.
-- [ ] Reavaliar a necessidade da Context API após essa migração.
+- **ORCA Screen Reader**
+- **Firefox**
 
-## Funcionalidades
+Foi também testada a navegação exclusivamente por teclado em Firefox, Chrome e Brave.
 
-- [ ] Melhorar continuamente a experiência de utilização.
-- [ ] Adicionar novas funcionalidades de organização das notas à medida que forem surgindo necessidades reais de utilização.
+# Tecnologias utilizadas
+
+O MyNotes foi desenvolvido recorrendo a tecnologias modernas do ecossistema frontend, escolhidas de acordo com as necessidades reais do projeto.
+
+## Next.js
+
+O projeto foi desenvolvido com **Next.js** como forma de começar a aprender os fundamentos da framework através de uma aplicação real.
+
+Ao longo do desenvolvimento foram exploradas funcionalidades como:
+
+- App Router;
+- Rotas dinâmicas;
+- Metadata API;
+- Route Announcements.
+
+Embora o Next.js disponibilize funcionalidades mais avançadas, como Server Components ou Server Actions, optei conscientemente por não as utilizar apenas porque existem.
+
+Para a natureza altamente interativa desta aplicação, uma abordagem maioritariamente baseada em **Client Components** revelou-se suficientemente simples, clara e adequada.
+
+A arquitetura permanece preparada para evoluir futuramente, caso a utilização da aplicação venha a justificar essa mudança.
+
+---
+
+## React
+
+O React é responsável pela construção de toda a interface da aplicação.
+
+A utilização de componentes reutilizáveis permitiu manter o código organizado, modular e de fácil manutenção.
+
+---
+
+## TypeScript
+
+Todo o projeto foi desenvolvido em **TypeScript**.
+
+A tipagem estática permitiu reduzir erros durante o desenvolvimento, melhorar a manutenção do código e tornar a comunicação entre componentes mais segura.
+
+---
+
+## Supabase
+
+O **Supabase** é utilizado como backend da aplicação.
+
+Atualmente é responsável por:
+
+- autenticação por OTP;
+- armazenamento das notas;
+- gestão da base de dados;
+- políticas de segurança através de Row Level Security (RLS).
+
+---
+
+## TanStack Query
+
+A gestão de dados é realizada através do **TanStack Query**.
+
+A biblioteca é utilizada para:
+
+- obtenção de dados;
+- cache automático;
+- sincronização entre cliente e servidor;
+- invalidação automática da cache após alterações;
+- gestão simplificada dos estados de carregamento.
+
+A utilização do TanStack Query permitiu eliminar a necessidade de recorrer a um contexto global para armazenar notas, simplificando significativamente a arquitetura da aplicação.
+
+---
+
+## React Markdown
+
+Utilizado para converter e apresentar notas escritas em Markdown de forma segura e simples.
+
+---
+
+## html2pdf.js
+
+Biblioteca utilizada para gerar a exportação das notas em formato PDF diretamente no navegador.
+
+---
+
+## Web Share API
+
+Sempre que suportada pelo navegador, permite partilhar notas utilizando os mecanismos nativos do dispositivo.
+
+---
+
+## CSS
+
+Toda a interface foi desenvolvida utilizando **CSS puro**.
+
+Não foram utilizados frameworks CSS.
+
+A estilização foi construída recorrendo a:
+
+- Custom Properties (CSS Variables);
+- Flexbox;
+- CSS Grid;
+- Media Queries;
+- `clamp()` para tipografia responsiva.
+
+Esta abordagem permitiu manter controlo total sobre o comportamento visual da aplicação e implementar facilmente requisitos específicos de acessibilidade.
+
+# 🏗️ Arquitetura
+
+Ao longo do desenvolvimento, a arquitetura do MyNotes evoluiu várias vezes.
+
+Inicialmente o projeto seguia uma abordagem mais tradicional, recorrendo a **React Context** para armazenar as notas carregadas após a autenticação.
+
+À medida que a aplicação cresceu e fui aprofundando conhecimentos sobre gestão de dados no ecossistema React, essa abordagem foi sendo substituída por uma solução mais simples e adequada ao problema.
+
+Atualmente toda a gestão de dados da aplicação é realizada através do **TanStack Query**.
+
+Esta mudança permitiu reduzir a complexidade da aplicação, eliminar estado global desnecessário e simplificar significativamente a comunicação com o Supabase.
+
+## Fluxo geral dos dados
+
+Atualmente o fluxo de obtenção de dados pode ser resumido da seguinte forma:
+
+```text
+Utilizador
+        │
+        ▼
+Interface (React / Next.js)
+        │
+        ▼
+TanStack Query
+        │
+        ▼
+Supabase
+        │
+        ▼
+Resposta
+        │
+        ▼
+Cache
+        │
+        ▼
+Interface atualizada
+```
+
+A interface nunca comunica diretamente com a base de dados.
+
+Toda a obtenção, atualização e invalidação dos dados é centralizada através do TanStack Query.
+
+---
+
+## Dashboard
+
+Após a autenticação, o dashboard apresenta apenas uma página de resultados de cada vez.
+
+Em vez de carregar todas as notas existentes, a aplicação solicita apenas os registos necessários para a página atualmente visualizada.
+
+A paginação é realizada diretamente pelo Supabase utilizando consultas com `range()`, reduzindo significativamente a quantidade de dados transferidos.
+
+Sempre que o utilizador muda de página, apenas os novos registos são obtidos.
+
+---
+
+## Cache
+
+O TanStack Query mantém automaticamente uma cache das consultas realizadas.
+
+Isto permite, por exemplo:
+
+- evitar pedidos desnecessários;
+- reutilizar resultados recentes;
+- manter a interface responsiva;
+- simplificar a sincronização entre cliente e servidor.
+
+Sempre que uma nota é criada, editada ou eliminada, a cache correspondente é automaticamente invalidada, garantindo que a informação apresentada permanece consistente.
+
+---
+
+## Porque não utilizei React Context?
+
+Durante o desenvolvimento cheguei à conclusão de que um contexto global deixava de acrescentar valor ao projeto.
+
+A responsabilidade do React Context seria apenas armazenar dados que já eram geridos de forma muito mais eficiente pelo TanStack Query.
+
+Ao eliminar essa camada intermédia consegui:
+
+- reduzir código;
+- simplificar a arquitetura;
+- evitar duplicação de estado;
+- tornar o fluxo de dados mais previsível.
+
+---
+
+## Porque mantive uma abordagem maioritariamente client-side?
+
+Sendo este um projeto desenvolvido com Next.js, naturalmente surgiu a questão de utilizar funcionalidades como:
+
+- Server Components;
+- Server Actions;
+- acesso aos dados diretamente no servidor.
+
+Estas possibilidades foram analisadas durante o desenvolvimento.
+
+No entanto, para a natureza altamente interativa do MyNotes, não encontrei vantagens suficientemente significativas que justificassem aumentar a complexidade da arquitetura.
+
+Grande parte da aplicação consiste em:
+
+- pesquisa em tempo real;
+- edição de notas;
+- pré-visualização em Markdown;
+- exportação para PDF;
+- partilha;
+- navegação rápida entre páginas.
+
+Neste contexto, uma abordagem baseada em Client Components revelou-se suficientemente simples, eficiente e fácil de manter.
+
+Isto não significa que essas funcionalidades não venham a ser utilizadas no futuro.
+
+Caso a evolução da aplicação venha a demonstrar benefícios reais na sua utilização, essa possibilidade será naturalmente reavaliada.
+
+# ♿ Acessibilidade
+
+A acessibilidade foi considerada desde o início do desenvolvimento do MyNotes e não apenas adicionada numa fase final do projeto.
+
+O objetivo sempre foi construir uma aplicação utilizável tanto por pessoas que utilizam rato como por quem depende exclusivamente do teclado ou de tecnologias de apoio.
+
+Ao longo do desenvolvimento procurei privilegiar soluções baseadas em HTML semântico e comportamento nativo dos elementos, recorrendo a atributos ARIA apenas quando estes acrescentavam efetivamente valor.
+
+## Medidas implementadas
+
+Entre as principais medidas de acessibilidade presentes na aplicação destacam-se:
+
+- utilização de HTML semântico;
+- estrutura consistente de títulos;
+- navegação completa através do teclado;
+- gestão adequada do foco durante a navegação;
+- indicadores visuais claros de foco;
+- contraste adequado entre texto e fundo;
+- utilização criteriosa de atributos ARIA;
+- anúncios de alterações importantes da interface através de regiões `aria-live`;
+- Route Announcements disponibilizados pelo Next.js.
+
+Sempre que possível procurei utilizar soluções nativas do navegador antes de recorrer a implementações personalizadas.
+
+---
+
+## Gestão do foco
+
+Foi dedicada especial atenção à gestão do foco entre páginas e componentes.
+
+Alguns exemplos incluem:
+
+- após fechar um diálogo modal, o foco regressa ao elemento que o abriu;
+- ao regressar da visualização ou edição de uma nota, o foco volta ao botão correspondente da nota anteriormente selecionada;
+- os diálogos modais implementam *focus trapping*, impedindo que o foco saia do modal enquanto este permanece aberto.
+
+Estas pequenas interações ajudam a tornar a navegação previsível para utilizadores de teclado e leitores de ecrã.
+
+---
+
+## Testes realizados
+
+Para além das validações automáticas, foram realizados testes manuais durante todo o desenvolvimento.
+
+Os principais testes incluíram:
+
+### Leitor de ecrã
+
+- ORCA Screen Reader
+- Firefox
+
+Este é o ambiente onde consigo garantir o correto funcionamento da aplicação do ponto de vista da acessibilidade.
+
+---
+
+### Navegação por teclado
+
+Foram igualmente realizados testes completos utilizando apenas o teclado em:
+
+- Firefox;
+- Chrome;
+- Brave.
+
+---
+
+## Limitações conhecidas
+
+Embora tenham sido seguidas boas práticas de acessibilidade e realizados testes manuais, não foi possível validar o comportamento da aplicação em todos os leitores de ecrã e navegadores existentes.
+
+Em particular, não foi possível realizar testes com **NVDA** por não dispor atualmente de um ambiente Windows.
+
+Por esse motivo, apenas posso garantir o comportamento observado durante os testes realizados com:
+
+- ORCA + Firefox;
+- navegação exclusivamente por teclado em Firefox, Chrome e Brave.
+
+À medida que o projeto evoluir e existam novos ambientes disponíveis para testes, esta secção será naturalmente atualizada.
+
+# Estrutura do projeto
+
+```
+mynotes/
+├── database/
+│   ├── schema.sql
+│   └── email-template.html
+│
+├── public/
+│
+├── src/
+│   ├── app/
+│   ├── components/
+|   ├── context/
+|   ├── data/
+│   ├── hooks/
+│   ├── lib/
+│   ├── providers/
+│   ├── types/
+│   └── utils/
+│
+├── package.json
+└── README.md
+```
+
+A estrutura procura manter uma separação clara entre:
+
+- interface;
+- componentes reutilizáveis;
+- integração com Supabase;
+- utilitários;
+- lógica da aplicação.
 
 ---
 
 # 🚀 Como executar o projeto
 
-## Pré-requisitos
-
-Antes de iniciar o projeto deverá ter instalado:
-
-- Node.js
-- npm (ou outro gestor de pacotes compatível)
-
-Também será necessária uma conta no Supabase para criar o projeto e obter as credenciais de acesso.
-
----
-
-## Instalação
-
-Clone o repositório:
+## 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/pedrobfernandes/MyNotes.git
-```
 
-Entre na pasta do projeto:
-
-```bash
 cd my-notes
 ```
 
-Instale as dependências:
+---
+
+## 2. Instalar dependências
 
 ```bash
 npm install
 ```
 
-Crie um ficheiro `.env.local` e configure as variáveis de ambiente necessárias:
+---
 
-```bash
+## 3. Criar projeto no Supabase
+
+Criar um novo projeto em:
+
+https://supabase.com
+
+Após a criação, obter:
+
+- Project URL
+- anon public key
+
+---
+
+## 4. Criar o ficheiro `.env.local`
+
+```env
 NEXT_PUBLIC_SUPABASE_URL=url_do_projeto
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua_chave_anon_publica
 NEXT_PUBLIC_SUPABASE_DELETE_ACCOUNT_URL=url_da_edge_function_para_excluir_conta
+
 ```
 
-Configure a base de dados:
+---
 
-- Copie e execute o script que está na pasta `database/my-notes-setup.sql` no editor SQL do projeto no Supabase
-- Crie uma Edge Function com o nome: `delete-user-account`, usando este script:
+# Configuração da base de dados
 
-  ```typescript
+## 1. Executar o script SQL
+
+No painel do Supabase:
+
+```
+SQL Editor
+```
+
+Copiar e executar o conteúdo do ficheiro:
+
+```
+database/my-notes-setup.sql
+```
+
+---
+
+## O que este script cria
+
+O script é responsável por:
+
+- criação da tabela de notas;
+- índices;
+- políticas RLS;
+- permissões necessárias;
+- restantes objetos utilizados pela aplicação.
+
+---
+
+# Configurações de autenticação
+
+A aplicação utiliza autenticação através de **OTP (One-Time Password)**.
+
+No dashboard do Supabase, procure pelos templates de Email, e use o template da pasta `database/supabase-email-template` para "Confirm sign up" e "Magic link"
+
+Em seguida, procure `Authentication` e lá, encontre `Sign in/Providers`. Nessa página encontre `Auth Providers` e então abra as configurações de `Email`,
+(que por padrão já vem como `Enabled`). Nas configurações, navege até á opção `Email OTP length` e altere de 8 para 6 digitos.
+
+---
+
+# Edge Function
+
+A aplicação utiliza uma Edge Function para deletar a conta de usuario e todas as notas através da regra na tabela `ON DELETE CASCADE`:
+
+Criar uma nova Edge Function:
+
+- dashboard do Supabase -> `Edge Functions`
+- `Deploy a new function` -> `Via editor`
+- `Function name` -> `delete-user-account`
+- copie e cole este script no editor e em seguida -> `Deploy function`
+
+```typescript
    import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -684,61 +744,121 @@ Configure a base de dados:
    });
 
   ```
-- No dashboard do Supabase, procure pelos templates de Email, e use o template da pasta `database/supabase-email-template` para "Confirm sign up" e "Magic link"
-- Execute a aplicação
 
-  ```bash
-  npm run dev
-  ```
+---
+
+# Executar a aplicação
+
+```bash
+npm run dev
+```
+
 A aplicação ficará disponível em:
 
-```text
+```
 http://localhost:3000
 ```
 
 ---
 
-# Estrutura da base de dados
+# Build de produção
 
-A aplicação utiliza uma tabela simples para armazenar as notas dos utilizadores.
+```bash
+npm run build
 
-Cada nota possui:
-
-- identificador;
-- utilizador proprietário;
-- título;
-- conteúdo;
-- data de criação;
-- data da última atualização.
-
-O acesso aos dados é protegido através de **Row Level Security (RLS)**, garantindo que cada utilizador apenas pode consultar e modificar as suas próprias notas.
-
-A remoção da conta utiliza uma Edge Function do Supabase e a eliminação das notas associadas é efetuada automaticamente através de `ON DELETE CASCADE`.
+npm start
+```
 
 ---
 
-# Porque desenvolvi este projeto desta forma?
+# Tecnologias necessárias
 
-Durante o desenvolvimento procurei encontrar um equilíbrio entre aprender novas tecnologias e construir uma aplicação que fosse realmente útil.
+- Node.js
+- npm
+- Conta Supabase
+- Projeto Supabase criado
 
-Seria possível recorrer desde o início a uma arquitetura mais complexa, explorando um maior número de funcionalidades do Next.js.
+# 🗺️ Roadmap
 
-No entanto, preferi consolidar primeiro os conceitos fundamentais antes de aumentar a complexidade da aplicação.
+O MyNotes é uma aplicação que utilizo diariamente.
 
-Esta abordagem permitiu-me compreender melhor cada decisão tomada, evitar introduzir soluções que ainda não dominava e preparar o projeto para evoluir gradualmente à medida que continuo a aprender.
+Por esse motivo, a evolução do projeto não será orientada pela quantidade de funcionalidades implementadas, mas sim pelas necessidades que forem surgindo durante a utilização da aplicação.
 
-Acredito que uma evolução incremental é mais sustentável do que tentar utilizar todas as funcionalidades disponíveis apenas porque a tecnologia as oferece.
+Cada nova funcionalidade será avaliada de acordo com uma pergunta muito simples:
+
+> **Esta alteração resolve um problema real identificado durante a utilização do projeto?**
+
+Se a resposta for "sim", a funcionalidade será considerada.
+
+Caso contrário, a aplicação continuará simples, evitando adicionar complexidade desnecessária.
 
 ---
+
+## Arquitetura
+
+Estas são áreas que pretendo continuar a explorar à medida que aprofundo conhecimentos sobre o ecossistema Next.js.
+
+- [ ] Avaliar a introdução de **Server Components** em cenários onde tragam benefícios reais.
+- [ ] Explorar **Server Actions** sempre que possam simplificar a arquitetura da aplicação.
+- [ ] Continuar a aprender funcionalidades do Next.js e avaliar a sua aplicação no projeto.
+
+---
+
+## Organização das notas
+
+À medida que o número de notas aumentar, poderão surgir novas necessidades de organização.
+
+Estas funcionalidades serão avaliadas apenas caso façam sentido durante a utilização da aplicação.
+
+Possíveis evoluções incluem:
+
+- [ ] Avaliar pesquisa também pelo conteúdo das notas.
+- [ ] Avaliar sistemas complementares de organização, como etiquetas (tags), caso a pesquisa por título deixe de ser suficiente.
+
+---
+
+## Acessibilidade
+
+Embora tenham sido realizados testes manuais ao longo de todo o desenvolvimento, esta continua a ser uma área em evolução.
+
+Pretendo continuar a melhorar a acessibilidade da aplicação sempre que identificar oportunidades para o fazer.
+
+Possíveis evoluções:
+
+- [ ] Testar a aplicação com novos leitores de ecrã se e quando disponiveis.
+- [ ] Validar comportamento em diferentes navegadores e plataformas.
+- [ ] Continuar a melhorar pequenos detalhes relacionados com navegação por teclado e gestão do foco.
+
+---
+
+## Evolução contínua
+
+O MyNotes continuará a evoluir principalmente através da utilização diária da aplicação.
+
+Como sou atualmente o principal utilizador do projeto, muitas melhorias surgirão naturalmente da experiência de utilização no dia a dia.
+
+Caso outros utilizadores venham a utilizar a aplicação e forneçam sugestões ou feedback, essas propostas serão igualmente analisadas e poderão contribuir para futuras evoluções do projeto.
 
 # Considerações finais
 
-O MyNotes representa muito mais do que um exercício técnico.
+O MyNotes começou como uma forma de resolver um problema muito simples do meu dia a dia.
 
-Foi uma oportunidade para desenvolver uma aplicação que resolve um problema real do meu dia a dia enquanto, simultaneamente, aprofundava conhecimentos em React, TypeScript, Next.js e Supabase.
+Ao longo dos anos fui acumulando centenas de pequenas notas técnicas, distribuídas por inúmeros ficheiros de texto. Encontrar informação dentro de um ficheiro nunca foi difícil; o verdadeiro desafio era lembrar em que ficheiro essa informação estava.
 
-Ao longo do desenvolvimento procurei dar especial atenção à organização do código, à reutilização de componentes, à acessibilidade e à experiência de utilização, sempre procurando compreender o motivo por detrás de cada decisão técnica.
+Construir esta aplicação permitiu-me resolver esse problema de uma forma que se adapta exatamente à forma como organizo o meu conhecimento.
 
-Embora existam várias melhorias planeadas para o futuro, considero que esta primeira versão estabelece uma base sólida para continuar a evoluir o projeto e explorar progressivamente mais funcionalidades do ecossistema Next.js.
+Ao mesmo tempo, o projeto acabou por se tornar uma excelente oportunidade para começar a aprender Next.js através de uma aplicação real.
 
-Mais do que apresentar um produto final, este repositório documenta o meu processo de aprendizagem e a forma como procuro construir software: começando por soluções simples, funcionando corretamente, e evoluindo-as de forma consciente e incremental.
+Durante o desenvolvimento fui explorando diferentes abordagens, tecnologias e possibilidades arquiteturais. Algumas foram implementadas, outras foram conscientemente deixadas de fora.
+
+Talvez a maior aprendizagem deste projeto não tenha sido uma funcionalidade específica do Next.js ou uma biblioteca em particular.
+
+Foi perceber que desenvolver software não significa utilizar todas as ferramentas disponíveis.
+
+Significa compreender o problema, escolher a solução mais adequada para esse contexto e aceitar que, muitas vezes, a solução mais simples é também a melhor.
+
+Essa filosofia esteve presente em praticamente todas as decisões tomadas durante o desenvolvimento do MyNotes e continuará a orientar a evolução do projeto.
+
+Hoje esta aplicação faz parte do meu dia a dia e continuará a evoluir à medida que novas necessidades reais forem surgindo.
+
+Se chegou até aqui, obrigado pelo tempo dedicado a conhecer o projeto. Caso tenha alguma sugestão, feedback ou simplesmente queira conversar sobre desenvolvimento frontend, acessibilidade ou Next.js, terei todo o gosto em falar consigo.
