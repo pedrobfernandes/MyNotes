@@ -35,7 +35,7 @@ export function NoteForm(props: NoteFormProps)
     
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
-    const [keywords, setKeywords] = useState("");
+    const [keywords, setKeywords] = useState<string>("");
     const [previewMode, setPreviewMode] = useState<boolean>(false);
     
     const queryClient = useQueryClient();
