@@ -35,6 +35,7 @@ export function NoteForm(props: NoteFormProps)
     
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
+    const [keywords, setKeywords] = useState("");
     const [previewMode, setPreviewMode] = useState<boolean>(false);
     
     const queryClient = useQueryClient();
@@ -164,6 +165,25 @@ export function NoteForm(props: NoteFormProps)
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
                 />
+            </div>
+            <div className={styles.inputGroup}>
+                <label htmlFor="keywords">Palavras-chave (opcional)</label>
+                <input
+                    id="keywords"
+                    aria-describedby="keywords-help"
+                    className={styles.titleInput}
+                    type="text"
+                    value={keywords}
+                    onChange={(event) => setKeywords(event.target.value)}
+                />
+                <p id="keywords-help">
+                    <span className="visually-hidden">
+                        Introduza uma ou mais palavras-chave iniciadas pelo símbolo cardinal (#), separadas por espaços.
+                    </span>
+                    <span aria-hidden="true">
+                        Exemplo: #Linux #Rede #Hardware
+                    </span>
+                </p>
             </div>
             <div className={styles.inputGroup}>
                 <label htmlFor="content">Conteúdo (Aceita Markdown)</label>

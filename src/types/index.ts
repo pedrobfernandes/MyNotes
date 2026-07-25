@@ -5,6 +5,7 @@ export type Note =
     title: string;
     title_normalized: string;
     content: string;
+    keywords?: string[] | null;
     created_at: string;
     updated_at: string;
 };
