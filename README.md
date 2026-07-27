@@ -182,9 +182,9 @@ Cada nota pode ser escrita utilizando:
 
 ## Pesquisa
 
-A pesquisa permite localizar rapidamente qualquer nota através do seu título.
+A pesquisa permite localizar rapidamente qualquer nota através do seu título ou de palavras-chave.
 
-Para realizar uma pesquisa, o utilizador introduz o termo pretendido e confirma a ação através do botão **Buscar**.
+Para realizar uma pesquisa, o utilizador introduz o termo pretendido ou as palavras-chave e confirma a ação através do botão **Buscar**.
 
 Esta abordagem foi uma escolha consciente, privilegiando um comportamento simples e previsível, adequado à forma como utilizo a aplicação no dia a dia.
 
@@ -550,6 +550,12 @@ Por esse motivo, apenas posso garantir o comportamento observado durante os test
 
 À medida que o projeto evoluir e existam novos ambientes disponíveis para testes, esta secção será naturalmente atualizada.
 
+Uma outra limitação ou "bug" identificado é no botão de "Buscar" do formulário de pesquisa. Quando não encontra uma correspondência para a pesquisa,
+o leitor de ecrã lê o botão de "Buscar" duas vezes. Exemplo: se achou correspondência lê: "Buscar - botão de apertar", "5 correspondências encontradas".
+Mas se não achou correspondência, lê: "Buscar - botão de apertar", "Buscar - botão de apertar", "Nenhuma correspondência encontrada". No momento não sei
+porque isto acontece, possivelmente um erro de implementação no meu código, mas, como é apenas este item, e, apesar disso o leitor continua a lêr a mensagem,
+iá ficar assim por enquanto.
+
 # Estrutura do projeto
 
 ```
@@ -813,7 +819,7 @@ Estas funcionalidades serão avaliadas apenas caso façam sentido durante a util
 Possíveis evoluções incluem:
 
 - [ ] Avaliar pesquisa também pelo conteúdo das notas.
-- [ ] Avaliar sistemas complementares de organização, como etiquetas (tags), caso a pesquisa por título deixe de ser suficiente.
+- [ ] Avaliar sistemas complementares de organização, como etiquetas (tags), caso a pesquisa por título e palavras-chave deixem de ser suficientes.
 
 ---
 
