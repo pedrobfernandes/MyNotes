@@ -413,9 +413,12 @@ export default function DashboardClient(props: DashboardClientProps)
     // Cuida de anunciar os resultados da pesquisa, se algum..
     useEffect(() =>
     {
-        if (notesQuery.isLoading ||
+        if (
+            notesQuery.isFetching ||
+            notesQuery.isLoading ||
             hasSearched === false ||
-            filter === ""
+            filter === ""||
+            notesQuery.data === undefined
         )
         {
             return;
@@ -434,7 +437,11 @@ export default function DashboardClient(props: DashboardClientProps)
             announce(`${totalNotes} correspondências encontradas.`);
         }
         
-    }, [filter, notesQuery.data?.count, notesQuery.isLoading, hasSearched, announce]);
+    }, [
+        filter, notesQuery.data?.count,
+        notesQuery.isFetching, notesQuery.isLoading,
+        hasSearched, announce
+    ]);
     
     
     // Cuida de anunciar que a nota foi deletada
@@ -499,12 +506,6 @@ export default function DashboardClient(props: DashboardClientProps)
                 {
                     notesQuery.isSuccess && totalNotes > 0 &&
                         <>
-                        <h2
-                            id="search-form-title"
-                            className="visually-hidden"
-                        >
-                            Pesquisa de Notas
-                        </h2>
                         <SearchForm
                             filter={filter}
                             handleSearch={handleSearch}

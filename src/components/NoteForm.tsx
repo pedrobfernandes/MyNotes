@@ -10,7 +10,7 @@ import {  UserResponse } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-
+import { parseKeywords, formatKeywords } from "@/utils/keywords";
 import { useAriaActionStatusAnnouncer } from "@/hooks/useAriaActionStatusAnnouncer";
 import { useFormFieldValidation } from "@/hooks/useFormFieldValidation";
 import FormFieldStatusMessage from "./FormFieldStatusMessage";
@@ -35,7 +35,12 @@ export function NoteForm(props: NoteFormProps)
     
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
-    const [keywords, setKeywords] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>(
+        initialData !== undefined
+        ? formatKeywords(initialData.keywords)
+        : ""
+    );
+    
     const [previewMode, setPreviewMode] = useState<boolean>(false);
     
     const queryClient = useQueryClient();
@@ -69,12 +74,19 @@ export function NoteForm(props: NoteFormProps)
             return;
         }
         
+        const parsedKeywords: string[] = parseKeywords(keywords);
+        const keywordsToSave: string[] | null =
+            parsedKeywords.length > 0
+            ? parsedKeywords
+            : null;
+        
         
         if (initialData !== undefined)
         {
             const updatedNote: NoteMutationResult = await updateNote({
                 title: title,
                 content: content,
+                keywords: keywordsToSave,
             }, initialData.id);
             
             if (updatedNote.error !== null)
@@ -98,6 +110,7 @@ export function NoteForm(props: NoteFormProps)
             const insertedNote: NoteMutationResult = await insertNote({
                 title: title,
                 content: content,
+                keywords: keywordsToSave,
             }, user.data.user.id);
             
             

@@ -1,18 +1,7 @@
 import { supabase } from "@/lib/supabase/client";
+import { parseKeywords } from "@/utils/keywords";
+import { normalizeTitle } from "@/utils/normalize";
 import { FetchNotesResult, FetchNoteResult, NoteMutationResult, InsertNoteType } from "@/types";
-
-
-function normalize(str: string): string
-{
-    return (
-        str
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/ç/g, "c")
-            .replace(/\s+/g, "")
-    );
-}
 
 
 export async function fetchNotes(
@@ -25,21 +14,34 @@ export async function fetchNotes(
     const from = (page - 1) * notesPerPage;
     const to = from + notesPerPage - 1;
     
-    const normalizedSearch = normalize(search);
-    
     try
     {
         let query = supabase
         .from("notes")
         .select("*", { count: "exact" })
         .eq("user_id", userId);
+        
+        const trimmedSearch = search.trim();
     
-        if (normalizedSearch !== "")
+        if (trimmedSearch !== "")
         {
-            query = query.ilike(
-                "title_normalized",
-                `%${normalizedSearch}%`
-            );
+           if (trimmedSearch.includes("#"))
+           {
+               const keywords = parseKeywords(trimmedSearch);
+               
+               if (keywords.length > 0)
+               {
+                   query = query.overlaps("keywords", keywords);
+               }
+           }
+            else
+            {
+                const normalizedSearch = normalizeTitle(trimmedSearch);
+                query = query.ilike(
+                    "title_normalized",
+                    `%${normalizedSearch}%`
+                );
+            }
         }
         
         const { data: fetchData, error: fetchError, count } = await query
@@ -169,7 +171,7 @@ export async function insertNote(
     userId: string):
     Promise<NoteMutationResult>
 {
-    const { title, content } = note;
+    const { title, content, keywords } = note;
 
     try
     {
@@ -178,8 +180,9 @@ export async function insertNote(
             .insert({
                 user_id: userId,
                 title: title,
-                title_normalized: normalize(title),
+                title_normalized: normalizeTitle(title),
                 content: content,
+                keywords: keywords
             })
             .select()
             .maybeSingle();
@@ -226,7 +229,7 @@ export async function updateNote(
     noteId: string):
     Promise<NoteMutationResult>
 {
-    const { title, content } = note;
+    const { title, content, keywords } = note;
     
     try
     {
@@ -234,8 +237,9 @@ export async function updateNote(
             .from("notes")
             .update({
                 title: title,
-                title_normalized: normalize(title),
+                title_normalized: normalizeTitle(title),
                 content: content,
+                keywords: keywords,
                 updated_at: new Date().toISOString(),
             })
             .eq("id", noteId)

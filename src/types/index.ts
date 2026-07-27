@@ -5,7 +5,7 @@ export type Note =
     title: string;
     title_normalized: string;
     content: string;
-    keywords?: string[] | null;
+    keywords: string[] | null;
     created_at: string;
     updated_at: string;
 };
@@ -15,6 +15,7 @@ export type InsertNoteType =
 {
     title: string;
     content: string;
+    keywords: string[] | null;
 };
 
 
