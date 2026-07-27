@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS notes (
   title_normalized TEXT NOT NULL,
 
   content TEXT NOT NULL,
+  
+  keywords TEXT[],
 
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
 
