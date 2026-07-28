@@ -32,6 +32,8 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
     const page = searchParams.get("page") ?? "1";
     const search = searchParams.get("search") ?? "";
     
+    const encodedSearch = encodeURIComponent(search);
+    
     const noteQuery = useQuery({
         queryKey: ["note", id],
         queryFn: async () =>
@@ -255,7 +257,7 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
                         <div className={styles.linkGroup}>
                             <Link
                                 id={"edit-note-link"}
-                                className={styles.link} href={`/notes/${note.id}/edit?page=${page}&search=${search}`}
+                                className={styles.link} href={`/notes/${note.id}/edit?page=${page}&search=${encodedSearch}`}
                                 onClick={() =>
                                 {
                                     sessionStorage.setItem(
@@ -266,13 +268,13 @@ export default function ViewNoteClient(props: ViewNoteClientProps)
                             >
                                 Editar
                             </Link>
-                            <Link className={styles.link} href={`/dashboard?page=${page}&search=${search}`}>
+                            <Link className={styles.link} href={`/dashboard?page=${page}&search=${encodedSearch}`}>
                                 Voltar
                             </Link>
                              <DeleteButton
                                 id={id}
                                 page={page}
-                                search={search}
+                                search={encodedSearch}
                             />
                         </div>
                         <div className={styles.buttonGroup}>

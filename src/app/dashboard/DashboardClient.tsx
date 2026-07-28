@@ -587,6 +587,7 @@ export default function DashboardClient(props: DashboardClientProps)
                         </>
                 }
                 
+                
                 {
                     notesQuery.isSuccess &&
                     totalNotes == 0 &&

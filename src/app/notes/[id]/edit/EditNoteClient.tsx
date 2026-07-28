@@ -48,6 +48,8 @@ export default function EditNoteClient(props: EditNoteClientProps)
     const page = searchParams.get("page") ?? "1";
     const search = searchParams.get("search") ?? "";
     
+    const encodedSearch = encodeURIComponent(search);
+    
     
     if (noteQuery.isLoading)
     {
@@ -67,7 +69,7 @@ export default function EditNoteClient(props: EditNoteClientProps)
                 <h1>{note.title}</h1>
                 <NoteForm
                     initialData={note}
-                    redirectPath={`/notes/${note.id}?page=${page}&search=${search}`}
+                    redirectPath={`/notes/${note.id}?page=${page}&search=${encodedSearch}`}
                 />
             </main>
         );
