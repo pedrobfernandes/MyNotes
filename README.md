@@ -550,11 +550,21 @@ Por esse motivo, apenas posso garantir o comportamento observado durante os test
 
 À medida que o projeto evoluir e existam novos ambientes disponíveis para testes, esta secção será naturalmente atualizada.
 
-Uma outra limitação ou "bug" identificado é no botão de "Buscar" do formulário de pesquisa. Quando não encontra uma correspondência para a pesquisa,
-o leitor de ecrã lê o botão de "Buscar" duas vezes. Exemplo: se achou correspondência lê: "Buscar - botão de apertar", "5 correspondências encontradas".
-Mas se não achou correspondência, lê: "Buscar - botão de apertar", "Buscar - botão de apertar", "Nenhuma correspondência encontrada". No momento não sei
-porque isto acontece, possivelmente um erro de implementação no meu código, mas, como é apenas este item, e, apesar disso o leitor continua a lêr a mensagem,
-iá ficar assim por enquanto.
+Uma outra limitação observada durante os testes diz respeito ao botão **Buscar** do formulário de pesquisa.
+Quando a pesquisa não encontra correspondências, o leitor de ecrã ORCA anuncia o botão **Buscar** duas vezes antes de anunciar
+a mensagem "Nenhuma correspondência encontrada".
+
+Exemplo:
+
+- Quando existem resultados:
+  - "Buscar - botão de apertar"
+  - 5 correspondências encontradas"
+- Quando não existem resultados:
+  - "Buscar - botão de apertar"
+  - "Buscar - botão de apertar"
+  - "Nenhuma correspondência encontrada"
+
+Apesar desta repetição, nenhuma informação é perdida, uma vez que a mensagem final é sempre anunciada corretamente. Após várias tentativas de investigação, não foi possível determinar se este comportamento resulta da implementação da aplicação ou de uma particularidade do ORCA. Por esse motivo, esta limitação permanece documentada até que possa ser validada noutros leitores de ecrã, como o NVDA.
 
 # Estrutura do projeto
 
